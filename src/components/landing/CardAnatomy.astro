@@ -1,0 +1,32 @@
+---
+import type { CardAnatomyContent } from "@/content/landing";
+
+interface Props {
+  anatomy: CardAnatomyContent;
+}
+
+const { anatomy } = Astro.props as Props;
+---
+
+<section id="card-anatomy" class="reliquary-panel scroll-mt-8" aria-labelledby="card-anatomy-title">
+  <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{anatomy.sectionEyebrow}</p>
+  <h2 id="card-anatomy-title" class="mt-3 text-3xl font-semibold">{anatomy.sectionTitle}</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-surface-parchment/90 md:text-base">{anatomy.sectionDescription}</p>
+
+  <div class="ornate-separator mt-6" aria-hidden="true"></div>
+
+  <dl class="mt-7 grid gap-4 md:grid-cols-2">
+    {
+      anatomy.fields.map((field) => (
+        <div class="reliquary-card p-4">
+          <dt class="text-sm font-semibold uppercase tracking-[0.1em] text-metal-aged-gold">{field.label}</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-surface-parchment/90">{field.detail}</dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <p class="energy-glow-accent mt-5 rounded-md border border-dashed border-metal-bronze/50 bg-surface-calm/75 px-4 py-3 text-xs text-surface-parchment/85">
+    Placeholder card render: {anatomy.placeholderAsset}
+  </p>
+</section>

@@ -1,0 +1,116 @@
+---
+import { newsletterContent } from "@/content/newsletter";
+
+const formId = "newsletter-form";
+const statusId = "newsletter-status";
+const helperId = "newsletter-helper";
+---
+
+<form id={formId} action="#follow-first-edition" method="post" class="mt-6 grid gap-4" aria-describedby={helperId} novalidate>
+  <div class="grid gap-2">
+    <label for="newsletter-email" class="text-sm font-semibold text-surface-parchment">{newsletterContent.emailLabel}</label>
+    <input
+      id="newsletter-email"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required
+      inputmode="email"
+      class="w-full rounded-md border border-metal-bronze/70 bg-surface-obsidian/65 px-4 py-3 text-sm text-surface-parchment placeholder:text-surface-parchment/50 focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian/65"
+      placeholder="you@example.com"
+      aria-describedby={`${helperId} ${statusId}`}
+    />
+    <p id={helperId} class="text-xs leading-relaxed text-surface-parchment/85">{newsletterContent.helperText}</p>
+  </div>
+
+  <fieldset class="consent-panel rounded-md border border-metal-bronze/45 bg-surface-obsidian/55 p-3">
+    <legend class="px-1 text-xs uppercase tracking-[0.14em] text-metal-aged-gold-bright">Consent</legend>
+    <div class="mt-2 flex items-start gap-3">
+      <input
+        id="newsletter-consent"
+        name="consent"
+        type="checkbox"
+        required
+        class="mt-1 h-4 w-4 rounded border-metal-bronze/70 bg-surface-obsidian/80 focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian/45"
+        aria-describedby={statusId}
+      />
+      <label for="newsletter-consent" class="text-sm leading-relaxed text-surface-parchment/90">
+        {newsletterContent.consentLabel}
+      </label>
+    </div>
+    <p class="mt-2 text-xs leading-relaxed text-surface-parchment/85">{newsletterContent.consentText}</p>
+  </fieldset>
+
+  <div class="flex flex-wrap items-center gap-3">
+    <button
+      type="submit"
+      class="inline-flex items-center rounded-md border border-metal-aged-gold bg-metal-aged-gold/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-metal-aged-gold-bright transition hover:bg-metal-aged-gold/20 focus-visible:bg-metal-aged-gold/20"
+    >
+      {newsletterContent.submitLabel}
+    </button>
+    <p class="text-xs text-surface-parchment/80">Static placeholder flow — provider integration is pending.</p>
+  </div>
+
+  <p id={statusId} role="status" aria-live="polite" class="min-h-6 rounded-md border border-metal-bronze/35 bg-surface-obsidian/55 px-3 py-2 text-sm text-surface-parchment/85">
+    Ready to register your First Edition interest.
+  </p>
+</form>
+
+<script is:inline>
+  (() => {
+    const form = document.getElementById("newsletter-form");
+    if (!(form instanceof HTMLFormElement)) return;
+
+    const emailInput = form.querySelector("#newsletter-email");
+    const consentInput = form.querySelector("#newsletter-consent");
+    const status = form.querySelector("#newsletter-status");
+    const submitButton = form.querySelector("button[type='submit']");
+
+    if (!(emailInput instanceof HTMLInputElement)) return;
+    if (!(consentInput instanceof HTMLInputElement)) return;
+    if (!(status instanceof HTMLElement)) return;
+    if (!(submitButton instanceof HTMLButtonElement)) return;
+
+    const setStatus = (message, tone) => {
+      status.textContent = message;
+      status.dataset.tone = tone;
+      if (tone === "error") {
+        status.classList.add("border-element-utu/70", "text-element-utu");
+      } else {
+        status.classList.remove("border-element-utu/70", "text-element-utu");
+      }
+    };
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const emailValue = emailInput.value.trim();
+      if (!emailValue) {
+        setStatus("Email is required.", "error");
+        emailInput.focus();
+        return;
+      }
+
+      if (!emailInput.checkValidity()) {
+        setStatus("Please enter a valid email address.", "error");
+        emailInput.focus();
+        return;
+      }
+
+      if (!consentInput.checked) {
+        setStatus("Consent is required to continue.", "error");
+        consentInput.focus();
+        return;
+      }
+
+      submitButton.disabled = true;
+      setStatus("Submitting request...", "loading");
+
+      window.setTimeout(() => {
+        setStatus("You are now on the First Edition watchlist.", "success");
+        submitButton.disabled = false;
+        form.reset();
+      }, 550);
+    });
+  })();
+</script>

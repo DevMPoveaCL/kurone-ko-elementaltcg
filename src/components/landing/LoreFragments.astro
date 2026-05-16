@@ -1,0 +1,28 @@
+---
+import type { LoreFragmentsContent } from "@/content/landing";
+
+interface Props {
+  lore: LoreFragmentsContent;
+}
+
+const { lore } = Astro.props as Props;
+---
+
+<section id="lore-fragments" class="reliquary-panel scroll-mt-8" aria-labelledby="lore-fragments-title">
+  <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{lore.sectionEyebrow}</p>
+  <h2 id="lore-fragments-title" class="mt-3 text-3xl font-semibold">{lore.sectionTitle}</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-surface-parchment/90 md:text-base">{lore.sectionDescription}</p>
+
+  <div class="ornate-separator mt-6" aria-hidden="true"></div>
+
+  <ul class="mt-7 grid list-none gap-4 p-0 md:grid-cols-3" aria-label="Recovered lore fragments">
+    {
+      lore.fragments.map((fragment) => (
+        <li class="reliquary-card p-5">
+          <h3 class="text-lg font-semibold text-surface-parchment">{fragment.title}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-surface-parchment/90">“{fragment.excerpt}”</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>

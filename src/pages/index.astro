@@ -1,0 +1,110 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { landingContent } from "@/content/landing";
+import HeroReliquary from "@/components/landing/HeroReliquary.astro";
+import FourDivinePaths from "@/components/landing/FourDivinePaths.astro";
+import TacticalBattlefield from "@/components/landing/TacticalBattlefield.astro";
+import EnergyAscension from "@/components/landing/EnergyAscension.astro";
+import CardAnatomy from "@/components/landing/CardAnatomy.astro";
+import LoreFragments from "@/components/landing/LoreFragments.astro";
+import RoadmapTeaser from "@/components/landing/RoadmapTeaser.astro";
+import FinalCTA from "@/components/landing/FinalCTA.astro";
+---
+
+<BaseLayout
+  title="The Four Sovereigns — Sumerian Edition"
+  description="The Four Sovereigns is a divine tactical TCG videogame forged in the Sumerian first age. Command goddess relics, sacred symbols, and strategic devotion on a contested battlefield."
+  siteName="The Four Sovereigns"
+  ogImage="/assets/landing/hero/og-default-placeholder.webp"
+  robots="index, follow"
+>
+  <main class="min-h-screen w-full">
+    <HeroReliquary hero={landingContent.hero} />
+
+    <div class="reliquary-section-field px-6 py-14 lg:px-10 lg:py-18">
+      <div class="mx-auto flex w-full max-w-6xl flex-col gap-8">
+        <div class="scroll-reveal">
+          <FourDivinePaths intro={landingContent.divinePathsContent} paths={landingContent.divinePaths} />
+        </div>
+
+        <div class="scroll-reveal">
+          <TacticalBattlefield battlefield={landingContent.tacticalBattlefield} />
+        </div>
+
+        <div class="scroll-reveal">
+          <EnergyAscension ascension={landingContent.energyAscension} />
+        </div>
+
+        <div class="scroll-reveal">
+          <CardAnatomy anatomy={landingContent.cardAnatomy} />
+        </div>
+
+        <div class="scroll-reveal">
+          <LoreFragments lore={landingContent.loreFragments} />
+        </div>
+
+        <div class="scroll-reveal">
+          <RoadmapTeaser roadmap={landingContent.roadmapTeaser} />
+        </div>
+
+        <div class="scroll-reveal">
+          <FinalCTA />
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script is:inline>
+    (() => {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const sections = Array.from(document.querySelectorAll(".scroll-reveal"));
+
+      if (sections.length === 0) return;
+
+      if (reduceMotion) {
+        sections.forEach((section) => {
+          if (!(section instanceof HTMLElement)) return;
+          section.style.setProperty("--reveal-progress", "1");
+          section.style.setProperty("--reveal-inverse", "0");
+        });
+        return;
+      }
+
+      document.documentElement.dataset.scrollLinkedRevealReady = "true";
+
+      const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+      const update = () => {
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const buildDistance = viewportHeight * 0.58;
+
+        sections.forEach((section) => {
+          if (!(section instanceof HTMLElement)) return;
+
+          const rect = section.getBoundingClientRect();
+          const rawProgress = (viewportHeight - rect.top) / buildDistance;
+          const progress = clamp(rawProgress, 0, 1);
+          const inverse = 1 - progress;
+
+          section.style.setProperty("--reveal-progress", progress.toFixed(3));
+          section.style.setProperty("--reveal-inverse", inverse.toFixed(3));
+        });
+      };
+
+      let ticking = false;
+      const requestUpdate = () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+      };
+
+      update();
+      window.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", requestUpdate);
+    })();
+  </script>
+
+</BaseLayout>

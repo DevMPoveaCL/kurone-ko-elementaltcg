@@ -1,0 +1,29 @@
+---
+import type { EnergyAscensionContent } from "@/content/landing";
+
+interface Props {
+  ascension: EnergyAscensionContent;
+}
+
+const { ascension } = Astro.props as Props;
+---
+
+<section id="energy-ascension" class="reliquary-panel scroll-mt-8" aria-labelledby="energy-ascension-title">
+  <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{ascension.sectionEyebrow}</p>
+  <h2 id="energy-ascension-title" class="mt-3 text-3xl font-semibold">{ascension.sectionTitle}</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-surface-parchment/90 md:text-base">{ascension.sectionDescription}</p>
+
+  <div class="ornate-separator mt-6" aria-hidden="true"></div>
+
+  <ol class="mt-7 grid gap-4 p-0 md:grid-cols-3" aria-label="Energy ascension ritual tiers">
+    {
+      ascension.steps.map((step) => (
+        <li class="reliquary-card list-none p-4">
+          <p class="inline-flex rounded-full border border-element-nammu/35 bg-element-nammu/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-metal-aged-gold-bright">{step.tier}</p>
+          <h3 class="mt-2 text-xl font-semibold">{step.title}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-surface-parchment/90">{step.detail}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>

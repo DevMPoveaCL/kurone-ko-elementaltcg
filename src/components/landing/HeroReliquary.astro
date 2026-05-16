@@ -1,0 +1,65 @@
+---
+import type { HeroContent } from "@/content/landing";
+import { IMAGE_OPTIMIZATION } from "@/content/landing";
+import CinematicBackdrop from "@/components/landing/CinematicBackdrop.astro";
+
+interface Props {
+  hero: HeroContent;
+}
+
+const { hero } = Astro.props as Props;
+
+// Optimization preset for hero poster — ready for <Image /> swap
+const heroOpt = IMAGE_OPTIMIZATION[hero.optimizationKey];
+void heroOpt; // Referenced by comment block below; used when <Image /> replaces placeholder
+---
+
+<section id="hero" class="relative min-h-[100svh] overflow-hidden border-b border-metal-bronze/60 bg-surface-obsidian px-5 py-5 md:px-8 md:py-7" aria-labelledby="hero-title">
+  <CinematicBackdrop cinematic={hero.cinematic} />
+  <!--
+    IMAGE OPTIMIZATION READINESS — swap when hero poster is Approved:
+    import { Image } from "astro:assets";
+    <Image
+      src={heroOpt.src}
+      alt={heroOpt.altFallback}
+      width={heroOpt.width}
+      height={heroOpt.height}
+      loading={heroOpt.loading}
+      fetchpriority={heroOpt.fetchpriority}
+      decoding={heroOpt.decoding}
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    Current: poster rendered by CinematicBackdrop as CSS background-image
+    or <video poster> — keep until real asset file exists on disk.
+  -->
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-b from-surface-obsidian/75 via-surface-obsidian/35 to-surface-obsidian/85"></div>
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-metal-aged-gold/20 via-transparent to-element-an/20"></div>
+  <div class="pointer-events-none absolute inset-x-6 top-24 h-px bg-gradient-to-r from-transparent via-metal-aged-gold/70 to-transparent md:inset-x-16"></div>
+  <div class="pointer-events-none absolute inset-x-6 bottom-20 h-px bg-gradient-to-r from-transparent via-metal-bronze/60 to-transparent md:inset-x-16"></div>
+
+  <nav class="relative z-30 flex items-center justify-between gap-4 rounded-full border border-metal-bronze/55 bg-surface-obsidian/65 px-4 py-3 backdrop-blur-md" aria-label="Landing navigation">
+    <a href="#hero" class="text-sm font-semibold uppercase tracking-[0.16em] text-surface-parchment focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian">
+      The Four Sovereigns
+    </a>
+    <div class="hidden items-center gap-5 text-xs uppercase tracking-[0.16em] text-surface-parchment/80 lg:flex">
+      <a class="hover:text-metal-aged-gold-bright focus-visible:text-metal-aged-gold-bright focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian" href="#four-divine-paths">Paths</a>
+      <a class="hover:text-metal-aged-gold-bright focus-visible:text-metal-aged-gold-bright focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian" href="#tactical-battlefield">Battlefield</a>
+      <a class="hover:text-metal-aged-gold-bright focus-visible:text-metal-aged-gold-bright focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian" href="#energy-ascension">Energy</a>
+      <a class="hover:text-metal-aged-gold-bright focus-visible:text-metal-aged-gold-bright focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian" href="#card-anatomy">Cards</a>
+    </div>
+    <a
+      href={hero.primaryCtaHref}
+      class="inline-flex items-center rounded-full border border-metal-aged-gold bg-metal-aged-gold/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-metal-aged-gold-bright transition hover:bg-metal-aged-gold/20 focus-visible:bg-metal-aged-gold/20 focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian"
+    >
+      Follow
+    </a>
+  </nav>
+
+  <h1 id="hero-title" class="sr-only">{hero.title}</h1>
+
+  <div class="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center px-6">
+    <p class="text-center text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-surface-parchment/70">
+      Scroll to unveil the Sumerian Edition
+    </p>
+  </div>
+</section>

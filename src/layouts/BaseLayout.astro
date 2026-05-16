@@ -1,0 +1,90 @@
+---
+import "@/styles/theme.css";
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  canonicalUrl?: string;
+  siteName?: string;
+  robots?: string;
+}
+
+const {
+  title,
+  description,
+  ogImage = "/assets/landing/hero/og-default-placeholder.webp",
+  canonicalUrl,
+  siteName = "The Four Sovereigns",
+  robots = "index, follow",
+} = Astro.props as Props;
+
+const fullTitle = title.includes(siteName) ? title : `${title} — ${siteName}`;
+const fullDescription =
+  description.length > 0
+    ? description
+    : "The Four Sovereigns: Sumerian Edition — a divine tactical TCG videogame forged in the first age.";
+---
+
+<!--
+  CLAIM-GUARD: This landing page is a conceptual preview of The Four Sovereigns.
+  It makes NO claims about:
+  - Release dates, launch windows, or platform availability
+  - Playable-beta status, demo builds, or early-access timelines
+  - Pricing, monetization, distribution platforms, or storefront listings
+  All future-era content (Roadmap, Lore beyond Sumerian Edition) is marked as teaser only.
+  Structured data uses "WebSite" schema only — no Product, SoftwareApplication, or VideoGame types.
+  Update this guard when real claims are added.
+-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Primary Meta -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={fullDescription} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta name="robots" content={robots} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={fullDescription} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${siteName} — Sumerian Edition key art`} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={fullDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={`${siteName} — Sumerian Edition key art`} />
+
+    <!-- JSON-LD Structured Data (WebSite only — no Product/SoftwareApplication claims) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: siteName,
+      description: fullDescription,
+      url: canonicalUrl ?? undefined,
+      inLanguage: "en",
+      about: {
+        "@type": "Thing",
+        name: `${siteName} — Sumerian Edition`,
+        description:
+          "A divine tactical trading card game videogame set in the Sumerian first age.",
+      },
+    })}>
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

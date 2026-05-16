@@ -1,0 +1,291 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface-obsidian: oklch(0.2 0.015 280);
+  --color-surface-calm: oklch(0.3 0.02 275);
+  --color-surface-parchment: oklch(0.92 0.03 90);
+  --color-metal-aged-gold: oklch(0.76 0.12 95);
+  --color-metal-aged-gold-bright: oklch(0.84 0.14 95);
+  --color-metal-bronze: oklch(0.61 0.09 70);
+  --color-element-utu: oklch(0.74 0.17 65);
+  --color-element-nammu: oklch(0.71 0.1 230);
+  --color-element-an: oklch(0.79 0.08 220);
+  --color-element-ki: oklch(0.67 0.08 145);
+  --color-focus-ring: oklch(0.88 0.14 95);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply m-0 bg-surface-obsidian text-surface-parchment antialiased;
+    font-family: "Spectral", "Palatino Linotype", serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: "Marcellus", "Garamond", serif;
+    letter-spacing: 0.02em;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* checkbox and radio need explicit ring for cross-browser visibility */
+  input[type="checkbox"]:focus-visible,
+  input[type="radio"]:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .surface-scrim {
+    @apply bg-surface-calm/85 backdrop-blur-sm;
+  }
+
+  .surface-panel {
+    @apply rounded-xl border border-metal-bronze/50 bg-surface-calm/90 p-6;
+  }
+
+  .reliquary-section-field {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 12% 10%, color-mix(in oklch, var(--color-metal-aged-gold) 16%, transparent), transparent 18rem),
+      radial-gradient(circle at 86% 18%, color-mix(in oklch, var(--color-element-nammu) 22%, transparent), transparent 22rem),
+      radial-gradient(ellipse at 18% 86%, color-mix(in oklch, var(--color-element-ki) 14%, transparent), transparent 20rem),
+      linear-gradient(180deg, var(--color-surface-obsidian), color-mix(in oklch, var(--color-surface-calm) 44%, var(--color-surface-obsidian)) 46%, var(--color-surface-obsidian));
+  }
+
+  .reliquary-section-field::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    opacity: 0.24;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 28%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 28%, transparent) 1px, transparent 1px),
+      repeating-linear-gradient(112deg, transparent 0 1.35rem, color-mix(in oklch, var(--color-surface-parchment) 4%, transparent) 1.4rem 1.45rem);
+    background-size: 6rem 6rem, 6rem 6rem, 100% 100%;
+    mask-image: linear-gradient(to bottom, transparent, black 6%, black 92%, transparent);
+  }
+
+  .reliquary-section-field::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.78;
+    background:
+      radial-gradient(ellipse at 50% 0%, transparent, var(--color-surface-obsidian) 70%),
+      linear-gradient(90deg, var(--color-surface-obsidian), transparent 18%, transparent 82%, var(--color-surface-obsidian));
+  }
+
+  .reliquary-panel {
+    position: relative;
+    overflow: hidden;
+    @apply rounded-2xl border border-metal-bronze/55 bg-surface-calm/90 p-6 shadow-2xl shadow-surface-obsidian/35 backdrop-blur-sm md:p-8;
+  }
+
+  .reliquary-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border: 1px solid color-mix(in oklch, var(--color-metal-aged-gold) 24%, transparent);
+    border-radius: inherit;
+    background:
+      radial-gradient(circle at 100% 0%, color-mix(in oklch, var(--color-element-nammu) 16%, transparent), transparent 16rem),
+      linear-gradient(135deg, color-mix(in oklch, var(--color-surface-parchment) 5%, transparent), transparent 30%);
+    mask-image: linear-gradient(to bottom, black, transparent 86%);
+  }
+
+  .reliquary-card {
+    position: relative;
+    overflow: hidden;
+    @apply rounded-xl border border-metal-bronze/50 bg-surface-obsidian/65;
+  }
+
+  .reliquary-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background:
+      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 16%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 16%, transparent) 1px, transparent 1px),
+      radial-gradient(circle at 90% 10%, color-mix(in oklch, var(--color-element-nammu) 18%, transparent), transparent 9rem);
+    background-size: 4rem 4rem, 4rem 4rem, 100% 100%;
+  }
+
+  .reliquary-card > * {
+    position: relative;
+  }
+
+  .board-grid-accent {
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--color-element-nammu) 20%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 28%, transparent) 1px, transparent 1px);
+    background-size: 3.5rem 3.5rem;
+  }
+
+  .consent-panel {
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--color-surface-parchment) 5%, transparent);
+    background:
+      linear-gradient(180deg, color-mix(in oklch, var(--color-surface-calm) 62%, transparent), color-mix(in oklch, var(--color-surface-obsidian) 72%, transparent));
+  }
+
+  .scroll-reveal {
+    position: relative;
+  }
+
+  .energy-glow-accent {
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklch, var(--color-element-nammu) 24%, transparent),
+      0 0 2.5rem color-mix(in oklch, var(--color-element-nammu) 12%, transparent);
+  }
+
+  .ornate-separator {
+    @apply relative h-px overflow-hidden bg-gradient-to-r from-transparent via-metal-aged-gold/65 to-transparent;
+  }
+
+  .ornate-separator::before {
+    content: "";
+    position: absolute;
+    inset: -0.35rem 25%;
+    background: radial-gradient(circle, color-mix(in oklch, var(--color-element-nammu) 42%, transparent), transparent 68%);
+  }
+
+  .focus-ring {
+    @apply outline-2 outline-offset-2 outline-focus-ring;
+  }
+
+  .contrast-safe-text {
+    @apply text-surface-parchment;
+  }
+
+  .reliquary-cinematic-fallback {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 72% 42%, color-mix(in oklch, var(--color-element-nammu) 42%, transparent), transparent 24rem),
+      radial-gradient(circle at 24% 28%, color-mix(in oklch, var(--color-element-ki) 24%, transparent), transparent 18rem),
+      linear-gradient(120deg, color-mix(in oklch, var(--color-surface-calm) 82%, black), var(--color-surface-obsidian) 58%, color-mix(in oklch, var(--color-element-nammu) 18%, var(--color-surface-obsidian)));
+  }
+
+  .reliquary-cinematic-fallback::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.42;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 20%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 20%, transparent) 1px, transparent 1px),
+      radial-gradient(circle at 50% 115%, color-mix(in oklch, var(--color-element-nammu) 35%, transparent), transparent 28rem);
+    background-size: 7.5rem 7.5rem, 7.5rem 7.5rem, 100% 100%;
+    mask-image: linear-gradient(to bottom, transparent, black 18%, black 78%, transparent);
+  }
+
+  .reliquary-cinematic-fallback::after {
+    content: "";
+    position: absolute;
+    inset: -12%;
+    opacity: 0.5;
+    background:
+      radial-gradient(ellipse at 12% 85%, color-mix(in oklch, var(--color-element-ki) 34%, transparent), transparent 18rem),
+      radial-gradient(ellipse at 90% 80%, color-mix(in oklch, var(--color-element-nammu) 32%, transparent), transparent 20rem),
+      repeating-linear-gradient(112deg, transparent 0 1.4rem, color-mix(in oklch, var(--color-surface-parchment) 4%, transparent) 1.45rem 1.5rem);
+    filter: blur(0.3px);
+  }
+}
+
+@keyframes section-scroll-build {
+  0% {
+    opacity: 0.18;
+    filter: blur(0.45rem);
+    transform: translateY(4rem) scale(0.975);
+  }
+
+  42% {
+    opacity: 0.72;
+    filter: blur(0.14rem);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes relic-fragment-build {
+  0% {
+    opacity: 0;
+    filter: blur(0.32rem);
+    transform: translateY(1.6rem);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-scroll-linked-reveal-ready="true"] .scroll-reveal {
+    opacity: calc(0.18 + (var(--reveal-progress, 1) * 0.82));
+    filter: blur(calc(var(--reveal-inverse, 0) * 0.45rem));
+    transform: translateY(calc(var(--reveal-inverse, 0) * 4rem)) scale(calc(1 - (var(--reveal-inverse, 0) * 0.025)));
+    transform-origin: 50% 18%;
+    will-change: opacity, filter, transform;
+  }
+
+  html[data-scroll-linked-reveal-ready="true"] .scroll-reveal :is(h2, h3, p, .ornate-separator, .reliquary-card, .surface-panel, fieldset, form, li) {
+    opacity: calc(0.3 + (var(--reveal-progress, 1) * 0.7));
+    filter: blur(calc(var(--reveal-inverse, 0) * 0.22rem));
+    transform: translateY(calc(var(--reveal-inverse, 0) * 1.4rem));
+    will-change: opacity, filter, transform;
+  }
+
+  @supports (animation-timeline: view()) {
+    html:not([data-scroll-linked-reveal-ready="true"]) .scroll-reveal {
+      animation: section-scroll-build linear both;
+      animation-timeline: view();
+      animation-range: entry 2% cover 34%;
+      transform-origin: 50% 18%;
+      will-change: opacity, filter, transform;
+    }
+
+    html:not([data-scroll-linked-reveal-ready="true"]) .scroll-reveal :is(h2, h3, p, .ornate-separator, .reliquary-card, .surface-panel, fieldset, form, li) {
+      animation: relic-fragment-build linear both;
+      animation-timeline: view();
+      animation-range: entry 8% cover 28%;
+      will-change: opacity, filter, transform;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

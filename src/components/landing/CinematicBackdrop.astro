@@ -1,0 +1,93 @@
+---
+import type { HeroCinematicContent } from "@/content/landing";
+
+interface Props {
+  cinematic: HeroCinematicContent;
+}
+
+const { cinematic } = Astro.props as Props;
+
+const hasVideoSource = cinematic.videoSrc !== null;
+const playbackButtonLabel = "Pause ceremonial motion";
+const fallbackLabel = cinematic.posterAlt;
+---
+
+<div class="absolute inset-0" data-cinematic-root>
+  {
+    hasVideoSource ? (
+      <>
+        <video
+          class="h-full w-full object-cover"
+          poster={cinematic.posterSrc}
+          aria-hidden="true"
+          role="presentation"
+          tabindex="-1"
+          muted
+          playsinline
+          autoplay
+          loop={cinematic.allowLoop}
+          preload="metadata"
+          data-cinematic-video
+        >
+          <source src={cinematic.videoSrc ?? ""} type={cinematic.videoType ?? undefined} />
+        </video>
+        <button
+          type="button"
+          class="absolute bottom-6 right-6 z-20 rounded-md border border-metal-aged-gold/70 bg-surface-calm/80 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-metal-aged-gold-bright hover:bg-surface-calm/90 focus-visible:bg-surface-calm/90 focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian"
+          aria-label={playbackButtonLabel}
+          aria-pressed="true"
+          data-cinematic-toggle
+        >
+          Pause motion
+        </button>
+      </>
+    ) : (
+      <div
+        class="reliquary-cinematic-fallback h-full w-full"
+        role="img"
+        aria-label={fallbackLabel}
+      ></div>
+    )
+  }
+  <div class="absolute inset-0 bg-surface-obsidian/55"></div>
+  <script is:inline>
+    (() => {
+      const root = document.querySelector("[data-cinematic-root]");
+      if (!(root instanceof HTMLElement)) {
+        return;
+      }
+
+      const video = root.querySelector("[data-cinematic-video]");
+      const toggle = root.querySelector("[data-cinematic-toggle]");
+      if (!(video instanceof HTMLVideoElement) || !(toggle instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const setPausedState = (isPaused) => {
+        toggle.textContent = isPaused ? "Play motion" : "Pause motion";
+        toggle.setAttribute("aria-pressed", isPaused ? "false" : "true");
+      };
+
+      if (reduceMotion) {
+        video.pause();
+        video.removeAttribute("autoplay");
+        setPausedState(true);
+      } else {
+        setPausedState(false);
+      }
+
+      toggle.addEventListener("click", () => {
+        if (video.paused) {
+          void video.play();
+          setPausedState(false);
+          return;
+        }
+
+        video.pause();
+        setPausedState(true);
+      });
+    })();
+  </script>
+</div>

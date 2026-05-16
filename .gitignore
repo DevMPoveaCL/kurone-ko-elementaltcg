@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output and generated Astro files
+dist/
+.astro/
+
+# Local/OpenCode artifacts and research docs
+.atl/
+docs/
+
+# Non-landing local design sources
+Informe de Diseño del Juego TCG.rtf
+CampoTCG.png
+diosas.png
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.log
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Markdown notes that are not needed to compile the landing
+src/assets/**/*.md
