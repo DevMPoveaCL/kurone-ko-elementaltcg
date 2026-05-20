@@ -1,0 +1,394 @@
+---
+import type { ShowingCardsContent } from "@/content/landing";
+
+interface Props {
+  content: ShowingCardsContent;
+}
+
+const { content } = Astro.props as Props;
+const activeCard = content.cards[0];
+
+if (!activeCard) {
+  throw new Error("ShowingCards requires at least one card.");
+}
+
+const trailingCardOne = content.cards[1] ?? activeCard;
+const trailingCardTwo = content.cards[2] ?? trailingCardOne;
+const serializedCards = JSON.stringify(content.cards).replace(/</g, "\\u003c");
+---
+
+<section
+  id="showing-cards"
+  class="showing-cards-unboxed scroll-mt-8"
+  aria-labelledby="showing-cards-title"
+  aria-label={content.ariaLabel}
+  aria-roledescription="carousel"
+  role="region"
+  data-showing-cards-root
+>
+  <div class="mx-auto w-full max-w-7xl px-6 py-16 lg:px-10 lg:py-20">
+    <div class="max-w-5xl" data-showing-cards-intro>
+      <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{content.sectionEyebrow}</p>
+      <h2 id="showing-cards-title" class="mt-3 text-3xl font-semibold md:text-4xl">{content.sectionTitle}</h2>
+      <p class="mt-3 max-w-5xl text-sm leading-relaxed text-surface-parchment/90 md:text-base">
+        {content.sectionDescription}
+      </p>
+      <div class="ornate-separator mt-6" aria-hidden="true"></div>
+    </div>
+
+    <div class="mt-10 grid gap-8 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,0.9fr)] lg:items-center">
+      <div class="showing-card-stage" data-showing-cards-stage>
+        <button
+          class="showing-card-control showing-card-control--side showing-card-control--previous"
+          type="button"
+          aria-label={content.previousLabel}
+          data-showing-cards-previous
+        >
+          <span aria-hidden="true">←</span>
+        </button>
+
+        <img
+          src={trailingCardOne.image.src}
+          alt=""
+          width={trailingCardOne.image.width}
+          height={trailingCardOne.image.height}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="auto"
+          class="showing-card-image showing-card-trailing showing-card-trailing--1"
+          aria-hidden="true"
+          data-card-slot="trailing-1"
+        />
+        <img
+          src={trailingCardTwo.image.src}
+          alt=""
+          width={trailingCardTwo.image.width}
+          height={trailingCardTwo.image.height}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="auto"
+          class="showing-card-image showing-card-trailing showing-card-trailing--2"
+          aria-hidden="true"
+          data-card-slot="trailing-2"
+        />
+        <div class="showing-card-tilt" data-showing-cards-tilt data-card-element={activeCard.element}>
+          <img
+            src={activeCard.image.src}
+            alt={activeCard.image.alt}
+            width={activeCard.image.width}
+            height={activeCard.image.height}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+            class="showing-card-image showing-card-buffer"
+            data-card-buffer="a"
+            data-buffer-active="true"
+            aria-hidden="false"
+          />
+          <img
+            src={activeCard.image.src}
+            alt=""
+            width={activeCard.image.width}
+            height={activeCard.image.height}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+            class="showing-card-image showing-card-buffer"
+            data-card-buffer="b"
+            data-buffer-active="false"
+            aria-hidden="true"
+          />
+        </div>
+
+        <button
+          class="showing-card-control showing-card-control--side showing-card-control--next"
+          type="button"
+          aria-label={content.nextLabel}
+          data-showing-cards-next
+        >
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <div class="showing-card-dots" aria-label="Showing card positions">
+          {
+            content.cards.map((card, index) => (
+              <button
+                class="showing-card-dot"
+                type="button"
+                aria-label={`Show ${card.name}`}
+                aria-current={index === 0 ? "true" : "false"}
+                aria-pressed={index === 0 ? "true" : "false"}
+                data-showing-cards-dot
+                data-card-index={index}
+              >
+                <span class="sr-only">{card.name}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <aside
+        class="showing-card-lore"
+        aria-live="polite"
+        data-showing-cards-lore
+        data-transitioning="false"
+        data-motion-ready="false"
+      >
+        <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright" data-showing-cards-element>
+          {activeCard.elementLabel}
+        </p>
+        <h3 class="mt-3 text-3xl font-semibold" data-showing-cards-name>{activeCard.name}</h3>
+        <p class="mt-2 text-sm uppercase tracking-[0.2em] text-surface-parchment/85" data-showing-cards-role>
+          {activeCard.role} · {activeCard.symbol}
+        </p>
+        <p class="mt-5 text-base leading-relaxed text-surface-parchment/90" data-showing-cards-short>
+          {activeCard.shortLore}
+        </p>
+        <p class="mt-4 text-sm leading-7 text-surface-parchment/90" data-showing-cards-tablet>
+          {activeCard.tabletLore}
+        </p>
+        <p class="mt-5 text-base leading-relaxed text-metal-aged-gold-bright" data-showing-cards-question>
+          {activeCard.question}
+        </p>
+
+        <p class="sr-only" data-showing-cards-live>{content.livePrefix} {activeCard.name}</p>
+      </aside>
+    </div>
+  </div>
+
+  <script
+    is:inline
+    type="application/json"
+    data-showing-cards-data
+    data-live-prefix={content.livePrefix}
+    set:html={serializedCards}
+  ></script>
+
+  <script is:inline>
+    (() => {
+      const roots = document.querySelectorAll("[data-showing-cards-root]");
+
+      roots.forEach((root) => {
+        if (!(root instanceof HTMLElement)) return;
+
+        const dataScript = root.querySelector("[data-showing-cards-data]");
+        const livePrefix = dataScript instanceof HTMLElement ? dataScript.dataset.livePrefix || "" : "";
+        const buffers = Array.from(root.querySelectorAll("[data-card-buffer]"));
+        const trailingImages = Array.from(root.querySelectorAll("[data-card-slot^='trailing-']"));
+        const tilt = root.querySelector("[data-showing-cards-tilt]");
+        const lore = root.querySelector("[data-showing-cards-lore]");
+        const element = root.querySelector("[data-showing-cards-element]");
+        const name = root.querySelector("[data-showing-cards-name]");
+        const role = root.querySelector("[data-showing-cards-role]");
+        const shortLore = root.querySelector("[data-showing-cards-short]");
+        const tabletLore = root.querySelector("[data-showing-cards-tablet]");
+        const question = root.querySelector("[data-showing-cards-question]");
+        const live = root.querySelector("[data-showing-cards-live]");
+        const previous = root.querySelector("[data-showing-cards-previous]");
+        const next = root.querySelector("[data-showing-cards-next]");
+        const dots = Array.from(root.querySelectorAll("[data-showing-cards-dot]"));
+
+        if (
+          !(dataScript instanceof HTMLScriptElement) ||
+          buffers.length !== 2 ||
+          !buffers.every((buffer) => buffer instanceof HTMLImageElement) ||
+          !(tilt instanceof HTMLElement) ||
+          !(lore instanceof HTMLElement) ||
+          !(element instanceof HTMLElement) ||
+          !(name instanceof HTMLElement) ||
+          !(role instanceof HTMLElement) ||
+          !(shortLore instanceof HTMLElement) ||
+          !(tabletLore instanceof HTMLElement) ||
+          !(question instanceof HTMLElement) ||
+          !(live instanceof HTMLElement) ||
+          !(previous instanceof HTMLButtonElement) ||
+          !(next instanceof HTMLButtonElement)
+        ) {
+          return;
+        }
+
+        let cards;
+        try {
+          cards = JSON.parse(dataScript.textContent || "[]");
+        } catch {
+          return;
+        }
+
+        if (!Array.isArray(cards) || cards.length === 0) return;
+
+        let activeIndex = 0;
+        let activeBufferIndex = 0;
+        let renderRequest = 0;
+        let transitionEndTimer = 0;
+
+        const prefersAnimatedSwap = window.matchMedia("(prefers-reduced-motion: no-preference)");
+        const setMotionReady = () => {
+          lore.dataset.motionReady = String(prefersAnimatedSwap.matches);
+        };
+
+        setMotionReady();
+        if (typeof prefersAnimatedSwap.addEventListener === "function") {
+          prefersAnimatedSwap.addEventListener("change", setMotionReady);
+        }
+
+        const getWrappedCard = (index) => cards[(index + cards.length) % cards.length];
+
+        const preloadImage = async (card) => {
+          if (!card || !card.image || !card.image.src) return;
+
+          const preload = new Image();
+          preload.src = card.image.src;
+          if (typeof preload.decode === "function") {
+            await preload.decode().catch(() => undefined);
+          }
+        };
+
+        const preloadAdjacent = (index) => {
+          void preloadImage(getWrappedCard(index - 1));
+          void preloadImage(getWrappedCard(index + 1));
+        };
+
+        const updateLoreContent = (card) => {
+          if (!card || !card.image) return;
+
+          tilt.dataset.cardElement = card.element;
+
+          element.textContent = card.elementLabel;
+          name.textContent = card.name;
+          role.textContent = `${card.role} · ${card.symbol}`;
+          shortLore.textContent = card.shortLore;
+          tabletLore.textContent = card.tabletLore;
+          question.textContent = card.question;
+          live.textContent = `${livePrefix} ${card.name}`.trim();
+
+          dots.forEach((dot, dotIndex) => {
+            if (!(dot instanceof HTMLButtonElement)) return;
+            const isActive = dotIndex === activeIndex;
+            dot.setAttribute("aria-current", String(isActive));
+              dot.setAttribute("aria-pressed", String(isActive));
+            });
+        };
+
+        const updateTrailingCards = () => {
+          trailingImages.forEach((trailingImage, trailingIndex) => {
+            if (!(trailingImage instanceof HTMLImageElement)) return;
+            const trailingCard = getWrappedCard(activeIndex + trailingIndex + 1);
+            if (!trailingCard || !trailingCard.image) return;
+            trailingImage.src = trailingCard.image.src;
+            trailingImage.width = trailingCard.image.width;
+            trailingImage.height = trailingCard.image.height;
+          });
+        };
+
+        const flipBuffer = (card) => {
+          const nextBufferIndex = activeBufferIndex === 0 ? 1 : 0;
+          const currentBuffer = buffers[activeBufferIndex];
+          const nextBuffer = buffers[nextBufferIndex];
+          if (!(currentBuffer instanceof HTMLImageElement) || !(nextBuffer instanceof HTMLImageElement)) return;
+
+          nextBuffer.src = card.image.src;
+          nextBuffer.alt = card.image.alt;
+          nextBuffer.width = card.image.width;
+          nextBuffer.height = card.image.height;
+          nextBuffer.setAttribute("aria-hidden", "false");
+          nextBuffer.dataset.bufferActive = "true";
+
+          currentBuffer.setAttribute("aria-hidden", "true");
+          currentBuffer.dataset.bufferActive = "false";
+          activeBufferIndex = nextBufferIndex;
+        };
+
+        const render = async (index) => {
+          activeIndex = (index + cards.length) % cards.length;
+          const card = cards[activeIndex];
+          if (!card || !card.image) return;
+
+          window.clearTimeout(transitionEndTimer);
+          const requestId = renderRequest + 1;
+          renderRequest = requestId;
+
+          updateLoreContent(card);
+          updateTrailingCards();
+          preloadAdjacent(activeIndex);
+
+          if (!prefersAnimatedSwap.matches) {
+            lore.dataset.transitioning = "false";
+            await preloadImage(card);
+            if (requestId !== renderRequest) return;
+            flipBuffer(card);
+            return;
+          }
+
+          lore.dataset.motionReady = "true";
+          lore.dataset.transitioning = "true";
+
+          await preloadImage(card);
+          if (requestId !== renderRequest) return;
+          flipBuffer(card);
+
+          transitionEndTimer = window.setTimeout(() => {
+            lore.dataset.transitioning = "false";
+          }, 300);
+        };
+
+        previous.addEventListener("click", () => render((activeIndex - 1 + cards.length) % cards.length));
+        next.addEventListener("click", () => render((activeIndex + 1 + cards.length) % cards.length));
+
+        dots.forEach((dot) => {
+          if (!(dot instanceof HTMLButtonElement)) return;
+          dot.addEventListener("click", () => {
+            const index = Number.parseInt(dot.dataset.cardIndex || "0", 10);
+            render(index);
+          });
+        });
+
+        root.addEventListener("keydown", (event) => {
+          if (!(event instanceof KeyboardEvent)) return;
+          if (!root.contains(document.activeElement)) return;
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            render((activeIndex - 1 + cards.length) % cards.length);
+          }
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            render((activeIndex + 1 + cards.length) % cards.length);
+          }
+        });
+
+        const canTilt = window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
+          window.matchMedia("(pointer: fine)").matches;
+
+        if (!canTilt) return;
+
+        let frame = 0;
+        let pointerX = 50;
+        let pointerY = 50;
+
+        const applyTilt = () => {
+          const rotateY = (pointerX - 50) * 0.16;
+          const rotateX = (50 - pointerY) * 0.14;
+          tilt.style.setProperty("--tilt-x", `${rotateX.toFixed(2)}deg`);
+          tilt.style.setProperty("--tilt-y", `${rotateY.toFixed(2)}deg`);
+          tilt.style.setProperty("--glare-x", `${pointerX.toFixed(2)}%`);
+          tilt.style.setProperty("--glare-y", `${pointerY.toFixed(2)}%`);
+          frame = 0;
+        };
+
+        tilt.addEventListener("pointermove", (event) => {
+          const rect = tilt.getBoundingClientRect();
+          pointerX = ((event.clientX - rect.left) / rect.width) * 100;
+          pointerY = ((event.clientY - rect.top) / rect.height) * 100;
+          if (frame === 0) frame = window.requestAnimationFrame(applyTilt);
+        }, { passive: true });
+
+        tilt.addEventListener("pointerleave", () => {
+          tilt.style.setProperty("--tilt-x", "0deg");
+          tilt.style.setProperty("--tilt-y", "0deg");
+          tilt.style.setProperty("--glare-x", "50%");
+          tilt.style.setProperty("--glare-y", "18%");
+        });
+      });
+    })();
+  </script>
+</section>

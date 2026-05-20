@@ -7,6 +7,88 @@ export const ELEMENT = {
 
 export type Element = (typeof ELEMENT)[keyof typeof ELEMENT];
 
+export type CardFrameGlyph = "infinity" | "waterDrop" | "queen" | "crown";
+
+export interface CardFrameConfig {
+  cost: string;
+  rank: string;
+  loreTitle: string;
+  attributeLabel: string;
+  topLeftGlyphs: readonly CardFrameGlyph[];
+  bottomLeftGlyphs: readonly CardFrameGlyph[];
+  bottomRightGlyph: CardFrameGlyph;
+  illustrationObjectPosition: string;
+  /** Final full-card render for urgent/full-asset replacement flow */
+  fullCard?: string;
+  /** Nammu layered card — uses exact user-provided PNG layer assets */
+  layered?: {
+    frame: string;
+    illustration: string;
+    symbolInfinity: string;
+    symbolCost: string;
+    symbolQueen: string;
+    symbolWater: string;
+    loreText: string;
+  };
+}
+
+export const CARD_FRAME_CONFIG = {
+  fire: {
+    cost: "7",
+    rank: "Q",
+    loreTitle: "Lore",
+    attributeLabel: "Fire",
+    topLeftGlyphs: ["infinity", "waterDrop"],
+    bottomLeftGlyphs: ["queen", "crown", "waterDrop"],
+    bottomRightGlyph: "waterDrop",
+    illustrationObjectPosition: "center 18%",
+    fullCard: "/assets/cards/utu/card.webp",
+  },
+  water: {
+    cost: "7",
+    rank: "Q",
+    loreTitle: "Lore",
+    attributeLabel: "Water",
+    topLeftGlyphs: ["infinity", "waterDrop"],
+    bottomLeftGlyphs: ["queen", "crown", "waterDrop"],
+    bottomRightGlyph: "waterDrop",
+    illustrationObjectPosition: "center 18%",
+    fullCard: "/assets/cards/nammu/card.webp",
+    layered: {
+      frame: "/assets/cards/nammu/frame.png",
+      illustration: "/assets/cards/nammu/illustration.png",
+      symbolInfinity: "/assets/cards/nammu/symbol-infinity.png",
+      symbolCost: "/assets/cards/nammu/symbol-cost-7.png",
+      symbolQueen: "/assets/cards/nammu/symbol-queen.png",
+      symbolWater: "/assets/cards/nammu/symbol-water.png",
+      loreText:
+        "She brought no destruction, only memory: the echo of the first breath when the world still slept beneath the waters. In her presence, every soul remembered its forgotten cradle.",
+    },
+  },
+  air: {
+    cost: "7",
+    rank: "Q",
+    loreTitle: "Lore",
+    attributeLabel: "Air",
+    topLeftGlyphs: ["infinity", "waterDrop"],
+    bottomLeftGlyphs: ["queen", "crown", "waterDrop"],
+    bottomRightGlyph: "waterDrop",
+    illustrationObjectPosition: "center 18%",
+    fullCard: "/assets/cards/an/card.webp",
+  },
+  earth: {
+    cost: "7",
+    rank: "Q",
+    loreTitle: "Lore",
+    attributeLabel: "Earth",
+    topLeftGlyphs: ["infinity", "waterDrop"],
+    bottomLeftGlyphs: ["queen", "crown", "waterDrop"],
+    bottomRightGlyph: "waterDrop",
+    illustrationObjectPosition: "center 18%",
+    fullCard: "/assets/cards/ki/card.webp",
+  },
+} as const satisfies Record<Element, CardFrameConfig>;
+
 // ─── Image Optimization Contract ─────────────────────────────────────────────
 // Guides future replacement of placeholder <img> tags with Astro <Image />.
 // Until approved assets exist on disk, keep standard <img> with these props.
@@ -56,53 +138,59 @@ export const IMAGE_OPTIMIZATION: Record<string, ImageOptimizationConfig> = {
     loading: "eager",
     fetchpriority: "auto",
     decoding: "sync",
-    altFallback: "The Four Sovereigns — Sumerian Edition key art",
+    altFallback: "Elemental Queens — Sumerian Edition key art",
     isPlaceholder: true,
     fallbackFormat: "png",
   },
+  // APPROVAL GATE: When final goddess illustrations are generated via ChatGPT Image 2
+  // and placed at public/assets/landing/goddesses/{element}.png:
+  //   - Set isPlaceholder to false
+  //   - Update src to "/assets/landing/goddesses/{element}.png"
+  //   - Delete {element}.svg placeholder files
+  //   - Run `npm run build` to verify Astro image optimization
   "goddess-utu": {
-    src: "/assets/landing/goddesses/utu-placeholder.webp",
-    width: 600,
-    height: 840,
+    src: "/assets/cards/utu/card.webp",
+    width: 2160,
+    height: 3840,
     loading: "lazy",
     fetchpriority: "auto",
     decoding: "async",
     altFallback: "Utu — Solar Judgment card render",
-    isPlaceholder: true,
-    fallbackFormat: "png",
+    isPlaceholder: false,
+    fallbackFormat: null,
   },
   "goddess-nammu": {
-    src: "/assets/landing/goddesses/nammu-placeholder.webp",
-    width: 600,
-    height: 840,
+    src: "/assets/cards/nammu/card.webp",
+    width: 2160,
+    height: 3840,
     loading: "lazy",
     fetchpriority: "auto",
     decoding: "async",
     altFallback: "Nammu — Abyssal Memory card render",
-    isPlaceholder: true,
-    fallbackFormat: "png",
+    isPlaceholder: false,
+    fallbackFormat: null,
   },
   "goddess-an": {
-    src: "/assets/landing/goddesses/an-placeholder.webp",
-    width: 600,
-    height: 840,
+    src: "/assets/cards/an/card.webp",
+    width: 2160,
+    height: 3840,
     loading: "lazy",
     fetchpriority: "auto",
     decoding: "async",
     altFallback: "An — Celestial Dominion card render",
-    isPlaceholder: true,
-    fallbackFormat: "png",
+    isPlaceholder: false,
+    fallbackFormat: null,
   },
   "goddess-ki": {
-    src: "/assets/landing/goddesses/ki-placeholder.webp",
-    width: 600,
-    height: 840,
+    src: "/assets/cards/ki/card.webp",
+    width: 2160,
+    height: 3840,
     loading: "lazy",
     fetchpriority: "auto",
     decoding: "async",
     altFallback: "Ki — Verdant Foundation card render",
-    isPlaceholder: true,
-    fallbackFormat: "png",
+    isPlaceholder: false,
+    fallbackFormat: null,
   },
   "card-anatomy": {
     src: "/src/assets/landing/goddesses/first-edition-card-placeholder.webp",
@@ -117,16 +205,136 @@ export const IMAGE_OPTIMIZATION: Record<string, ImageOptimizationConfig> = {
   },
 } as const;
 
-export interface GoddessCardContent {
-  id: Element;
-  name: "Utu" | "Nammu" | "An" | "Ki";
+export const SHOWING_CARD_ORDER = ["nammu", "utu", "an", "ki"] as const;
+
+export type ShowingCardId = (typeof SHOWING_CARD_ORDER)[number];
+
+export const SHOWING_CARD_NAME = {
+  nammu: "Nammu",
+  utu: "Utu",
+  an: "An",
+  ki: "Ki",
+} as const satisfies Record<ShowingCardId, string>;
+
+export type ShowingCardName = (typeof SHOWING_CARD_NAME)[ShowingCardId];
+
+export const SHOWING_CARD_ELEMENT = {
+  nammu: ELEMENT.WATER,
+  utu: ELEMENT.FIRE,
+  an: ELEMENT.AIR,
+  ki: ELEMENT.EARTH,
+} as const satisfies Record<ShowingCardId, Element>;
+
+export interface ShowingCardImage {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  optimizationKey: string;
+}
+
+export interface ShowingCardContent {
+  id: ShowingCardId;
+  name: ShowingCardName;
+  element: Element;
+  elementLabel: string;
   role: string;
   symbol: string;
   shortLore: string;
-  cardImage: string;
-  /** Optimization preset key from IMAGE_OPTIMIZATION. */
-  optimizationKey: string;
+  tabletLore: string;
+  question: string;
+  image: ShowingCardImage;
 }
+
+export interface ShowingCardsContent {
+  sectionEyebrow: string;
+  sectionTitle: string;
+  sectionDescription: string;
+  ariaLabel: string;
+  previousLabel: string;
+  nextLabel: string;
+  livePrefix: string;
+  cards: readonly ShowingCardContent[];
+}
+
+export const SHOWING_CARDS_BY_ID = {
+  nammu: {
+    id: "nammu",
+    name: SHOWING_CARD_NAME.nammu,
+    element: SHOWING_CARD_ELEMENT.nammu,
+    elementLabel: "Water",
+    role: "Abyssal Memory",
+    symbol: "Tide Seal",
+    shortLore: "The first water remembers every cradle, every wound, and every survivor the world tried to erase.",
+    tabletLore:
+      "She brought no destruction, only memory: the echo of the first breath when the world still slept beneath the waters. Before temple, name, or clay learned to say “I,” Nammu was the abyssal matrix from which sky and earth were born. She pleaded for humanity because she remembered every scar that survived cruelty, every hand that reached for water, and every descendant of Ziusudra who rose after the flood to write laws, bury the beloved, and prove that falling is not the same as failure.",
+    question: "What is a soul, if it no longer remembers where it began?",
+    image: {
+      src: "/assets/cards/nammu/card.webp",
+      width: 2160,
+      height: 3840,
+      alt: "Nammu — Abyssal Memory full-card render",
+      optimizationKey: "goddess-nammu",
+    },
+  },
+  utu: {
+    id: "utu",
+    name: SHOWING_CARD_NAME.utu,
+    element: SHOWING_CARD_ELEMENT.utu,
+    elementLabel: "Fire",
+    role: "Solar Judgment",
+    symbol: "Sun Seal",
+    shortLore: "The sun has seen every cruelty and still burns, begging someone to prove the wound is not all that remains.",
+    tabletLore:
+      "Utu is the first spark born between height and ground: light, heat, and the unbearable knowledge that the cosmos can be judged. For five thousand years she watched wars, empires, graves, children hiding from violence, and cities turning ash beneath the same dawn she was condemned to give. She voted guilty because justice without intervention became torture, then offered the Game because even the sun needed a player to show her the scar beneath the wound.",
+    question: "If the sun has witnessed every cruelty, is it just that she must still light our darkness?",
+    image: {
+      src: "/assets/cards/utu/card.webp",
+      width: 2160,
+      height: 3840,
+      alt: "Utu — Solar Judgment full-card render",
+      optimizationKey: "goddess-utu",
+    },
+  },
+  an: {
+    id: "an",
+    name: SHOWING_CARD_NAME.an,
+    element: SHOWING_CARD_ELEMENT.an,
+    elementLabel: "Air",
+    role: "Celestial Dominion",
+    symbol: "Sky Seal",
+    shortLore: "The sky gave aspiration, then learned that every descent could wound the ones she wanted to protect.",
+    tabletLore:
+      "An stretched the vault and gave humanity aspiration: the hunger to name stars, build towers, and reach beyond the mud. Yet every time she descended, her gifts twisted into borders, arrogance, broken tongues, and worship of distance over accountability. She is not cold because she does not love; she is distant because she fears her touch will destroy what she loves, and the Game asks whether height can become care without becoming conquest.",
+    question: "What is love, if touching what you love would destroy it?",
+    image: {
+      src: "/assets/cards/an/card.webp",
+      width: 2160,
+      height: 3840,
+      alt: "An — Celestial Dominion full-card render",
+      optimizationKey: "goddess-an",
+    },
+  },
+  ki: {
+    id: "ki",
+    name: SHOWING_CARD_NAME.ki,
+    element: SHOWING_CARD_ELEMENT.ki,
+    elementLabel: "Earth",
+    role: "Verdant Foundation",
+    symbol: "Stone Seal",
+    shortLore: "The earth carries every footstep, burial, harvest, and name, terrified that service may be mistaken for absence.",
+    tabletLore:
+      "Ki gave humanity ground, womb, grave, field, mountain, and every name that cultures placed upon the patient earth. She fragmented herself into service until she feared becoming useful but unseen: a silent stage for a world with no one left to stand upon it. She and Nammu hid Ziusudra’s descendants after the flood, not from weakness but because a goddess who admits her terror can still choose protection over pride.",
+    question: "What remains of a goddess, when her silence is mistaken for absence?",
+    image: {
+      src: "/assets/cards/ki/card.webp",
+      width: 2160,
+      height: 3840,
+      alt: "Ki — Verdant Foundation full-card render",
+      optimizationKey: "goddess-ki",
+    },
+  },
+} as const satisfies Record<ShowingCardId, ShowingCardContent>;
 
 export interface HeroContent {
   title: string;
@@ -146,12 +354,6 @@ export interface HeroCinematicContent {
   videoSrc: string | null;
   videoType: "video/mp4" | "video/webm" | null;
   allowLoop: boolean;
-}
-
-export interface DivinePathsContent {
-  sectionEyebrow: string;
-  sectionTitle: string;
-  sectionDescription: string;
 }
 
 export interface TacticalBattlefieldContent {
@@ -209,7 +411,7 @@ export interface RoadmapTeaserContent {
 export interface LandingSectionOrder {
   id:
     | "hero"
-    | "four-divine-paths"
+    | "showing-cards"
     | "tactical-battlefield"
     | "energy-ascension"
     | "card-anatomy"
@@ -222,24 +424,23 @@ export interface LandingSectionOrder {
 export interface LandingContent {
   locale: "en";
   edition: "Sumerian Edition";
-  gameName: "The Four Sovereigns";
+  gameName: "Elemental Queens";
   hero: HeroContent;
-  divinePathsContent: DivinePathsContent;
+  showingCards: ShowingCardsContent;
   tacticalBattlefield: TacticalBattlefieldContent;
   energyAscension: EnergyAscensionContent;
   cardAnatomy: CardAnatomyContent;
   loreFragments: LoreFragmentsContent;
   roadmapTeaser: RoadmapTeaserContent;
   sections: LandingSectionOrder[];
-  divinePaths: GoddessCardContent[];
 }
 
 export const landingContent: LandingContent = {
   locale: "en",
   edition: "Sumerian Edition",
-  gameName: "The Four Sovereigns",
+  gameName: "Elemental Queens",
   hero: {
-    title: "The Four Sovereigns — Sumerian Edition",
+    title: "Elemental Queens — Sumerian Edition",
     subtitle: "A divine tactical TCG videogame forged in the first age.",
     supportingText:
       "Enter a reliquary of goddess relics, sacred symbols, and strategic devotion where every summon reshapes the battlefield.",
@@ -255,11 +456,16 @@ export const landingContent: LandingContent = {
       allowLoop: false,
     },
   },
-  divinePathsContent: {
-    sectionEyebrow: "The Divine Paths",
-    sectionTitle: "Four Goddesses. Four Ways to Command Fate.",
+  showingCards: {
+    sectionEyebrow: "The Four Primordial Queens",
+    sectionTitle: "The Oldest Trial Has Returned to Your Hands",
     sectionDescription:
-      "Each sovereign offers a distinct tactical identity through elemental symbolism, ritual role, and sacred battlefield intent.",
+      "Before the world learned to count its days, four Queens played beneath the silence of creation. Their movements became Memory, Judgment, Ascent, and Foundation. The Nexus kept that first trial alive where Water, Fire, Air, and Earth could touch without destroying one another. Now those fragments descend as cards, not as gifts, but as a final question. No prophecy names the hand that must answer. No fifth trial waits beyond this one. If even divinity could not heal what it carried, what will you do when her relic chooses you?",
+    ariaLabel: "Showing Cards elemental carousel",
+    previousLabel: "Show previous goddess card",
+    nextLabel: "Show next goddess card",
+    livePrefix: "Now showing",
+    cards: SHOWING_CARD_ORDER.map((cardId) => SHOWING_CARDS_BY_ID[cardId]),
   },
   tacticalBattlefield: {
     sectionEyebrow: "Tactical Proof",
@@ -286,7 +492,7 @@ export const landingContent: LandingContent = {
       },
       {
         tier: "6 Energy",
-        title: "Awaken Sovereign Gifts",
+        title: "Awaken Queen Gifts",
         detail:
           "Mono-element focus grants each goddess a unique strategic advantage.",
       },
@@ -305,23 +511,23 @@ export const landingContent: LandingContent = {
       "Each first-edition card combines identity, cost, and consequence in one artifact so collectors and competitors read intent at a glance.",
     fields: [
       {
-        label: "Sovereign Crest",
-        detail: "Displays goddess allegiance with name and sacred seal, never by color alone.",
+        label: "Seal Medallion",
+        detail: "Top-left origin seal combines infinity and elemental drops for divine allegiance.",
       },
       {
-        label: "Energy Invocation",
-        detail: "Marks the ritual threshold required to deploy influence on the board.",
+        label: "Cost Medallion",
+        detail: "Top-right value marks the ritual threshold required to deploy influence on the board.",
       },
       {
-        label: "Blessed / Sacrifice Script",
-        detail: "Highlights the cost-and-reward tension that defines high-stakes turns.",
+        label: "Rank Medallion",
+        detail: "Bottom-left rank pairs the queen mark with crown and drop iconography.",
       },
       {
-        label: "Temple Lore Line",
-        detail: "Carries concise narrative memory without replacing the full codex.",
+        label: "Attribute Medallion",
+        detail: "Bottom-right elemental drop reinforces the card attribute without relying on color alone.",
       },
     ],
-    placeholderAsset: "/src/assets/landing/goddesses/first-edition-card-placeholder.webp",
+    placeholderAsset: "/assets/cards/utu/card.webp",
   },
   loreFragments: {
     sectionEyebrow: "Recovered Tablets",
@@ -352,51 +558,13 @@ export const landingContent: LandingContent = {
   },
   sections: [
     { id: "hero", title: "Hero Reliquary" },
-    { id: "four-divine-paths", title: "Four Divine Paths" },
+    { id: "showing-cards", title: "Showing Cards" },
     { id: "tactical-battlefield", title: "Tactical Battlefield" },
     { id: "energy-ascension", title: "Energy Ascension" },
     { id: "card-anatomy", title: "First Edition Card Anatomy" },
     { id: "lore-fragments", title: "Lore Fragments" },
     { id: "future-eras-teaser", title: "Future Eras Teaser" },
     { id: "final-cta", title: "Final CTA" },
-  ],
-  divinePaths: [
-    {
-      id: ELEMENT.FIRE,
-      name: "Utu",
-      role: "Solar Judgment",
-      symbol: "Sun Seal",
-      shortLore: "Bearer of radiant verdict and sacred flame.",
-      cardImage: "/assets/landing/goddesses/utu-placeholder.webp",
-      optimizationKey: "goddess-utu",
-    },
-    {
-      id: ELEMENT.WATER,
-      name: "Nammu",
-      role: "Abyssal Memory",
-      symbol: "Tide Seal",
-      shortLore: "Keeper of primordial waters and hidden tides.",
-      cardImage: "/assets/landing/goddesses/nammu-placeholder.webp",
-      optimizationKey: "goddess-nammu",
-    },
-    {
-      id: ELEMENT.AIR,
-      name: "An",
-      role: "Celestial Dominion",
-      symbol: "Sky Seal",
-      shortLore: "Sovereign of the upper vault and divine order.",
-      cardImage: "/assets/landing/goddesses/an-placeholder.webp",
-      optimizationKey: "goddess-an",
-    },
-    {
-      id: ELEMENT.EARTH,
-      name: "Ki",
-      role: "Verdant Foundation",
-      symbol: "Stone Seal",
-      shortLore: "Mother of foundations, growth, and endurance.",
-      cardImage: "/assets/landing/goddesses/ki-placeholder.webp",
-      optimizationKey: "goddess-ki",
-    },
   ],
 };
 
@@ -419,7 +587,7 @@ export const landingContent: LandingContent = {
 //   "none"              — hide the visual entirely (for optional assets)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type FallbackStrategy = "placeholder-label" | "static-svg" | "none";
+export type FallbackStrategy = "placeholder-label" | "static-svg" | "static-png" | "none";
 
 export interface AssetFallbackEntry {
   /** Human-readable asset name matching docs/landing-asset-checklist.md */
@@ -447,37 +615,37 @@ export const ASSET_FALLBACK_MAP: Record<string, AssetFallbackEntry> = {
     assetName: "Open Graph default image (hero/)",
     status: "Placeholder",
     strategy: "placeholder-label",
-    fallbackLabel: "The Four Sovereigns — Sumerian Edition",
+    fallbackLabel: "Elemental Queens — Sumerian Edition",
     priority: 2,
   },
 
   // Goddess renders
   "goddess-utu": {
-    assetName: "Utu goddess card render (goddesses/)",
-    status: "Placeholder",
-    strategy: "placeholder-label",
-    fallbackLabel: "Utu — Solar Judgment (awaiting approved render)",
+    assetName: "Utu full-card render (cards/utu/)",
+    status: "Approved",
+    strategy: "static-png",
+    fallbackLabel: "Utu — Solar Judgment approved card render",
     priority: 2,
   },
   "goddess-nammu": {
-    assetName: "Nammu goddess card render (goddesses/)",
-    status: "Placeholder",
-    strategy: "placeholder-label",
-    fallbackLabel: "Nammu — Abyssal Memory (awaiting approved render)",
+    assetName: "Nammu full-card render (cards/nammu/)",
+    status: "Approved",
+    strategy: "static-png",
+    fallbackLabel: "Nammu — Abyssal Memory approved card render",
     priority: 2,
   },
   "goddess-an": {
-    assetName: "An goddess card render (goddesses/)",
-    status: "Placeholder",
-    strategy: "placeholder-label",
-    fallbackLabel: "An — Celestial Dominion (awaiting approved render)",
+    assetName: "An full-card render (cards/an/)",
+    status: "Approved",
+    strategy: "static-png",
+    fallbackLabel: "An — Celestial Dominion approved card render",
     priority: 2,
   },
   "goddess-ki": {
-    assetName: "Ki goddess card render (goddesses/)",
-    status: "Placeholder",
-    strategy: "placeholder-label",
-    fallbackLabel: "Ki — Verdant Foundation (awaiting approved render)",
+    assetName: "Ki full-card render (cards/ki/)",
+    status: "Approved",
+    strategy: "static-png",
+    fallbackLabel: "Ki — Verdant Foundation approved card render",
     priority: 2,
   },
 
@@ -493,7 +661,7 @@ export const ASSET_FALLBACK_MAP: Record<string, AssetFallbackEntry> = {
   // Symbols (currently inline SVG/text — tracked for future asset swap)
   "symbols-elemental": {
     assetName: "Elemental symbol set (symbols/) — Fire, Water, Air, Earth",
-    status: "Missing",
+    status: "Approved",
     strategy: "static-svg",
     fallbackLabel: "~ Elemental symbols pending",
     priority: 3,
@@ -516,14 +684,14 @@ export const ASSET_FALLBACK_MAP: Record<string, AssetFallbackEntry> = {
   // Ornaments
   "ornaments-dividers": {
     assetName: "Cuneiform-style section dividers (ornaments/)",
-    status: "Missing",
+    status: "Approved",
     strategy: "static-svg",
     fallbackLabel: "~ Ornamental divider pending",
     priority: 4,
   },
   "ornaments-frames": {
     assetName: "Card frame motifs (ornaments/)",
-    status: "Missing",
+    status: "Approved",
     strategy: "static-svg",
     fallbackLabel: "~ Frame ornament pending",
     priority: 4,
@@ -540,10 +708,10 @@ export const ASSET_FALLBACK_MAP: Record<string, AssetFallbackEntry> = {
 
   // Brand identity
   "logo-wordmark": {
-    assetName: "The Four Sovereigns logo / wordmark",
+    assetName: "Elemental Queens logo / wordmark",
     status: "Missing",
     strategy: "placeholder-label",
-    fallbackLabel: "The Four Sovereigns",
+    fallbackLabel: "Elemental Queens",
     priority: 1,
   },
 };

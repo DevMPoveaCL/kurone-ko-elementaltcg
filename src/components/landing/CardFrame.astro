@@ -1,0 +1,262 @@
+---
+import { CARD_FRAME_CONFIG } from "@/content/landing";
+import type { CardFrameConfig, CardFrameGlyph, Element } from "@/content/landing";
+
+interface Props {
+  element: Element;
+  /** Path to goddess illustration or full-card asset */
+  illustration?: string;
+  /** Goddess name (e.g. "Utu") */
+  name: string;
+  /** Role text (e.g. "Solar Judgment") */
+  role: string;
+  /** Symbol display label (e.g. "Sun Seal") */
+  symbol: string;
+  /** Short lore text */
+  shortLore: string;
+  /** Optional: ability text displayed above lore */
+  ability?: string;
+  /** Whether this is a diagram/anatomy display (no interaction) */
+  isAnatomy?: boolean;
+}
+
+const {
+  element,
+  illustration,
+  name,
+  role,
+  symbol,
+  shortLore,
+  ability,
+  isAnatomy = false,
+} = Astro.props as Props;
+
+const frameConfig = CARD_FRAME_CONFIG[element];
+const typedFrameConfig = frameConfig as CardFrameConfig;
+const ornamentBase = "/assets/landing/ornaments";
+
+// Full-card assets take priority for the urgent production path.
+const waterConfig = frameConfig as typeof CARD_FRAME_CONFIG.water;
+const fullCardAsset = typedFrameConfig.fullCard;
+const hasFullCardAsset = !!fullCardAsset;
+const isLayeredNammu = !hasFullCardAsset && element === "water" && !!waterConfig.layered;
+const layeredConfig = isLayeredNammu ? waterConfig.layered : null;
+
+const glyphLabel: Record<CardFrameGlyph, string> = {
+  infinity: "Infinity",
+  waterDrop: "Water drop",
+  queen: "Queen rank",
+  crown: "Crown",
+};
+---
+
+{hasFullCardAsset && fullCardAsset ? (
+  <figure
+    class={`card-frame card-frame--${element} card-frame--full-card`}
+    role={isAnatomy ? "img" : "figure"}
+    aria-label={`${name} — ${role} card`}
+  >
+    <img
+      class="card-frame-full__image"
+      src={fullCardAsset}
+      alt={`${name} — ${role} final card`}
+      width="2160"
+      height="3840"
+      loading={isAnatomy ? "eager" : "lazy"}
+      decoding="async"
+    />
+  </figure>
+) : isLayeredNammu && layeredConfig ? (
+  // ════════════════════════════════════════════════════════════════════════════
+  // NAMMU LAYERED CARD — exact asset composition
+  // Layer order (bottom to top):
+  //   1. frame plate (opaque base)
+  //   2. illustration (clipped to center window)
+  //   3. top-left    symbol-infinity.png
+  //   4. top-right   symbol-cost-7.png
+  //   5. title/name  text
+  //   6. lore panel  title + text
+  //   7. bottom-left symbol-queen.png
+  //   8. bottom-right symbol-water.png
+  // ════════════════════════════════════════════════════════════════════════════
+  <figure
+    class="card-frame card-frame--water card-frame--layered"
+    role={isAnatomy ? "img" : "figure"}
+    aria-label={`${name} — ${role} layered card`}
+  >
+    {/* Layer 1: Opaque frame plate */}
+    <img
+      class="card-frame-layered__frame"
+      src={layeredConfig.frame}
+      alt=""
+      loading={isAnatomy ? "eager" : "lazy"}
+      decoding="async"
+    />
+
+    {/* Layer 2: Illustration — clipped to center window */}
+    <div class="card-frame-layered__illustration-window" aria-hidden="true">
+      <img
+        class="card-frame-layered__illustration"
+        src={layeredConfig.illustration}
+        alt={`${name} — ${role}`}
+        loading={isAnatomy ? "eager" : "lazy"}
+        decoding="async"
+      />
+    </div>
+
+    {/* Layer 3: Title/name text */}
+    <header class="card-frame-layered__header">
+      <span class="card-frame-layered__name">{name}</span>
+    </header>
+
+    {/* Layer 4: Lore panel */}
+    <section class="card-frame-layered__lore-panel" aria-label={`${name} lore`}>
+      <p class="card-frame-layered__lore-title">{frameConfig.loreTitle}</p>
+      {ability ? <p class="card-frame-layered__ability">{ability}</p> : null}
+      <p class="card-frame-layered__lore">{layeredConfig.loreText}</p>
+    </section>
+
+    {/* Layer 5: Symbol medallions */}
+    <span class="card-frame-layered__medallion card-frame-layered__medallion--tl" aria-hidden="true">
+      <img
+        class="card-frame-layered__symbol"
+        src={layeredConfig.symbolInfinity}
+        alt="Infinity seal"
+        loading="lazy"
+        decoding="async"
+      />
+    </span>
+
+    <span class="card-frame-layered__medallion card-frame-layered__medallion--tr" aria-hidden="true">
+      <img
+        class="card-frame-layered__symbol"
+        src={layeredConfig.symbolCost}
+        alt={`Cost: ${frameConfig.cost}`}
+        loading="lazy"
+        decoding="async"
+      />
+    </span>
+
+    <span class="card-frame-layered__medallion card-frame-layered__medallion--bl" aria-hidden="true">
+      <img
+        class="card-frame-layered__symbol"
+        src={layeredConfig.symbolQueen}
+        alt={`Rank: ${frameConfig.rank}`}
+        loading="lazy"
+        decoding="async"
+      />
+    </span>
+
+    <span class="card-frame-layered__medallion card-frame-layered__medallion--br" aria-hidden="true">
+      <img
+        class="card-frame-layered__symbol"
+        src={layeredConfig.symbolWater}
+        alt={`${frameConfig.attributeLabel} attribute`}
+        loading="lazy"
+        decoding="async"
+      />
+    </span>
+  </figure>
+) : (
+  // ════════════════════════════════════════════════════════════════════════════
+  // GENERIC CARD FRAME — fallback for all other elements
+  // Uses CSS-based medallions with SVG glyphs
+  // ════════════════════════════════════════════════════════════════════════════
+
+<figure
+  class={`card-frame card-frame--${element}`}
+  role={isAnatomy ? "img" : "figure"}
+  aria-label={`${name} — ${role} draft card`}
+  style={`--card-frame-radius: 0.875rem; --card-illustration-position: ${frameConfig.illustrationObjectPosition};`}
+>
+  <!-- Outer reliquary ornamentation -->
+  <span class="card-frame-corner card-frame-corner--tl" aria-hidden="true">
+    <img src={`${ornamentBase}/corner-tl.svg`} alt="" loading="lazy" />
+  </span>
+  <span class="card-frame-corner card-frame-corner--tr" aria-hidden="true">
+    <img src={`${ornamentBase}/corner-tr.svg`} alt="" loading="lazy" />
+  </span>
+  <span class="card-frame-corner card-frame-corner--bl" aria-hidden="true">
+    <img src={`${ornamentBase}/corner-bl.svg`} alt="" loading="lazy" />
+  </span>
+  <span class="card-frame-corner card-frame-corner--br" aria-hidden="true">
+    <img src={`${ornamentBase}/corner-br.svg`} alt="" loading="lazy" />
+  </span>
+
+  <span class="card-frame-medallion card-frame-medallion--tl" data-frame-slot="seal" aria-label={`${name} origin seal`}>
+    {frameConfig.topLeftGlyphs.map((glyph) => (
+      <span class="card-frame-glyph" data-frame-glyph={glyph} aria-label={glyphLabel[glyph]}>
+        {glyph === "infinity" ? (
+          <svg viewBox="0 0 32 18" data-frame-glyph="infinity" aria-hidden="true">
+            <path d="M9 3c4.6 0 6 12 14 12 3.3 0 6-2.7 6-6s-2.7-6-6-6c-8 0-9.4 12-14 12a6 6 0 1 1 0-12Z" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 18 24" data-frame-glyph="waterDrop" aria-hidden="true">
+            <path d="M9 2c3.8 4.3 7 8.4 7 13.1a7 7 0 0 1-14 0C2 10.4 5.2 6.3 9 2Z" />
+          </svg>
+        )}
+      </span>
+    ))}
+  </span>
+
+  <span class="card-frame-medallion card-frame-medallion--tr" data-frame-slot="cost" aria-label={`Cost: ${frameConfig.cost}`}>
+    <span class="card-frame-medallion-value">{frameConfig.cost}</span>
+  </span>
+
+  <header class="card-frame-header">
+    <span class="card-frame-name">{name}</span>
+    <span class="card-frame-divider" aria-hidden="true">
+      <img src={`${ornamentBase}/divider-horizontal.svg`} alt="" loading="lazy" />
+    </span>
+  </header>
+
+  <div class="card-frame-illustration">
+    {
+      illustration ? (
+        <img
+          src={illustration}
+          alt={`${name} — ${role}`}
+          width="600"
+          height="840"
+          loading={isAnatomy ? "eager" : "lazy"}
+          decoding="async"
+        />
+      ) : (
+        <div class="card-frame-illustration-placeholder"></div>
+      )
+    }
+  </div>
+
+  <section class="card-frame-lore-panel" aria-label={`${name} lore`}>
+    <p class="card-frame-lore-title">{frameConfig.loreTitle}</p>
+    {ability ? <p class="card-frame-ability">{ability}</p> : null}
+    <p class="card-frame-lore">{shortLore}</p>
+  </section>
+
+  <span class="card-frame-medallion card-frame-medallion--bl" data-frame-slot="rank" aria-label={`Rank: ${frameConfig.rank}`}>
+    <span class="card-frame-medallion-value">{frameConfig.rank}</span>
+    {frameConfig.bottomLeftGlyphs.filter((glyph) => glyph !== "queen").map((glyph) => (
+      <span class="card-frame-glyph" data-frame-glyph={glyph} aria-label={glyphLabel[glyph]}>
+        {glyph === "crown" ? (
+          <svg viewBox="0 0 24 18" data-frame-glyph="crown" aria-hidden="true">
+            <path d="M3 15h18l-1.6-10.2-4.8 4.5L12 2 9.4 9.3 4.6 4.8 3 15Z" />
+            <path d="M10.5 11.5c0-1.2.8-2.4 1.5-3.3.7.9 1.5 2.1 1.5 3.3a1.5 1.5 0 0 1-3 0Z" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 18 24" data-frame-glyph="waterDrop" aria-hidden="true">
+            <path d="M9 2c3.8 4.3 7 8.4 7 13.1a7 7 0 0 1-14 0C2 10.4 5.2 6.3 9 2Z" />
+          </svg>
+        )}
+      </span>
+    ))}
+  </span>
+
+  <span class="card-frame-medallion card-frame-medallion--br" data-frame-slot="attribute" aria-label={`${frameConfig.attributeLabel} attribute: ${symbol}`}>
+    <span class="card-frame-glyph" data-frame-glyph={frameConfig.bottomRightGlyph} aria-label={glyphLabel[frameConfig.bottomRightGlyph]}>
+      <svg viewBox="0 0 18 24" data-frame-glyph="waterDrop" aria-hidden="true">
+        <path d="M9 2c3.8 4.3 7 8.4 7 13.1a7 7 0 0 1-14 0C2 10.4 5.2 6.3 9 2Z" />
+      </svg>
+    </span>
+  </span>
+</figure>
+)}

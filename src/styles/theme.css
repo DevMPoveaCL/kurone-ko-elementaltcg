@@ -9,7 +9,7 @@
   --color-metal-bronze: oklch(0.61 0.09 70);
   --color-element-utu: oklch(0.74 0.17 65);
   --color-element-nammu: oklch(0.71 0.1 230);
-  --color-element-an: oklch(0.79 0.08 220);
+  --color-element-an: oklch(0.88 0.02 95);
   --color-element-ki: oklch(0.67 0.08 145);
   --color-focus-ring: oklch(0.88 0.14 95);
 }
@@ -135,6 +135,527 @@
     position: relative;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════════
+     CARD FRAME — exact draft reliquary frame
+     Slots: seal / cost / name / illustration / lore / rank / attribute.
+     Per-element theming via --card-element custom property.
+     ═════════════════════════════════════════════════════════════════════════ */
+
+  .card-frame {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: 3.35rem 1fr 5.4rem;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "illo"
+      "lore";
+    aspect-ratio: 5 / 7;
+    --card-frame-medallion-size: 2.25rem;
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+    border-radius: var(--card-frame-radius, 1rem);
+    border: 1px solid color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 52%, var(--color-surface-obsidian));
+    background:
+      radial-gradient(circle at 50% 6%, color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 22%, transparent), transparent 10rem),
+      linear-gradient(145deg, color-mix(in oklch, var(--color-surface-obsidian) 82%, black), color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 12%, var(--color-surface-obsidian)) 48%, var(--color-surface-obsidian));
+    box-shadow:
+      0 0 1.5rem color-mix(in oklch, var(--card-element) 24%, transparent),
+      inset 0 0 0 1px color-mix(in oklch, var(--card-element, var(--color-metal-bronze)) 35%, transparent);
+    transition: box-shadow 0.4s ease;
+  }
+
+  .card-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0.45rem;
+    z-index: 1;
+    pointer-events: none;
+    border: 1px solid color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 42%, transparent);
+    border-radius: calc(var(--card-frame-radius, 1rem) * 0.78);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in oklch, var(--color-surface-parchment) 10%, transparent),
+      inset 0 0 1.4rem color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 16%, transparent);
+  }
+
+  .card-frame:hover,
+  .card-frame:focus-within {
+    box-shadow:
+      0 0 2.5rem color-mix(in oklch, var(--card-element) 24%, transparent),
+      inset 0 0 0 1px color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 50%, transparent);
+  }
+
+  /* ── Header Strip ─────────────────────────────────────────────────────── */
+
+  .card-frame-header {
+    grid-area: header;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 3.1rem 0.55rem;
+    background: linear-gradient(
+      180deg,
+      var(--color-surface-obsidian) 0%,
+      color-mix(in oklch, var(--color-surface-obsidian) 85%, var(--card-element, var(--color-surface-calm))) 100%
+    );
+    border-bottom: 1px solid color-mix(in oklch, var(--card-element, var(--color-metal-bronze)) 28%, transparent);
+  }
+
+  .card-frame-name {
+    min-width: min(62%, 13rem);
+    padding: 0.22rem 1rem;
+    border: 1px solid color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 45%, transparent);
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 16%, var(--color-surface-obsidian)), transparent);
+    text-align: center;
+    font-family: "Marcellus", "Garamond", serif;
+    font-size: clamp(0.95rem, 2.5vw, 1.35rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-surface-parchment);
+    text-shadow: 0 0 0.5rem var(--card-element);
+    line-height: 1.2;
+  }
+
+  .card-frame-medallion {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.12rem;
+    width: var(--card-frame-medallion-size);
+    height: var(--card-frame-medallion-size);
+    border: 1px solid color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 62%, var(--color-surface-parchment));
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 38% 30%, color-mix(in oklch, var(--color-surface-parchment) 34%, transparent), transparent 38%),
+      radial-gradient(circle at 50% 50%, color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 24%, var(--color-surface-obsidian)), var(--color-surface-obsidian) 72%);
+    box-shadow:
+      0 0 0 0.18rem color-mix(in oklch, var(--color-surface-obsidian) 75%, transparent),
+      0 0 1rem color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 42%, transparent),
+      inset 0 0 0.55rem color-mix(in oklch, var(--color-surface-parchment) 10%, transparent);
+    color: var(--color-surface-parchment);
+  }
+
+  .card-frame-medallion--tl { top: 0.6rem; left: 0.58rem; }
+  .card-frame-medallion--tr { top: 0.6rem; right: 0.58rem; }
+  .card-frame-medallion--bl { bottom: 0.6rem; left: 0.58rem; }
+  .card-frame-medallion--br { bottom: 0.6rem; right: 0.58rem; }
+
+  .card-frame-medallion-value {
+    font-family: "Marcellus", "Garamond", serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 0 0.35rem var(--card-element);
+  }
+
+  .card-frame-glyph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+  }
+
+  .card-frame-glyph svg {
+    width: 0.78rem;
+    height: 0.78rem;
+    fill: currentColor;
+    stroke: color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 70%, var(--color-surface-parchment));
+    stroke-width: 1.2;
+  }
+
+  .card-frame-medallion--tl .card-frame-glyph:first-child svg {
+    width: 1.05rem;
+  }
+
+  .card-frame-medallion--bl {
+    flex-wrap: wrap;
+    padding: 0.22rem;
+  }
+
+  .card-frame-medallion--bl .card-frame-medallion-value {
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  /* ── Illustration Window ──────────────────────────────────────────────── */
+
+  .card-frame-illustration {
+    grid-area: illo;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .card-frame-illustration img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--card-illustration-position, center 18%);
+    display: block;
+  }
+
+  .card-frame-illustration-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 50% 30%, color-mix(in oklch, var(--card-element, var(--color-element-nammu)) 28%, transparent), transparent 60%),
+      linear-gradient(180deg, var(--color-surface-obsidian), color-mix(in oklch, var(--color-surface-calm) 40%, var(--color-surface-obsidian)));
+  }
+
+  .card-frame-illustration-placeholder::after {
+    content: "Illustration pending";
+    font-family: "Marcellus", "Garamond", serif;
+    font-size: 0.9rem;
+    color: color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 55%, var(--color-surface-parchment));
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+  }
+
+  /* illustration gradient overlay for text readability (bottom 28%) */
+  .card-frame-illustration::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      transparent 60%,
+      color-mix(in oklch, var(--color-surface-obsidian) 55%, transparent) 80%,
+      var(--color-surface-obsidian) 100%
+    );
+  }
+
+  /* ── Lower Lore Plaque ────────────────────────────────────────────────── */
+
+  .card-frame-lore-panel {
+    grid-area: lore;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.14rem;
+    margin: 0.35rem 3.05rem 0.7rem;
+    padding: 0.58rem 0.8rem;
+    border: 1px solid color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 38%, transparent);
+    border-radius: 0.55rem;
+    background: linear-gradient(
+      0deg,
+      color-mix(in oklch, var(--color-surface-obsidian) 94%, black) 0%,
+      color-mix(in oklch, var(--card-element, var(--color-surface-calm)) 13%, var(--color-surface-obsidian)) 100%
+    );
+    box-shadow: inset 0 0 0.8rem color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 10%, transparent);
+    font-size: 0.55rem;
+    opacity: 0.72;
+  }
+
+  .card-frame-ability {
+    font-size: 0.6rem;
+    line-height: 1.4;
+    color: var(--color-surface-parchment);
+    opacity: 0.9;
+    font-style: italic;
+  }
+
+  .card-frame-lore-title {
+    font-family: "Marcellus", "Garamond", serif;
+    font-size: 0.6rem;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in oklch, var(--card-element, var(--color-metal-aged-gold)) 82%, var(--color-surface-parchment));
+  }
+
+  .card-frame-lore {
+    font-size: inherit;
+    line-height: 1.45;
+    color: var(--color-surface-parchment);
+  }
+
+  .card-frame-symbol {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .card-frame-symbol img {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* ── Corner Ornaments ─────────────────────────────────────────────────── */
+
+  .card-frame-corner {
+    position: absolute;
+    z-index: 3;
+    width: 2rem;
+    height: 2rem;
+    pointer-events: none;
+    opacity: 0.65;
+    color: var(--card-element, var(--color-metal-aged-gold));
+  }
+
+  .card-frame-corner img {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .card-frame-corner--tl { top: 0; left: 0; }
+  .card-frame-corner--tr { top: 0; right: 0; }
+  .card-frame-corner--bl { bottom: 0; left: 0; }
+  .card-frame-corner--br { bottom: 0; right: 0; }
+
+  /* ── Divider in Header ────────────────────────────────────────────────── */
+
+  .card-frame-divider {
+    grid-area: header;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    height: 8px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .card-frame-divider img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* ── Per-Element Variant Overrides ────────────────────────────────────── */
+
+  .card-frame--fire  { --card-element: var(--color-element-utu); --card-illustration-position: center 18%; }
+  .card-frame--water { --card-element: var(--color-element-nammu); --card-illustration-position: center 18%; }
+  .card-frame--air   { --card-element: var(--color-element-an); --card-illustration-position: center 18%; }
+  .card-frame--earth { --card-element: var(--color-element-ki); --card-illustration-position: center 18%; }
+
+  /* ── Full-card asset render (production shortcut) ───────────────────────── */
+
+  .card-frame--full-card {
+    display: block;
+    aspect-ratio: 9 / 16;
+    border: 0;
+    background: transparent;
+    box-shadow: 0 0 1.8rem color-mix(in oklch, var(--card-element) 18%, transparent);
+  }
+
+  .card-frame--full-card::before {
+    content: none;
+  }
+
+  .card-frame-full__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* ── Layered Nammu Card (exact PNG layer composition) ────────────────────── */
+  /* marcoCard.png is 2160×3840 → aspect-ratio 9/16 */
+
+  .card-frame--layered {
+    aspect-ratio: 9 / 16;
+    border-radius: calc(var(--card-frame-radius, 1rem) * 0.78);
+    overflow: hidden;
+  }
+
+  .card-frame-layered__frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .card-frame-layered__illustration-window {
+    position: absolute;
+    /* Illustration window coordinates from marcoCard.png analysis */
+    /* Top-left of window: ~12.5% from left, ~18% from top */
+    /* Window size: ~75% width, ~55% height */
+    top: 18%;
+    left: 12.5%;
+    width: 75%;
+    height: 55%;
+    overflow: hidden;
+    z-index: 1;
+    border-radius: 0.25rem;
+  }
+
+  .card-frame-layered__illustration {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 18%;
+    display: block;
+  }
+
+  .card-frame-layered__header {
+    position: absolute;
+    top: 5.5%;
+    left: 12%;
+    width: 76%;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-frame-layered__name {
+    font-family: "Marcellus", "Garamond", serif;
+    font-size: clamp(1.1rem, 4vw, 1.9rem);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-surface-parchment);
+    text-shadow:
+      0 0 0.5rem var(--color-element-nammu),
+      0 2px 8px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    line-height: 1.2;
+    padding: 0.3rem 1rem;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 0, 0, 0.55) 20%,
+      rgba(0, 0, 0, 0.55) 80%,
+      transparent
+    );
+    border-radius: 999px;
+  }
+
+  .card-frame-layered__lore-panel {
+    position: absolute;
+    bottom: 8%;
+    left: 10%;
+    width: 80%;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.6rem 0.9rem;
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.65) 100%
+    );
+    border: 1px solid color-mix(in oklch, var(--color-element-nammu) 45%, transparent);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.6);
+  }
+
+  .card-frame-layered__lore-title {
+    font-family: "Marcellus", "Garamond", serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in oklch, var(--color-element-nammu) 85%, var(--color-surface-parchment));
+    line-height: 1;
+  }
+
+  .card-frame-layered__ability {
+    font-size: 0.6rem;
+    line-height: 1.4;
+    color: var(--color-surface-parchment);
+    opacity: 0.9;
+    font-style: italic;
+  }
+
+  .card-frame-layered__lore {
+    font-size: 0.58rem;
+    line-height: 1.5;
+    color: var(--color-surface-parchment);
+    opacity: 0.88;
+  }
+
+  .card-frame-layered__medallion {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--card-frame-medallion-size);
+    height: var(--card-frame-medallion-size);
+  }
+
+  .card-frame-layered__medallion--tl {
+    top: 7.5%;
+    left: 2%;
+  }
+
+  .card-frame-layered__medallion--tr {
+    top: 7.5%;
+    right: 2%;
+  }
+
+  .card-frame-layered__medallion--bl {
+    bottom: 22%;
+    left: 2%;
+  }
+
+  .card-frame-layered__medallion--br {
+    bottom: 22%;
+    right: 2%;
+  }
+
+  .card-frame-layered__symbol {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Fallback when element class is missing */
+  .card-frame:not([class*="card-frame--"]) {
+    --card-element: var(--color-metal-aged-gold);
+  }
+
+  /* ── Responsive Scaling ───────────────────────────────────────────────── */
+
+  @media (max-width: 640px) {
+    .card-frame {
+      max-width: 100%;
+      font-size: 0.9rem;
+    }
+
+    .card-frame {
+      --card-frame-medallion-size: 1.85rem;
+      grid-template-rows: 3rem 1fr 5rem;
+    }
+
+    .card-frame-header {
+      padding: 0.35rem 0.5rem;
+    }
+
+    .card-frame-lore-panel {
+      margin-inline: 2.55rem;
+      padding: 0.45rem 0.6rem;
+    }
+
+    .card-frame-corner {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
   .board-grid-accent {
     background-image:
       linear-gradient(color-mix(in oklch, var(--color-element-nammu) 20%, transparent) 1px, transparent 1px),
@@ -210,6 +731,234 @@
       repeating-linear-gradient(112deg, transparent 0 1.4rem, color-mix(in oklch, var(--color-surface-parchment) 4%, transparent) 1.45rem 1.5rem);
     filter: blur(0.3px);
   }
+
+  .showing-cards-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: clamp(42rem, 100svh, 58rem);
+    background:
+      radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--color-element-nammu) 24%, transparent), transparent 21rem),
+      radial-gradient(circle at 82% 28%, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 22rem),
+      linear-gradient(135deg, color-mix(in oklch, var(--color-surface-obsidian) 92%, black), color-mix(in oklch, var(--color-surface-calm) 74%, var(--color-surface-obsidian)) 54%, color-mix(in oklch, var(--color-element-ki) 14%, var(--color-surface-obsidian)));
+  }
+
+  .showing-cards-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.5;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 16%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 16%, transparent) 1px, transparent 1px),
+      radial-gradient(ellipse at 50% 102%, color-mix(in oklch, var(--color-element-nammu) 20%, transparent), transparent 34rem);
+    background-size: 8rem 8rem, 8rem 8rem, 100% 100%;
+    mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  }
+
+  .showing-card-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: visible;
+    min-height: clamp(34rem, 58vw, 46rem);
+    perspective: 1200px;
+    perspective-origin: 50% 42%;
+  }
+
+  .showing-card-stage::before {
+    content: "";
+    position: absolute;
+    inset: 14% 18% 8%;
+    border-radius: 999px;
+    background: radial-gradient(ellipse, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 70%);
+    filter: blur(1.4rem);
+  }
+
+  .showing-card-tilt {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    --glare-x: 50%;
+    --glare-y: 18%;
+    position: relative;
+    z-index: 3;
+    width: clamp(20rem, 34vw, 32rem);
+    max-width: min(78vw, 32rem);
+    transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateZ(0);
+    transform-style: preserve-3d;
+    border-radius: 1.35rem;
+    overflow: hidden;
+    box-shadow:
+      0 1.5rem 4rem color-mix(in oklch, var(--color-surface-obsidian) 72%, transparent),
+      0 0 2rem color-mix(in oklch, var(--card-showing-element, var(--color-metal-aged-gold)) 24%, transparent);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+    will-change: transform;
+  }
+
+  .showing-card-tilt[data-card-element="water"] { --card-showing-element: var(--color-element-nammu); }
+  .showing-card-tilt[data-card-element="fire"] { --card-showing-element: var(--color-element-utu); }
+  .showing-card-tilt[data-card-element="air"] { --card-showing-element: var(--color-element-an); }
+  .showing-card-tilt[data-card-element="earth"] { --card-showing-element: var(--color-element-ki); }
+
+  @media (min-width: 1024px) {
+    .showing-card-tilt {
+      min-width: 28rem;
+    }
+  }
+
+  .showing-card-tilt::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--glare-x) var(--glare-y), color-mix(in oklch, var(--color-surface-parchment) 28%, transparent), transparent 24%);
+    mix-blend-mode: screen;
+    opacity: 0.5;
+  }
+
+  .showing-card-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: inherit;
+    border: 1px solid color-mix(in oklch, var(--card-showing-element, var(--color-metal-aged-gold)) 44%, var(--color-surface-obsidian));
+    background: var(--color-surface-obsidian);
+  }
+
+  .showing-card-buffer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 150ms ease;
+    will-change: opacity;
+  }
+
+  .showing-card-buffer[data-buffer-active="true"] {
+    position: relative;
+    opacity: 1;
+    z-index: 2;
+  }
+
+  .showing-card-buffer[data-buffer-active="false"] {
+    z-index: 1;
+  }
+
+  .showing-card-trailing {
+    position: absolute;
+    z-index: 1;
+    width: min(54vw, 22rem);
+    max-width: 70%;
+    opacity: 0.35;
+    transform: translateZ(-60px) scale(0.85);
+    filter: blur(0.15rem);
+    pointer-events: none;
+    box-shadow: 0 1.2rem 3rem color-mix(in oklch, var(--color-surface-obsidian) 68%, transparent);
+  }
+
+  .showing-card-trailing--1 {
+    translate: 18% -4%;
+    rotate: 5deg;
+  }
+
+  .showing-card-trailing--2 {
+    z-index: 0;
+    opacity: 0.3;
+    translate: 31% 3%;
+    rotate: 9deg;
+  }
+
+  .showing-card-lore {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(0.5rem, 2vw, 1rem) 0;
+  }
+
+  .showing-card-lore::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(90deg, transparent 0 1.3rem, color-mix(in oklch, var(--color-metal-bronze) 10%, transparent) 1.35rem 1.4rem);
+    mask-image: linear-gradient(to bottom, black, transparent 72%);
+  }
+
+  .showing-card-lore > * {
+    position: relative;
+  }
+
+  .showing-card-lore[data-motion-ready="true"][data-transitioning="true"] :is(
+    [data-showing-cards-element],
+    [data-showing-cards-name],
+    [data-showing-cards-role],
+    [data-showing-cards-short],
+    [data-showing-cards-tablet],
+    [data-showing-cards-question]
+  ) {
+    animation:
+      showing-card-lore-fade-out 120ms ease forwards,
+      showing-card-lore-fade-in 150ms ease 120ms forwards;
+  }
+
+  .showing-card-control,
+  .showing-card-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in oklch, var(--color-metal-aged-gold) 48%, transparent);
+    background: color-mix(in oklch, var(--color-surface-obsidian) 62%, transparent);
+    color: var(--color-surface-parchment);
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  }
+
+  .showing-card-control {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    border-radius: 999px;
+    font-size: 1.2rem;
+  }
+
+  .showing-card-control--side {
+    position: absolute;
+    z-index: 4;
+    top: 50%;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    translate: 0 -50%;
+  }
+
+  .showing-card-control--previous {
+    left: max(0.25rem, calc(50% - min(39vw, 18rem)));
+  }
+
+  .showing-card-control--next {
+    right: max(0.25rem, calc(50% - min(39vw, 18rem)));
+  }
+
+  .showing-card-dots {
+    position: absolute;
+    z-index: 4;
+    bottom: 1.25rem;
+    left: 50%;
+    display: flex;
+    gap: 0.5rem;
+    translate: -50% 0;
+  }
+
+  .showing-card-dot {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 999px;
+  }
+
+  .showing-card-control:hover,
+  .showing-card-dot:hover,
+  .showing-card-dot[aria-current="true"] {
+    border-color: var(--color-metal-aged-gold-bright);
+    background: color-mix(in oklch, var(--color-metal-aged-gold) 28%, var(--color-surface-obsidian));
+    transform: translateY(-0.08rem);
+  }
 }
 
 @keyframes section-scroll-build {
@@ -242,6 +991,26 @@
     opacity: 1;
     filter: blur(0);
     transform: translateY(0);
+  }
+}
+
+@keyframes showing-card-lore-fade-out {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes showing-card-lore-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }
 
@@ -287,5 +1056,33 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .showing-card-tilt {
+    transform: none !important;
+    transition: none !important;
+    will-change: auto;
+    box-shadow: 0 1.2rem 3rem color-mix(in oklch, var(--color-surface-obsidian) 72%, transparent);
+  }
+
+  .showing-card-tilt::after {
+    opacity: 0.18;
+  }
+
+  .showing-card-lore[data-transitioning="true"] :is(
+    [data-showing-cards-element],
+    [data-showing-cards-name],
+    [data-showing-cards-role],
+    [data-showing-cards-short],
+    [data-showing-cards-tablet],
+    [data-showing-cards-question]
+  ) {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .showing-card-buffer {
+    transition: none !important;
+    will-change: auto;
   }
 }

@@ -1,5 +1,7 @@
 ---
 import type { CardAnatomyContent } from "@/content/landing";
+import { ELEMENT } from "@/content/landing";
+import CardFrame from "@/components/landing/CardFrame.astro";
 
 interface Props {
   anatomy: CardAnatomyContent;
@@ -15,18 +17,40 @@ const { anatomy } = Astro.props as Props;
 
   <div class="ornate-separator mt-6" aria-hidden="true"></div>
 
-  <dl class="mt-7 grid gap-4 md:grid-cols-2">
-    {
-      anatomy.fields.map((field) => (
-        <div class="reliquary-card p-4">
-          <dt class="text-sm font-semibold uppercase tracking-[0.1em] text-metal-aged-gold">{field.label}</dt>
-          <dd class="mt-2 text-sm leading-relaxed text-surface-parchment/90">{field.detail}</dd>
-        </div>
-      ))
-    }
-  </dl>
+  <!-- Anatomy diagram — CardFrame rendered as visual reference with exact draft slots -->
+  <div class="mt-7 flex flex-col items-center gap-6 md:flex-row md:items-start">
+    <div class="w-full max-w-sm shrink-0">
+      <CardFrame
+        element={ELEMENT.WATER}
+        illustration="/assets/cards/nammu/card.webp"
+        name="Nammu"
+        role="Abyssal Memory"
+        symbol="Tide Seal"
+        shortLore="Keeper of primordial waters and hidden tides."
+        ability="Memory — The first sea remembers every sacrifice."
+        isAnatomy={true}
+      />
+    </div>
 
-  <p class="energy-glow-accent mt-5 rounded-md border border-dashed border-metal-bronze/50 bg-surface-calm/75 px-4 py-3 text-xs text-surface-parchment/85">
-    Placeholder card render: {anatomy.placeholderAsset}
-  </p>
+    <!-- Anatomy field annotations -->
+    <dl class="grid gap-3 md:grid-cols-1">
+      {
+        anatomy.fields.map((field) => (
+          <div class="reliquary-card p-3">
+            <dt class="text-sm font-semibold uppercase tracking-[0.1em] text-metal-aged-gold">{field.label}</dt>
+            <dd class="mt-1 text-sm leading-relaxed text-surface-parchment/90">{field.detail}</dd>
+          </div>
+        ))
+      }
+      <!-- Additional annotation for card anatomy slots -->
+      <div class="reliquary-card p-3">
+        <dt class="text-sm font-semibold uppercase tracking-[0.1em] text-metal-aged-gold">Frame Anatomy</dt>
+          <dd class="mt-1 text-sm leading-relaxed text-surface-parchment/90">
+          The exact draft frame reads as a reliquary: seal medallion (top-left), cost medallion
+          (top-right), centered name strip, illustration window, lore panel, rank medallion
+          (bottom-left), and attribute medallion (bottom-right), all driven by OKLCH element tokens.
+        </dd>
+      </div>
+    </dl>
+  </div>
 </section>

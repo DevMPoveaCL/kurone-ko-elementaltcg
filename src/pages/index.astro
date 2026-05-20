@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { landingContent } from "@/content/landing";
 import HeroReliquary from "@/components/landing/HeroReliquary.astro";
-import FourDivinePaths from "@/components/landing/FourDivinePaths.astro";
+import ShowingCards from "@/components/landing/ShowingCards.astro";
 import TacticalBattlefield from "@/components/landing/TacticalBattlefield.astro";
 import EnergyAscension from "@/components/landing/EnergyAscension.astro";
 import CardAnatomy from "@/components/landing/CardAnatomy.astro";
@@ -12,21 +12,21 @@ import FinalCTA from "@/components/landing/FinalCTA.astro";
 ---
 
 <BaseLayout
-  title="The Four Sovereigns — Sumerian Edition"
-  description="The Four Sovereigns is a divine tactical TCG videogame forged in the Sumerian first age. Command goddess relics, sacred symbols, and strategic devotion on a contested battlefield."
-  siteName="The Four Sovereigns"
+  title="Elemental Queens — Sumerian Edition"
+  description="Elemental Queens is a divine tactical TCG videogame forged in the Sumerian first age. Command goddess relics, sacred symbols, and strategic devotion on a contested battlefield."
+  siteName="Elemental Queens"
   ogImage="/assets/landing/hero/og-default-placeholder.webp"
   robots="index, follow"
 >
   <main class="min-h-screen w-full">
     <HeroReliquary hero={landingContent.hero} />
 
+    <div class="showing-cards-section scroll-reveal">
+      <ShowingCards content={landingContent.showingCards} />
+    </div>
+
     <div class="reliquary-section-field px-6 py-14 lg:px-10 lg:py-18">
       <div class="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <div class="scroll-reveal">
-          <FourDivinePaths intro={landingContent.divinePathsContent} paths={landingContent.divinePaths} />
-        </div>
-
         <div class="scroll-reveal">
           <TacticalBattlefield battlefield={landingContent.tacticalBattlefield} />
         </div>

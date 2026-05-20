@@ -33,7 +33,7 @@ export const newsletterContent: NewsletterContent = {
   consentLabel: "I agree to receive First Edition product updates by email.",
   submitLabel: "Notify me",
   consentText:
-    "By subscribing, you agree to receive product updates related to The Four Sovereigns.",
+    "By subscribing, you agree to receive product updates related to Elemental Queens.",
   successMessage: "You are now on the First Edition watchlist.",
   errorMessage: "Subscription is temporarily unavailable. Please try again.",
   validation: {

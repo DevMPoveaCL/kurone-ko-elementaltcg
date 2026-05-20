@@ -15,7 +15,7 @@ const {
   description,
   ogImage = "/assets/landing/hero/og-default-placeholder.webp",
   canonicalUrl,
-  siteName = "The Four Sovereigns",
+  siteName = "Elemental Queens",
   robots = "index, follow",
 } = Astro.props as Props;
 
@@ -23,11 +23,11 @@ const fullTitle = title.includes(siteName) ? title : `${title} — ${siteName}`;
 const fullDescription =
   description.length > 0
     ? description
-    : "The Four Sovereigns: Sumerian Edition — a divine tactical TCG videogame forged in the first age.";
+    : "Elemental Queens: Sumerian Edition — a divine tactical TCG videogame forged in the first age.";
 ---
 
 <!--
-  CLAIM-GUARD: This landing page is a conceptual preview of The Four Sovereigns.
+  CLAIM-GUARD: This landing page is a conceptual preview of Elemental Queens.
   It makes NO claims about:
   - Release dates, launch windows, or platform availability
   - Playable-beta status, demo builds, or early-access timelines
