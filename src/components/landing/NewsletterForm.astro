@@ -52,7 +52,7 @@ const helperId = "newsletter-helper";
   </div>
 
   <p id={statusId} role="status" aria-live="polite" class="min-h-6 rounded-md border border-metal-bronze/35 bg-surface-obsidian/55 px-3 py-2 text-sm text-surface-parchment/85">
-    Ready to register your First Edition interest.
+    Ready to receive your answer.
   </p>
 </form>
 
@@ -107,7 +107,7 @@ const helperId = "newsletter-helper";
       setStatus("Submitting request...", "loading");
 
       window.setTimeout(() => {
-        setStatus("You are now on the First Edition watchlist.", "success");
+        setStatus("The Queens have heard your answer. You are now on the First Edition watchlist.", "success");
         submitButton.disabled = false;
         form.reset();
       }, 550);

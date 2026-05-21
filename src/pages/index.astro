@@ -3,11 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { landingContent } from "@/content/landing";
 import HeroReliquary from "@/components/landing/HeroReliquary.astro";
 import ShowingCards from "@/components/landing/ShowingCards.astro";
-import TacticalBattlefield from "@/components/landing/TacticalBattlefield.astro";
-import EnergyAscension from "@/components/landing/EnergyAscension.astro";
-import CardAnatomy from "@/components/landing/CardAnatomy.astro";
-import LoreFragments from "@/components/landing/LoreFragments.astro";
-import RoadmapTeaser from "@/components/landing/RoadmapTeaser.astro";
+import PrimordialVerdict from "@/components/landing/PrimordialVerdict.astro";
+import CardTypeReliquary from "@/components/landing/CardTypeReliquary.astro";
+import SacredGridAnatomy from "@/components/landing/SacredGridAnatomy.astro";
+import RoadmapSealedGate from "@/components/landing/RoadmapSealedGate.astro";
 import FinalCTA from "@/components/landing/FinalCTA.astro";
 ---
 
@@ -28,23 +27,19 @@ import FinalCTA from "@/components/landing/FinalCTA.astro";
     <div class="reliquary-section-field px-6 py-14 lg:px-10 lg:py-18">
       <div class="mx-auto flex w-full max-w-6xl flex-col gap-8">
         <div class="scroll-reveal">
-          <TacticalBattlefield battlefield={landingContent.tacticalBattlefield} />
+          <PrimordialVerdict verdict={landingContent.primordialVerdict} />
         </div>
 
         <div class="scroll-reveal">
-          <EnergyAscension ascension={landingContent.energyAscension} />
+          <CardTypeReliquary reliquary={landingContent.cardTypeReliquary} />
         </div>
 
         <div class="scroll-reveal">
-          <CardAnatomy anatomy={landingContent.cardAnatomy} />
+          <SacredGridAnatomy anatomy={landingContent.sacredGridAnatomy} />
         </div>
 
         <div class="scroll-reveal">
-          <LoreFragments lore={landingContent.loreFragments} />
-        </div>
-
-        <div class="scroll-reveal">
-          <RoadmapTeaser roadmap={landingContent.roadmapTeaser} />
+          <RoadmapSealedGate roadmap={landingContent.roadmapSealedGate} />
         </div>
 
         <div class="scroll-reveal">

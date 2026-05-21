@@ -1,0 +1,65 @@
+---
+import type { SacredGridAnatomyContent } from "@/content/landing";
+
+interface Props {
+  anatomy: SacredGridAnatomyContent;
+}
+
+const { anatomy } = Astro.props as Props;
+const firstHalf = anatomy.anatomyFields.slice(0, 4);
+const secondHalf = anatomy.anatomyFields.slice(4);
+---
+
+<section id="sacred-grid-anatomy" class="reliquary-panel scroll-mt-8" aria-labelledby="sacred-grid-anatomy-title">
+  <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{anatomy.sectionEyebrow}</p>
+  <h2 id="sacred-grid-anatomy-title" class="mt-3 max-w-4xl text-3xl font-semibold md:text-4xl">{anatomy.sectionTitle}</h2>
+  <p class="mt-4 max-w-4xl text-sm leading-7 text-surface-parchment/90 md:text-base">{anatomy.sectionDescription}</p>
+
+  <div class="ornate-separator mt-7" aria-hidden="true"></div>
+
+  <div class="mt-7 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+    <div class="sacred-grid-map rounded-2xl border border-metal-bronze/45 bg-surface-obsidian/60 p-5" aria-label="Battlefield deployment map">
+      <p class="text-xs uppercase tracking-[0.18em] text-metal-aged-gold-bright">Deployment Field</p>
+      <div class="mt-4 grid gap-2 rounded-xl border border-metal-bronze/40 bg-surface-calm/35 p-3">
+        <div class="grid grid-cols-6 gap-2" aria-hidden="true">
+          {Array.from({ length: 6 }).map(() => <span class="battle-slot battle-slot--pawn">P</span>)}
+        </div>
+        <div class="grid grid-cols-6 gap-2" aria-hidden="true">
+          <span class="battle-slot">R</span>
+          <span class="battle-slot">N</span>
+          <span class="battle-slot">B</span>
+          <span class="battle-slot">B</span>
+          <span class="battle-slot">N</span>
+          <span class="battle-slot">R</span>
+        </div>
+        <div class="mx-auto mt-2 grid h-16 w-16 place-items-center rounded-full border border-metal-aged-gold/70 bg-metal-aged-gold/10 text-lg font-semibold text-metal-aged-gold-bright" aria-hidden="true">Q</div>
+      </div>
+      <p class="mt-4 text-sm leading-7 text-surface-parchment/88">{anatomy.battlefieldSummary}</p>
+    </div>
+
+    <div class="grid gap-5 xl:grid-cols-[1fr_15rem_1fr] xl:items-center">
+      <ul class="grid list-none gap-3 p-0">
+        {firstHalf.map((field) => <li class="anatomy-callout"><strong>{field.label}</strong><span>{field.position}</span><p>{field.detail}</p></li>)}
+      </ul>
+
+      <div class="ally-card-diagram mx-auto w-full max-w-60 rounded-[1.4rem] border-2 border-metal-aged-gold/70 bg-surface-calm/60 p-3" aria-label="Ally card anatomy diagram">
+        <div class="grid grid-cols-[2.4rem_1fr_2.4rem] items-center gap-2">
+          <span class="diagram-medallion">PWR</span>
+          <span class="rounded border border-metal-bronze/55 bg-surface-obsidian/70 px-2 py-1 text-center text-xs font-semibold uppercase tracking-[0.12em]">Name</span>
+          <span class="diagram-medallion">Cost</span>
+        </div>
+        <div class="mt-3 grid min-h-52 place-items-center rounded-xl border border-metal-bronze/45 bg-surface-obsidian/50 text-xl font-semibold text-surface-parchment/78">Illustration</div>
+        <div class="ml-auto mt-3 w-20 rounded border border-metal-aged-gold/70 px-2 py-1 text-center text-xs text-metal-aged-gold-bright">Lore</div>
+        <div class="mt-3 grid grid-cols-[2.4rem_1fr_2.4rem] items-center gap-2">
+          <span class="diagram-medallion">Type</span>
+          <span class="rounded border border-metal-bronze/55 bg-surface-obsidian/70 px-2 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em]">Ability</span>
+          <span class="diagram-medallion">Attr</span>
+        </div>
+      </div>
+
+      <ul class="grid list-none gap-3 p-0">
+        {secondHalf.map((field) => <li class="anatomy-callout"><strong>{field.label}</strong><span>{field.position}</span><p>{field.detail}</p></li>)}
+      </ul>
+    </div>
+  </div>
+</section>

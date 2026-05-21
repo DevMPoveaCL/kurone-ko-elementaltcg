@@ -118,6 +118,93 @@
     @apply rounded-xl border border-metal-bronze/50 bg-surface-obsidian/65;
   }
 
+  .primordial-rule-card,
+  .card-type-vessel,
+  .sacred-grid-map,
+  .sealed-roadmap-list > li {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .primordial-rule-card::before,
+  .card-type-vessel::before,
+  .sealed-roadmap-list > li::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.44;
+    background: radial-gradient(circle at 82% 8%, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 9rem);
+  }
+
+  .card-type-asset-slot {
+    box-shadow: inset 0 0 2rem color-mix(in oklch, var(--color-metal-aged-gold) 8%, transparent);
+  }
+
+  .battle-slot {
+    display: grid;
+    min-height: 3.2rem;
+    place-items: center;
+    border: 1px solid color-mix(in oklch, var(--color-metal-bronze) 58%, transparent);
+    border-radius: 0.55rem;
+    background: color-mix(in oklch, var(--color-surface-obsidian) 68%, transparent);
+    color: var(--color-metal-aged-gold-bright);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .battle-slot--pawn {
+    color: color-mix(in oklch, var(--color-surface-parchment) 88%, var(--color-metal-aged-gold));
+  }
+
+  .diagram-medallion {
+    display: grid;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid color-mix(in oklch, var(--color-metal-aged-gold) 72%, transparent);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--color-surface-obsidian) 72%, transparent);
+    color: var(--color-metal-aged-gold-bright);
+    font-size: 0.57rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .anatomy-callout {
+    border: 1px solid color-mix(in oklch, var(--color-metal-bronze) 48%, transparent);
+    border-radius: 0.8rem;
+    background: color-mix(in oklch, var(--color-surface-obsidian) 62%, transparent);
+    padding: 0.8rem;
+  }
+
+  .anatomy-callout strong,
+  .anatomy-callout span {
+    display: block;
+  }
+
+  .anatomy-callout strong {
+    color: var(--color-metal-aged-gold-bright);
+    font-family: "Marcellus", "Garamond", serif;
+    font-size: 1rem;
+  }
+
+  .anatomy-callout span {
+    margin-top: 0.2rem;
+    color: color-mix(in oklch, var(--color-surface-parchment) 72%, transparent);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .anatomy-callout p {
+    margin-top: 0.45rem;
+    color: color-mix(in oklch, var(--color-surface-parchment) 88%, transparent);
+    font-size: 0.86rem;
+    line-height: 1.65;
+  }
+
   .reliquary-card::before {
     content: "";
     position: absolute;
@@ -736,7 +823,7 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    min-height: clamp(42rem, 100svh, 58rem);
+    min-height: 100svh;
     background:
       radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--color-element-nammu) 24%, transparent), transparent 21rem),
       radial-gradient(circle at 82% 28%, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 22rem),
@@ -762,7 +849,7 @@
     display: grid;
     place-items: center;
     overflow: visible;
-    min-height: clamp(34rem, 58vw, 46rem);
+    min-height: min(58svh, 34rem);
     perspective: 1200px;
     perspective-origin: 50% 42%;
   }
@@ -783,12 +870,13 @@
     --glare-y: 18%;
     position: relative;
     z-index: 3;
-    width: clamp(20rem, 34vw, 32rem);
-    max-width: min(78vw, 32rem);
+    width: clamp(16rem, min(28vw, 50svh), 24rem);
+    max-width: min(78vw, 24rem);
     transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateZ(0);
     transform-style: preserve-3d;
     border-radius: 1.35rem;
     overflow: hidden;
+    contain: paint;
     box-shadow:
       0 1.5rem 4rem color-mix(in oklch, var(--color-surface-obsidian) 72%, transparent),
       0 0 2rem color-mix(in oklch, var(--card-showing-element, var(--color-metal-aged-gold)) 24%, transparent);
@@ -803,7 +891,7 @@
 
   @media (min-width: 1024px) {
     .showing-card-tilt {
-      min-width: 28rem;
+      min-width: min(22rem, 48svh);
     }
   }
 
@@ -831,8 +919,9 @@
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 150ms ease;
-    will-change: opacity;
+    transform-origin: var(--glare-x, 50%) var(--glare-y, 50%);
+    transition: opacity 220ms ease-in-out, transform 260ms ease;
+    will-change: auto;
   }
 
   .showing-card-buffer[data-buffer-active="true"] {
@@ -845,16 +934,49 @@
     z-index: 1;
   }
 
+  .showing-card-magnifier {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.9);
+    transform-origin: var(--glare-x, 50%) var(--glare-y, 50%);
+    clip-path: circle(0% at var(--glare-x, 50%) var(--glare-y, 50%));
+    filter: contrast(1.05) saturate(1.03) drop-shadow(0 0 1rem color-mix(in oklch, var(--card-showing-element, var(--color-metal-aged-gold)) 26%, transparent));
+    transition:
+      opacity 140ms ease,
+      clip-path 180ms ease,
+      filter 180ms ease;
+    will-change: auto;
+  }
+
+  .showing-card-tilt[data-magnifying="true"] .showing-card-magnifier {
+    opacity: 1;
+    clip-path: circle(24% at var(--glare-x, 50%) var(--glare-y, 50%));
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .showing-card-tilt[data-magnifying="true"]::after {
+      opacity: 0.72;
+    }
+  }
+
   .showing-card-trailing {
     position: absolute;
     z-index: 1;
-    width: min(54vw, 22rem);
+    width: min(48vw, 18rem);
     max-width: 70%;
     opacity: 0.35;
     transform: translateZ(-60px) scale(0.85);
     filter: blur(0.15rem);
     pointer-events: none;
     box-shadow: 0 1.2rem 3rem color-mix(in oklch, var(--color-surface-obsidian) 68%, transparent);
+    transition: opacity 220ms ease, filter 220ms ease, transform 220ms ease;
   }
 
   .showing-card-trailing--1 {
@@ -872,7 +994,7 @@
   .showing-card-lore {
     position: relative;
     overflow: hidden;
-    padding: clamp(0.5rem, 2vw, 1rem) 0;
+    padding: clamp(0.35rem, 1.4vw, 0.8rem) 0;
   }
 
   .showing-card-lore::before {
@@ -888,6 +1010,24 @@
     position: relative;
   }
 
+  .showing-card-lore[data-motion-ready="true"] :is(
+    [data-showing-cards-element],
+    [data-showing-cards-name],
+    [data-showing-cards-role],
+    [data-showing-cards-short],
+    [data-showing-cards-tablet],
+    [data-showing-cards-question]
+  ) {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+    transition:
+      opacity 180ms ease,
+      filter 220ms ease,
+      transform 220ms ease;
+    transition-delay: var(--lore-delay, 0ms);
+  }
+
   .showing-card-lore[data-motion-ready="true"][data-transitioning="true"] :is(
     [data-showing-cards-element],
     [data-showing-cards-name],
@@ -896,9 +1036,10 @@
     [data-showing-cards-tablet],
     [data-showing-cards-question]
   ) {
-    animation:
-      showing-card-lore-fade-out 120ms ease forwards,
-      showing-card-lore-fade-in 150ms ease 120ms forwards;
+    opacity: 0;
+    filter: blur(0.22rem);
+    transform: translateY(0.45rem);
+    transition-delay: 0ms;
   }
 
   .showing-card-control,
@@ -919,31 +1060,24 @@
     font-size: 1.2rem;
   }
 
-  .showing-card-control--side {
-    position: absolute;
-    z-index: 4;
-    top: 50%;
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    translate: 0 -50%;
-  }
-
-  .showing-card-control--previous {
-    left: max(0.25rem, calc(50% - min(39vw, 18rem)));
-  }
-
-  .showing-card-control--next {
-    right: max(0.25rem, calc(50% - min(39vw, 18rem)));
+  .showing-card-control--lore {
+    flex: 0 0 auto;
   }
 
   .showing-card-dots {
-    position: absolute;
-    z-index: 4;
-    bottom: 1.25rem;
-    left: 50%;
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    translate: -50% 0;
+  }
+
+  .showing-card-navigation {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
   }
 
   .showing-card-dot {
@@ -991,26 +1125,6 @@
     opacity: 1;
     filter: blur(0);
     transform: translateY(0);
-  }
-}
-
-@keyframes showing-card-lore-fade-out {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes showing-card-lore-fade-in {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
   }
 }
 
@@ -1078,11 +1192,18 @@
     [data-showing-cards-question]
   ) {
     animation: none !important;
+    transition: none !important;
+    filter: none !important;
+    transform: none !important;
     opacity: 1 !important;
   }
 
   .showing-card-buffer {
     transition: none !important;
     will-change: auto;
+  }
+
+  .showing-card-magnifier {
+    display: none !important;
   }
 }

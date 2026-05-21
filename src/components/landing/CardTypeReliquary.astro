@@ -1,0 +1,36 @@
+---
+import type { CardTypeReliquaryContent } from "@/content/landing";
+
+interface Props {
+  reliquary: CardTypeReliquaryContent;
+}
+
+const { reliquary } = Astro.props as Props;
+---
+
+<section id="card-type-reliquary" class="reliquary-panel scroll-mt-8" aria-labelledby="card-type-reliquary-title">
+  <div class="grid gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+    <div>
+      <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{reliquary.sectionEyebrow}</p>
+      <h2 id="card-type-reliquary-title" class="mt-3 text-3xl font-semibold md:text-4xl">{reliquary.sectionTitle}</h2>
+    </div>
+    <p class="text-sm leading-7 text-surface-parchment/90 md:text-base">{reliquary.sectionDescription}</p>
+  </div>
+
+  <div class="ornate-separator mt-7" aria-hidden="true"></div>
+
+  <div class="mt-7 grid gap-4 lg:grid-cols-5" aria-label="Card types">
+    {
+      reliquary.cardTypes.map((cardType) => (
+        <article class="card-type-vessel rounded-2xl border border-metal-bronze/45 bg-surface-obsidian/62 p-4">
+          <div class="card-type-asset-slot grid min-h-36 place-items-center rounded-xl border border-dashed border-metal-aged-gold/45 bg-surface-calm/40 text-center" aria-label={cardType.assetLabel}>
+            <span class="px-3 text-xs uppercase tracking-[0.18em] text-metal-aged-gold-bright">{cardType.slot}</span>
+          </div>
+          <p class="mt-4 text-xs uppercase tracking-[0.18em] text-surface-parchment/75">{cardType.subtitle}</p>
+          <h3 class="mt-2 text-xl font-semibold text-metal-aged-gold-bright">{cardType.slot}</h3>
+          <p class="mt-3 text-sm leading-7 text-surface-parchment/88">{cardType.detail}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
