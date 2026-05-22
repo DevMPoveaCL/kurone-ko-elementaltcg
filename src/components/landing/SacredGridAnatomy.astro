@@ -6,60 +6,209 @@ interface Props {
 }
 
 const { anatomy } = Astro.props as Props;
-const firstHalf = anatomy.anatomyFields.slice(0, 4);
-const secondHalf = anatomy.anatomyFields.slice(4);
+const battlefieldHotspotPositions = [
+  { x: "10%", y: "91%" },
+  { x: "10%", y: "48%" },
+  { x: "23%", y: "42%" },
+  { x: "50%", y: "91%" },
+  { x: "58%", y: "63%" },
+  { x: "58%", y: "49%" },
+  { x: "44%", y: "79%" },
+  { x: "62%", y: "79%" },
+  { x: "85%", y: "82%" },
+  { x: "86%", y: "61%" },
+];
+const battlefieldHotspots = anatomy.battlefieldGuide.symbols.map((symbol, index) => {
+  const pos = battlefieldHotspotPositions[index] ?? { x: "50%", y: "50%" };
+  const yPercent = parseInt(pos.y);
+  return {
+    ...symbol,
+    ...pos,
+    tooltipDir: yPercent > 60 ? "above" : "below",
+  };
+});
+const anatomyHotspotPositions = [
+  { x: "15%", y: "11%" },
+  { x: "85%", y: "11%" },
+  { x: "50%", y: "12%" },
+  { x: "50%", y: "43%" },
+  { x: "50%", y: "72%" },
+  { x: "17%", y: "90%" },
+  { x: "50%", y: "87%" },
+  { x: "84%", y: "90%" },
+];
 ---
 
-<section id="sacred-grid-anatomy" class="reliquary-panel scroll-mt-8" aria-labelledby="sacred-grid-anatomy-title">
-  <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{anatomy.sectionEyebrow}</p>
-  <h2 id="sacred-grid-anatomy-title" class="mt-3 max-w-4xl text-3xl font-semibold md:text-4xl">{anatomy.sectionTitle}</h2>
-  <p class="mt-4 max-w-4xl text-sm leading-7 text-surface-parchment/90 md:text-base">{anatomy.sectionDescription}</p>
-
-  <div class="ornate-separator mt-7" aria-hidden="true"></div>
-
-  <div class="mt-7 grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-    <div class="sacred-grid-map rounded-2xl border border-metal-bronze/45 bg-surface-obsidian/60 p-5" aria-label="Battlefield deployment map">
-      <p class="text-xs uppercase tracking-[0.18em] text-metal-aged-gold-bright">Deployment Field</p>
-      <div class="mt-4 grid gap-2 rounded-xl border border-metal-bronze/40 bg-surface-calm/35 p-3">
-        <div class="grid grid-cols-6 gap-2" aria-hidden="true">
-          {Array.from({ length: 6 }).map(() => <span class="battle-slot battle-slot--pawn">P</span>)}
-        </div>
-        <div class="grid grid-cols-6 gap-2" aria-hidden="true">
-          <span class="battle-slot">R</span>
-          <span class="battle-slot">N</span>
-          <span class="battle-slot">B</span>
-          <span class="battle-slot">B</span>
-          <span class="battle-slot">N</span>
-          <span class="battle-slot">R</span>
-        </div>
-        <div class="mx-auto mt-2 grid h-16 w-16 place-items-center rounded-full border border-metal-aged-gold/70 bg-metal-aged-gold/10 text-lg font-semibold text-metal-aged-gold-bright" aria-hidden="true">Q</div>
-      </div>
-      <p class="mt-4 text-sm leading-7 text-surface-parchment/88">{anatomy.battlefieldSummary}</p>
+<section class="battlefield-content w-full" aria-labelledby="sacred-grid-anatomy-title">
+  <div class="grid gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
+    <div>
+      <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{anatomy.sectionEyebrow}</p>
+      <h2 id="sacred-grid-anatomy-title" class="mt-3 text-3xl font-semibold md:text-4xl">{anatomy.sectionTitle}</h2>
     </div>
-
-    <div class="grid gap-5 xl:grid-cols-[1fr_15rem_1fr] xl:items-center">
-      <ul class="grid list-none gap-3 p-0">
-        {firstHalf.map((field) => <li class="anatomy-callout"><strong>{field.label}</strong><span>{field.position}</span><p>{field.detail}</p></li>)}
-      </ul>
-
-      <div class="ally-card-diagram mx-auto w-full max-w-60 rounded-[1.4rem] border-2 border-metal-aged-gold/70 bg-surface-calm/60 p-3" aria-label="Ally card anatomy diagram">
-        <div class="grid grid-cols-[2.4rem_1fr_2.4rem] items-center gap-2">
-          <span class="diagram-medallion">PWR</span>
-          <span class="rounded border border-metal-bronze/55 bg-surface-obsidian/70 px-2 py-1 text-center text-xs font-semibold uppercase tracking-[0.12em]">Name</span>
-          <span class="diagram-medallion">Cost</span>
-        </div>
-        <div class="mt-3 grid min-h-52 place-items-center rounded-xl border border-metal-bronze/45 bg-surface-obsidian/50 text-xl font-semibold text-surface-parchment/78">Illustration</div>
-        <div class="ml-auto mt-3 w-20 rounded border border-metal-aged-gold/70 px-2 py-1 text-center text-xs text-metal-aged-gold-bright">Lore</div>
-        <div class="mt-3 grid grid-cols-[2.4rem_1fr_2.4rem] items-center gap-2">
-          <span class="diagram-medallion">Type</span>
-          <span class="rounded border border-metal-bronze/55 bg-surface-obsidian/70 px-2 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em]">Ability</span>
-          <span class="diagram-medallion">Attr</span>
-        </div>
-      </div>
-
-      <ul class="grid list-none gap-3 p-0">
-        {secondHalf.map((field) => <li class="anatomy-callout"><strong>{field.label}</strong><span>{field.position}</span><p>{field.detail}</p></li>)}
-      </ul>
-    </div>
+    <p class="text-sm leading-7 text-surface-parchment/90 md:text-base">{anatomy.sectionDescription}</p>
   </div>
+
+  <div class="ornate-separator mt-6" aria-hidden="true"></div>
+
+  <div class="battlefield-showcase mt-6">
+    <figure class="battlefield-arena-panel">
+      <div class="showing-card-tilt battlefield-board-tilt" data-battlefield-tilt data-battlefield-board-tilt>
+        <img
+          src={anatomy.battlefieldImage.src}
+          srcset={anatomy.battlefieldImage.srcSet}
+          sizes={anatomy.battlefieldImage.sizes}
+          alt={anatomy.battlefieldImage.alt}
+          width={anatomy.battlefieldImage.width}
+          height={anatomy.battlefieldImage.height}
+          loading="lazy"
+          decoding="async"
+          class="showing-card-image battlefield-arena-image"
+        />
+        <img
+          src="/assets/landing/battlefield/battlefield/variants/image-2000w.webp"
+          srcset={anatomy.battlefieldImage.srcSet}
+          sizes={anatomy.battlefieldImage.sizes}
+          alt=""
+          width={2000}
+          height={859}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="auto"
+          class="showing-card-magnifier battlefield-board-magnifier"
+          aria-hidden="true"
+          data-battlefield-board-magnifier
+        />
+      </div>
+      <div class="battlefield-hotspot-layer" aria-label={anatomy.battlefieldGuide.title}>
+        {
+            battlefieldHotspots.map((hotspot, index) => (
+            <div class="battlefield-hotspot battlefield-hotspot--field" data-tooltip-dir={hotspot.tooltipDir} style={`--hotspot-x:${hotspot.x};--hotspot-y:${hotspot.y};`}>
+              <button type="button" aria-label={`${hotspot.label}: ${hotspot.detail}`} aria-describedby={`battlefield-hotspot-${index}`}>
+                <span>{index + 1}</span>
+              </button>
+              <div id={`battlefield-hotspot-${index}`} class="battlefield-hotspot-card" role="tooltip">
+                <strong>{hotspot.label}</strong>
+                <p>{hotspot.detail}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <figcaption class="sr-only">{anatomy.battlefieldSummary}</figcaption>
+    </figure>
+
+    <aside class="battlefield-card-anatomy" aria-label="Gilgamesh card anatomy">
+      <div class="battlefield-card-stage">
+        <div class="showing-card-tilt battlefield-card-tilt" data-battlefield-tilt data-battlefield-card-tilt>
+          <img
+            src={anatomy.cardImage.src}
+            srcset={anatomy.cardImage.srcSet}
+            sizes={anatomy.cardImage.sizes}
+            alt={anatomy.cardImage.alt}
+            width={anatomy.cardImage.width}
+            height={anatomy.cardImage.height}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+            class="showing-card-image"
+          />
+          <img
+            src={anatomy.cardImage.magnifiedSrc}
+            srcset={anatomy.cardImage.magnifiedSrcSet}
+            sizes={anatomy.cardImage.magnifiedSizes}
+            alt=""
+            width={anatomy.cardImage.magnifiedWidth}
+            height={anatomy.cardImage.magnifiedHeight}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+            class="showing-card-magnifier"
+            aria-hidden="true"
+            data-battlefield-card-magnifier
+          />
+        </div>
+        <div class="battlefield-hotspot-layer battlefield-hotspot-layer--card" aria-label="Gilgamesh card anatomy markers">
+          {
+            anatomy.anatomyFields.map((field, index) => {
+              const position = anatomyHotspotPositions[index] ?? { x: "50%", y: "50%" };
+              const yPercent = parseInt(position.y);
+              const tooltipDir = yPercent > 60 ? "above" : "below";
+              return (
+                <div class="battlefield-hotspot battlefield-hotspot--card" data-tooltip-dir={tooltipDir} style={`--hotspot-x:${position.x};--hotspot-y:${position.y};`}>
+                  <button type="button" aria-label={`${field.label}: ${field.detail}`} aria-describedby={`card-anatomy-hotspot-${index}`}>
+                    <span>{index + 1}</span>
+                  </button>
+                  <div id={`card-anatomy-hotspot-${index}`} class="battlefield-hotspot-card" role="tooltip">
+                    <strong>{field.label}</strong>
+                    <span>{field.position}</span>
+                    <p>{field.detail}</p>
+                  </div>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script is:inline>
+    (() => {
+      const tilts = document.querySelectorAll("[data-battlefield-tilt]");
+
+      tilts.forEach((tilt) => {
+        if (!(tilt instanceof HTMLElement)) return;
+        const canMagnify = window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
+          window.matchMedia("(hover: hover)").matches &&
+          window.matchMedia("(pointer: fine)").matches;
+
+        if (!canMagnify) return;
+
+        let frame = 0;
+        let pointerX = 50;
+        let pointerY = 50;
+        let isPointerInside = false;
+
+        const applyTilt = () => {
+          const rotateY = (pointerX - 50) * 0.16;
+          const rotateX = (50 - pointerY) * 0.14;
+          tilt.style.setProperty("--tilt-x", `${rotateX.toFixed(2)}deg`);
+          tilt.style.setProperty("--tilt-y", `${rotateY.toFixed(2)}deg`);
+          tilt.style.setProperty("--glare-x", `${pointerX.toFixed(2)}%`);
+          tilt.style.setProperty("--glare-y", `${pointerY.toFixed(2)}%`);
+          frame = 0;
+        };
+
+        const setMagnifierState = (active) => {
+          tilt.dataset.magnifying = String(active);
+        };
+
+        const resolveStableMagnifierState = () => {
+          if (tilt.dataset.magnifying === "true") return pointerX >= 5 && pointerX <= 95 && pointerY >= 5 && pointerY <= 95;
+          return pointerX >= 9 && pointerX <= 91 && pointerY >= 9 && pointerY <= 91;
+        };
+
+        tilt.addEventListener("pointerenter", () => {
+          isPointerInside = true;
+        }, { passive: true });
+
+        tilt.addEventListener("pointermove", (event) => {
+          const rect = tilt.getBoundingClientRect();
+          pointerX = Math.min(Math.max(((event.clientX - rect.left) / rect.width) * 100, 0), 100);
+          pointerY = Math.min(Math.max(((event.clientY - rect.top) / rect.height) * 100, 0), 100);
+          setMagnifierState(isPointerInside && resolveStableMagnifierState());
+          if (frame === 0) frame = window.requestAnimationFrame(applyTilt);
+        }, { passive: true });
+
+        tilt.addEventListener("pointerleave", () => {
+          isPointerInside = false;
+          setMagnifierState(false);
+          tilt.style.setProperty("--tilt-x", "0deg");
+          tilt.style.setProperty("--tilt-y", "0deg");
+          tilt.style.setProperty("--glare-x", "50%");
+          tilt.style.setProperty("--glare-y", "18%");
+        });
+      });
+    })();
+  </script>
 </section>

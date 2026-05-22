@@ -93,6 +93,95 @@
       linear-gradient(90deg, var(--color-surface-obsidian), transparent 18%, transparent 82%, var(--color-surface-obsidian));
   }
 
+  .landing-continuum {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    background:
+      radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--color-element-nammu) 24%, transparent), transparent 21rem),
+      radial-gradient(circle at 82% 28%, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 22rem),
+      linear-gradient(135deg, color-mix(in oklch, var(--color-surface-obsidian) 92%, black), color-mix(in oklch, var(--color-surface-calm) 74%, var(--color-surface-obsidian)) 54%, color-mix(in oklch, var(--color-element-ki) 14%, var(--color-surface-obsidian)));
+    color: var(--color-surface-parchment);
+  }
+
+  .landing-continuum::before,
+  .landing-continuum::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .landing-continuum::before {
+    z-index: -2;
+    opacity: 0.42;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 18%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 18%, transparent) 1px, transparent 1px);
+    background-size: 7rem 7rem;
+  }
+
+  .landing-continuum::after {
+    z-index: -1;
+    opacity: 0.86;
+    background:
+      radial-gradient(ellipse at 50% 102%, color-mix(in oklch, var(--color-element-nammu) 20%, transparent), transparent 34rem),
+      linear-gradient(90deg, var(--color-surface-obsidian), transparent 18%, transparent 82%, var(--color-surface-obsidian));
+  }
+
+  .landing-continuum-section,
+  .landing-continuum .landing-viewport-section {
+    background: transparent;
+  }
+
+  .landing-viewport-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100svh;
+    scroll-margin-top: 0;
+  }
+
+  .landing-viewport-section::before,
+  .landing-viewport-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .landing-viewport-section::before {
+    z-index: -2;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 18%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 18%, transparent) 1px, transparent 1px);
+    background-size: 7rem 7rem;
+    opacity: 0.32;
+  }
+
+  .landing-viewport-section::after {
+    z-index: -1;
+    opacity: 0.86;
+  }
+
+  .landing-viewport-section--continuum {
+    background: transparent;
+    color: var(--color-surface-parchment);
+  }
+
+  .landing-viewport-section--continuum::before {
+    content: none;
+  }
+
+  .landing-viewport-section--continuum::after {
+    content: none;
+  }
+
+  /* Allow battlefield tooltips to overflow the section */
+  #sacred-grid-anatomy.landing-viewport-section {
+    overflow: visible;
+  }
+
   .reliquary-panel {
     position: relative;
     overflow: hidden;
@@ -119,15 +208,49 @@
   }
 
   .primordial-rule-card,
-  .card-type-vessel,
   .sacred-grid-map,
   .sealed-roadmap-list > li {
     position: relative;
     overflow: hidden;
   }
 
+  .primordial-verdict-frame {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid color-mix(in oklch, var(--color-metal-aged-gold) 52%, transparent);
+    border-radius: 0.75rem;
+    background:
+      radial-gradient(circle at 10% 0%, color-mix(in oklch, var(--color-metal-aged-gold) 12%, transparent), transparent 18rem),
+      linear-gradient(135deg, color-mix(in oklch, var(--color-surface-calm) 88%, var(--color-surface-obsidian)), color-mix(in oklch, var(--color-surface-obsidian) 84%, black));
+    box-shadow:
+      0 1.8rem 5rem color-mix(in oklch, black 34%, transparent),
+      inset 0 0 0 1px color-mix(in oklch, var(--color-metal-aged-gold) 14%, transparent);
+    padding: clamp(1.75rem, 4vw, 3.1rem);
+  }
+
+  .primordial-verdict-frame::before,
+  .primordial-verdict-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .primordial-verdict-frame::before {
+    opacity: 0.42;
+    background-image:
+      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 18%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 18%, transparent) 1px, transparent 1px);
+    background-size: 4.5rem 4.5rem;
+    mask-image: linear-gradient(to bottom, black, transparent 82%);
+  }
+
+  .primordial-verdict-frame::after {
+    border-radius: inherit;
+    box-shadow: inset 0 0 3.5rem color-mix(in oklch, black 30%, transparent);
+  }
+
   .primordial-rule-card::before,
-  .card-type-vessel::before,
   .sealed-roadmap-list > li::before {
     content: "";
     position: absolute;
@@ -137,8 +260,99 @@
     background: radial-gradient(circle at 82% 8%, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 9rem);
   }
 
+  .primordial-verdict-content .ornate-separator {
+    opacity: 0.8;
+    background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--color-metal-aged-gold) 62%, transparent), transparent);
+  }
+
   .card-type-asset-slot {
     box-shadow: inset 0 0 2rem color-mix(in oklch, var(--color-metal-aged-gold) 8%, transparent);
+  }
+
+  .card-type-vessel--image {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 0.25rem;
+    background: color-mix(in oklch, var(--color-surface-obsidian) 70%, black);
+    box-shadow: 0 1.1rem 3rem color-mix(in oklch, black 32%, transparent);
+    outline: none;
+  }
+
+  .card-type-vessel--image:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 0.35rem;
+  }
+
+  .card-type-vessel--image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 520 / 924;
+    object-fit: cover;
+    transition:
+      transform 360ms ease,
+      filter 360ms ease;
+  }
+
+  .card-type-vessel-overlay,
+  .card-type-vessel-copy {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition:
+      opacity 260ms ease,
+      transform 260ms ease;
+  }
+
+  .card-type-vessel-overlay {
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, color-mix(in oklch, black 26%, transparent), color-mix(in oklch, black 78%, transparent)),
+      radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 17rem);
+  }
+
+  .card-type-vessel-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: clamp(1rem, 2vw, 1.35rem);
+    transform: translateY(0.7rem);
+  }
+
+  .card-type-vessel--image:is(:hover, :focus-visible, :focus-within) img {
+    transform: scale(1.035);
+    filter: saturate(0.88) brightness(0.62);
+  }
+
+  .card-type-vessel--image:is(:hover, :focus-visible, :focus-within) .card-type-vessel-overlay,
+  .card-type-vessel--image:is(:hover, :focus-visible, :focus-within) .card-type-vessel-copy {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (hover: none) {
+    .card-type-vessel-overlay,
+    .card-type-vessel-copy {
+      opacity: 1;
+      transform: none;
+    }
+
+    .card-type-vessel--image img {
+      filter: brightness(0.68);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-type-vessel--image img,
+    .card-type-vessel-overlay,
+    .card-type-vessel-copy {
+      transition: none;
+    }
+
+    .card-type-vessel--image:is(:hover, :focus-visible, :focus-within) img {
+      transform: none;
+    }
   }
 
   .battle-slot {
@@ -152,6 +366,248 @@
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.12em;
+  }
+
+  .battlefield-content {
+    position: relative;
+    overflow: visible;
+  }
+
+  .battlefield-showcase {
+    display: grid;
+    gap: clamp(1.2rem, 3vw, 2.5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .battlefield-showcase {
+      grid-template-columns: minmax(0, 1.42fr) minmax(10rem, 0.24fr);
+    }
+  }
+
+  .battlefield-arena-panel {
+    position: relative;
+    overflow: visible;
+    border-radius: 1.1rem;
+  }
+
+  .battlefield-board-tilt {
+    --card-showing-element: var(--color-metal-aged-gold);
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    overflow: visible;
+    contain: none;
+    border-radius: inherit;
+  }
+
+  .battlefield-arena-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--color-surface-obsidian);
+    aspect-ratio: 1914 / 822;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+
+  .battlefield-board-magnifier {
+    border-radius: inherit;
+  }
+
+  .battlefield-card-anatomy {
+    display: grid;
+    place-items: center;
+  }
+
+  .battlefield-card-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: visible;
+    min-height: min(48svh, 28rem);
+    perspective: 1200px;
+  }
+
+  .battlefield-card-stage::before {
+    content: "";
+    position: absolute;
+    inset: 14% 14% 8%;
+    border-radius: 999px;
+    background: radial-gradient(ellipse, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 70%);
+    filter: blur(1.3rem);
+  }
+
+  .battlefield-card-tilt {
+    --card-showing-element: var(--color-metal-aged-gold);
+    width: clamp(10rem, min(13vw, 36svh), 13.5rem);
+    max-width: min(58vw, 13.5rem);
+    overflow: visible;
+    contain: none;
+  }
+
+  .battlefield-hotspot-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 8;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .battlefield-hotspot-layer--card {
+    inset: auto;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    z-index: 20;
+    width: clamp(10rem, min(13vw, 36svh), 13.5rem);
+    max-width: min(58vw, 13.5rem);
+    aspect-ratio: 800 / 1422;
+  }
+
+  .battlefield-hotspot {
+    position: absolute;
+    left: var(--hotspot-x);
+    top: var(--hotspot-y);
+    translate: -50% -50%;
+    pointer-events: none;
+  }
+
+  .battlefield-hotspot button {
+    display: grid;
+    width: 1.85rem;
+    height: 1.85rem;
+    place-items: center;
+    border: 1px solid color-mix(in oklch, var(--color-metal-aged-gold) 70%, transparent);
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--color-surface-obsidian) 78%, transparent);
+    color: var(--color-metal-aged-gold-bright);
+    font-size: 0.68rem;
+    font-weight: 800;
+    box-shadow:
+      0 0 0 0.35rem color-mix(in oklch, var(--color-metal-aged-gold) 14%, transparent),
+      0 0 1.4rem color-mix(in oklch, var(--color-metal-aged-gold) 24%, transparent);
+    cursor: help;
+    pointer-events: auto;
+    transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  }
+
+  .battlefield-hotspot button:hover,
+  .battlefield-hotspot button:focus-visible {
+    transform: scale(1.08);
+    background: color-mix(in oklch, var(--color-metal-aged-gold) 18%, var(--color-surface-obsidian));
+  }
+
+  .battlefield-hotspot-card {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.75rem);
+    width: min(18rem, 70vw);
+    translate: -50% 0.4rem;
+    border: 1px solid color-mix(in oklch, var(--color-metal-aged-gold) 42%, transparent);
+    border-radius: 0.85rem;
+    background: color-mix(in oklch, var(--color-surface-obsidian) 86%, transparent);
+    padding: 0.85rem;
+    color: var(--color-surface-parchment);
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 1rem 3rem color-mix(in oklch, black 34%, transparent);
+    backdrop-filter: blur(12px);
+    transition: opacity 180ms ease, translate 180ms ease;
+  }
+
+  /* Left-aligned tooltips for left-edge hotspots */
+  .battlefield-hotspot--field:nth-child(-n + 3) .battlefield-hotspot-card {
+    left: 0;
+    translate: 0 0.4rem;
+  }
+
+  .battlefield-hotspot--field:nth-child(-n + 3):has(button:hover) .battlefield-hotspot-card,
+  .battlefield-hotspot--field:nth-child(-n + 3):has(button:focus-visible) .battlefield-hotspot-card,
+  .battlefield-hotspot--field:nth-child(-n + 3):focus-within .battlefield-hotspot-card {
+    translate: 0 0;
+  }
+
+  /* Right-aligned tooltips for edge hotspots */
+  .battlefield-hotspot--field:nth-child(n + 9) .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(2) .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(8) .battlefield-hotspot-card {
+    right: 0;
+    left: auto;
+    translate: 0 0.4rem;
+  }
+
+  .battlefield-hotspot--field:nth-child(n + 9):has(button:hover) .battlefield-hotspot-card,
+  .battlefield-hotspot--field:nth-child(n + 9):has(button:focus-visible) .battlefield-hotspot-card,
+  .battlefield-hotspot--field:nth-child(n + 9):focus-within .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(2):has(button:hover) .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(2):has(button:focus-visible) .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(2):focus-within .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(8):has(button:hover) .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(8):has(button:focus-visible) .battlefield-hotspot-card,
+  .battlefield-hotspot--card:nth-child(8):focus-within .battlefield-hotspot-card {
+    translate: 0 0;
+  }
+
+  .battlefield-hotspot-card strong,
+  .battlefield-hotspot-card span {
+    display: block;
+    color: var(--color-metal-aged-gold-bright);
+  }
+
+  .battlefield-hotspot-card strong {
+    font-size: 0.95rem;
+  }
+
+  .battlefield-hotspot-card span {
+    margin-top: 0.2rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .battlefield-hotspot-card p {
+    margin-top: 0.45rem;
+    color: color-mix(in oklch, var(--color-surface-parchment) 90%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+
+  .battlefield-hotspot[data-tooltip-dir="above"]:has(button:hover) .battlefield-hotspot-card,
+  .battlefield-hotspot[data-tooltip-dir="above"]:has(button:focus-visible) .battlefield-hotspot-card,
+  .battlefield-hotspot[data-tooltip-dir="above"]:focus-within .battlefield-hotspot-card {
+    opacity: 1;
+    translate: -50% 0;
+  }
+
+  .battlefield-hotspot[data-tooltip-dir="below"]:has(button:hover) .battlefield-hotspot-card,
+  .battlefield-hotspot[data-tooltip-dir="below"]:has(button:focus-visible) .battlefield-hotspot-card,
+  .battlefield-hotspot[data-tooltip-dir="below"]:focus-within .battlefield-hotspot-card {
+    opacity: 1;
+    translate: -50% 0;
+  }
+
+  .battlefield-board-tilt[data-magnifying="true"] .showing-card-magnifier,
+  .battlefield-card-tilt[data-magnifying="true"] .showing-card-magnifier {
+    opacity: 1;
+    clip-path: circle(24% at var(--glare-x, 50%) var(--glare-y, 50%));
+  }
+
+  .battlefield-hotspot[data-tooltip-dir="below"] .battlefield-hotspot-card {
+    bottom: auto;
+    top: calc(100% + 0.75rem);
+  }
+
+  @media (max-width: 767px) {
+    .battlefield-hotspot button {
+      width: 1.55rem;
+      height: 1.55rem;
+      font-size: 0.62rem;
+    }
+
+    .battlefield-hotspot-card {
+      width: min(15rem, 78vw);
+    }
   }
 
   .battle-slot--pawn {
@@ -824,24 +1280,11 @@
     isolation: isolate;
     overflow: hidden;
     min-height: 100svh;
-    background:
-      radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--color-element-nammu) 24%, transparent), transparent 21rem),
-      radial-gradient(circle at 82% 28%, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 22rem),
-      linear-gradient(135deg, color-mix(in oklch, var(--color-surface-obsidian) 92%, black), color-mix(in oklch, var(--color-surface-calm) 74%, var(--color-surface-obsidian)) 54%, color-mix(in oklch, var(--color-element-ki) 14%, var(--color-surface-obsidian)));
+    background: transparent;
   }
 
   .showing-cards-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.5;
-    background-image:
-      linear-gradient(color-mix(in oklch, var(--color-metal-bronze) 16%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in oklch, var(--color-metal-bronze) 16%, transparent) 1px, transparent 1px),
-      radial-gradient(ellipse at 50% 102%, color-mix(in oklch, var(--color-element-nammu) 20%, transparent), transparent 34rem);
-    background-size: 8rem 8rem, 8rem 8rem, 100% 100%;
-    mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+    content: none;
   }
 
   .showing-card-stage {
@@ -1042,6 +1485,84 @@
     transition-delay: 0ms;
   }
 
+  .card-type-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: visible;
+    min-height: min(58svh, 34rem);
+    perspective: 1200px;
+    perspective-origin: 50% 42%;
+  }
+
+  .card-type-stage::before {
+    content: "";
+    position: absolute;
+    inset: 14% 18% 8%;
+    border-radius: 999px;
+    background: radial-gradient(ellipse, color-mix(in oklch, var(--color-metal-aged-gold) 18%, transparent), transparent 70%);
+    filter: blur(1.4rem);
+  }
+
+  .card-type-tilt {
+    --card-showing-element: var(--color-metal-aged-gold);
+    width: clamp(17rem, min(30vw, 52svh), 25rem);
+    max-width: min(78vw, 25rem);
+  }
+
+  @media (min-width: 1024px) {
+    .card-type-tilt {
+      min-width: min(23rem, 50svh);
+    }
+  }
+
+  .card-type-lore {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(0.35rem, 1.4vw, 0.8rem) 0;
+  }
+
+  .card-type-lore::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(90deg, transparent 0 1.3rem, color-mix(in oklch, var(--color-metal-bronze) 10%, transparent) 1.35rem 1.4rem);
+    mask-image: linear-gradient(to bottom, black, transparent 72%);
+  }
+
+  .card-type-lore > * {
+    position: relative;
+  }
+
+  .card-type-lore[data-motion-ready="true"] :is(
+    [data-card-type-title],
+    [data-card-type-subtitle],
+    [data-card-type-question],
+    [data-card-type-detail]
+  ) {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+    transition:
+      opacity 180ms ease,
+      filter 220ms ease,
+      transform 220ms ease;
+    transition-delay: var(--lore-delay, 0ms);
+  }
+
+  .card-type-lore[data-motion-ready="true"][data-transitioning="true"] :is(
+    [data-card-type-title],
+    [data-card-type-subtitle],
+    [data-card-type-question],
+    [data-card-type-detail]
+  ) {
+    opacity: 0;
+    filter: blur(0.22rem);
+    transform: translateY(0.45rem);
+    transition-delay: 0ms;
+  }
+
   .showing-card-control,
   .showing-card-dot {
     display: inline-flex;
@@ -1190,6 +1711,19 @@
     [data-showing-cards-short],
     [data-showing-cards-tablet],
     [data-showing-cards-question]
+  ) {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .card-type-lore[data-transitioning="true"] :is(
+    [data-card-type-title],
+    [data-card-type-subtitle],
+    [data-card-type-question],
+    [data-card-type-detail]
   ) {
     animation: none !important;
     transition: none !important;

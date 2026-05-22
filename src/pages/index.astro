@@ -20,29 +20,39 @@ import FinalCTA from "@/components/landing/FinalCTA.astro";
   <main class="min-h-screen w-full">
     <HeroReliquary hero={landingContent.hero} />
 
-    <div class="showing-cards-section scroll-reveal">
-      <ShowingCards content={landingContent.showingCards} />
-    </div>
-
-    <div class="reliquary-section-field px-6 py-14 lg:px-10 lg:py-18">
-      <div class="mx-auto flex w-full max-w-6xl flex-col gap-8">
+    <div class="landing-continuum">
+      <div class="showing-cards-section landing-continuum-section">
         <div class="scroll-reveal">
+          <ShowingCards content={landingContent.showingCards} />
+        </div>
+      </div>
+
+      <div id="primordial-verdict" class="landing-viewport-section landing-viewport-section--continuum">
+        <div class="scroll-reveal mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-6 py-10 lg:px-10">
           <PrimordialVerdict verdict={landingContent.primordialVerdict} />
         </div>
+      </div>
 
-        <div class="scroll-reveal">
+      <div id="card-type-reliquary" class="landing-viewport-section landing-viewport-section--continuum">
+        <div class="scroll-reveal mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-6 py-10 lg:px-10">
           <CardTypeReliquary reliquary={landingContent.cardTypeReliquary} />
         </div>
+      </div>
 
-        <div class="scroll-reveal">
+      <div id="sacred-grid-anatomy" class="landing-viewport-section landing-viewport-section--continuum">
+        <div class="scroll-reveal mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-6 py-10 lg:px-10">
           <SacredGridAnatomy anatomy={landingContent.sacredGridAnatomy} />
         </div>
+      </div>
 
-        <div class="scroll-reveal">
+      <div id="sealed-roadmap" class="landing-viewport-section landing-viewport-section--continuum">
+        <div class="scroll-reveal mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-6 py-10 lg:px-10">
           <RoadmapSealedGate roadmap={landingContent.roadmapSealedGate} />
         </div>
+      </div>
 
-        <div class="scroll-reveal">
+      <div id="follow-first-edition" class="landing-viewport-section landing-viewport-section--continuum">
+        <div class="scroll-reveal mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-6 py-10 lg:px-10">
           <FinalCTA />
         </div>
       </div>

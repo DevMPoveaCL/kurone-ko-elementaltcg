@@ -8,7 +8,11 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "typecheck": "astro check",
-    "lint": "astro check"
+    "lint": "astro check",
+    "assets:cards": "node scripts/generate-card-variants.mjs",
+    "qa:frame": "node scripts/qa/frame-contract.mjs",
+    "qa:landing-flow": "node scripts/qa/landing-flow-contract.mjs",
+    "qa:showing-cards": "node scripts/qa/showing-cards-contract.mjs"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",

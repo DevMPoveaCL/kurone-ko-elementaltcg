@@ -134,6 +134,21 @@ const cardSrcSet = (id: ShowingCardId) =>
 const cardMagnifierSrcSet = (id: ShowingCardId) =>
   CARD_MAGNIFIER_WIDTHS.map((width) => `/assets/cards/${id}/variants/card-${width}w.webp ${width}w`).join(", ");
 
+export const CARD_TYPE_ORDER = ["allies", "rooks", "energy", "talismans", "queens"] as const;
+export type CardTypeId = (typeof CARD_TYPE_ORDER)[number];
+
+const activeCardTypeVariant = (id: CardTypeId) => `/assets/landing/card-types/${id}/variants/card-800w.webp`;
+const trailingCardTypeVariant = (id: CardTypeId) => `/assets/landing/card-types/${id}/variants/card-400w.webp`;
+const magnifiedCardTypeVariant = (id: CardTypeId) => `/assets/landing/card-types/${id}/variants/card-1600w.webp`;
+const cardTypeSrcSet = (id: CardTypeId) =>
+  CARD_VARIANT_WIDTHS.map((width) => `/assets/landing/card-types/${id}/variants/card-${width}w.webp ${width}w`).join(", ");
+const cardTypeMagnifierSrcSet = (id: CardTypeId) =>
+  CARD_MAGNIFIER_WIDTHS.map((width) => `/assets/landing/card-types/${id}/variants/card-${width}w.webp ${width}w`).join(", ");
+
+const BATTLEFIELD_IMAGE_WIDTHS = [480, 800, 1200, 1600, 2000] as const;
+const battlefieldSrcSet = (id: "battlefield" | "field-guide") =>
+  BATTLEFIELD_IMAGE_WIDTHS.map((width) => `/assets/landing/battlefield/${id}/variants/image-${width}w.webp ${width}w`).join(", ");
+
 /** Maps content sections to their image optimization presets. */
 export const IMAGE_OPTIMIZATION: Record<string, ImageOptimizationConfig> = {
   "hero-poster": {
@@ -262,6 +277,15 @@ export interface ShowingCardImage {
   optimizationKey: string;
 }
 
+export interface LandingResponsiveImage {
+  src: string;
+  srcSet: string;
+  sizes: string;
+  width: number;
+  height: number;
+  alt: string;
+}
+
 export interface ShowingCardContent {
   id: ShowingCardId;
   name: ShowingCardName;
@@ -285,6 +309,49 @@ export interface ShowingCardsContent {
   livePrefix: string;
   cards: readonly ShowingCardContent[];
 }
+
+const cardTypeImage = (id: CardTypeId, alt: string): ShowingCardImage => ({
+  src: activeCardTypeVariant(id),
+  srcSet: cardTypeSrcSet(id),
+  sizes: "(max-width: 1023px) min(78vw, 24rem), min(30vw, 52svh)",
+  trailingSrc: trailingCardTypeVariant(id),
+  trailingSizes: "min(42vw, 18rem)",
+  magnifiedSrc: magnifiedCardTypeVariant(id),
+  magnifiedSrcSet: cardTypeMagnifierSrcSet(id),
+  magnifiedSizes: "min(78vw, 24rem)",
+  magnifiedWidth: CARD_MAGNIFIER_WIDTH,
+  magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
+  width: CARD_ACTIVE_WIDTH,
+  height: CARD_ACTIVE_HEIGHT,
+  alt,
+  optimizationKey: `card-type-${id}`,
+});
+
+const battlefieldImage = (id: "battlefield" | "field-guide", alt: string, width: number, height: number, sizes: string): LandingResponsiveImage => ({
+  src: `/assets/landing/battlefield/${id}/variants/image-1600w.webp`,
+  srcSet: battlefieldSrcSet(id),
+  sizes,
+  width,
+  height,
+  alt,
+});
+
+const gilgameshCardImage = (): ShowingCardImage => ({
+  src: "/assets/landing/battlefield/gilgamesh/variants/card-800w.webp",
+  srcSet: CARD_VARIANT_WIDTHS.map((width) => `/assets/landing/battlefield/gilgamesh/variants/card-${width}w.webp ${width}w`).join(", "),
+  sizes: "(max-width: 1023px) min(70vw, 20rem), min(22vw, 48svh)",
+  trailingSrc: "/assets/landing/battlefield/gilgamesh/variants/card-400w.webp",
+  trailingSizes: "min(38vw, 16rem)",
+  magnifiedSrc: "/assets/landing/battlefield/gilgamesh/variants/card-1600w.webp",
+  magnifiedSrcSet: CARD_MAGNIFIER_WIDTHS.map((width) => `/assets/landing/battlefield/gilgamesh/variants/card-${width}w.webp ${width}w`).join(", "),
+  magnifiedSizes: "min(70vw, 20rem)",
+  magnifiedWidth: CARD_MAGNIFIER_WIDTH,
+  magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
+  width: CARD_ACTIVE_WIDTH,
+  height: CARD_ACTIVE_HEIGHT,
+  alt: "Gilgamesh ally card render used to explain card anatomy",
+  optimizationKey: "battlefield-gilgamesh",
+});
 
 export const SHOWING_CARDS_BY_ID = {
   nammu: {
@@ -441,10 +508,13 @@ export interface PrimordialVerdictContent {
 }
 
 export interface CardTypeContent {
+  id: CardTypeId;
   slot: string;
   subtitle: string;
   detail: string;
   assetLabel: string;
+  question: string;
+  image: ShowingCardImage;
 }
 
 export interface CardTypeReliquaryContent {
@@ -460,11 +530,22 @@ export interface SacredGridFieldContent {
   detail: string;
 }
 
+export interface BattlefieldSymbolContent {
+  label: string;
+  detail: string;
+}
+
 export interface SacredGridAnatomyContent {
   sectionEyebrow: string;
   sectionTitle: string;
   sectionDescription: string;
   battlefieldSummary: string;
+  battlefieldImage: LandingResponsiveImage;
+  battlefieldGuide: {
+    title: string;
+    symbols: BattlefieldSymbolContent[];
+  };
+  cardImage: ShowingCardImage;
   anatomyFields: SacredGridFieldContent[];
 }
 
@@ -620,39 +701,54 @@ export const landingContent: LandingContent = {
       "Every card in the Sumerian Edition is a fragment of divine will sealed into form. Each type answers a different question on the battlefield.",
     cardTypes: [
       {
+        id: "allies",
         slot: "Allies",
         subtitle: "Pawn · Bishop · Knight",
+        question: "Who answers when the Queens call for mortal hands?",
         detail:
           "The mortal hands that answer the Queens' call. Pawns are the many; Bishops and Knights are the named figures of Sumerian myth and history. To summon a Bishop or Knight, a Pawn must be discarded from your hand.",
         assetLabel: "Ally card asset slot",
+        image: cardTypeImage("allies", "Allies card illustration showing a Sumerian warrior vessel"),
       },
       {
+        id: "rooks",
         slot: "Rooks",
         subtitle: "Towers · Temples · Ziggurats",
+        question: "Where does divine law touch mortal ground?",
         detail:
           "Sacred structures that anchor a domain: solar ziggurats, deep-water shrines, archives, gates, and towers where divine law touches mortal ground.",
         assetLabel: "Rook structure asset slot",
+        image: cardTypeImage("rooks", "Rook card illustration showing a sacred Sumerian tower"),
       },
       {
-        slot: "Talismans",
-        subtitle: "Hidden Strategies",
-        detail:
-          "Sealed gestures and ritual answers. Talismans do not simply occupy the grid; they bend the rules at the moment the opponent thinks the verdict is known.",
-        assetLabel: "Talisman asset slot",
-      },
-      {
+        id: "energy",
         slot: "Energy",
         subtitle: "The Elemental Pulse",
+        question: "What price wakes the Queen's gift?",
         detail:
           "The ritual fuel of the game. Energy pays costs, awakens Queen gifts, and becomes the threshold between mortal command and divine manifestation.",
         assetLabel: "Energy card asset slot",
+        image: cardTypeImage("energy", "Energy card illustration showing elemental flame water air and earth"),
       },
       {
+        id: "talismans",
+        slot: "Talismans",
+        subtitle: "Hidden Strategies",
+        question: "Which ritual bends the verdict before it lands?",
+        detail:
+          "Sealed gestures and ritual answers. Talismans do not simply occupy the grid; they bend the rules at the moment the opponent thinks the verdict is known.",
+        assetLabel: "Talisman asset slot",
+        image: cardTypeImage("talismans", "Talisman card illustration showing a sealed ritual eye relic"),
+      },
+      {
+        id: "queens",
         slot: "Queens",
         subtitle: "The Four Elemental Sovereigns",
+        question: "What happens when divinity enters the field herself?",
         detail:
           "Nammu, Utu, An, and Ki stand at the center of the covenant. At seven energy, a Queen may enter the field, bless her allies, and demand Sacrifice in return.",
         assetLabel: "Queen card asset slot",
+        image: cardTypeImage("queens", "Queen card illustration showing Nammu as an elemental sovereign"),
       },
     ],
   },
@@ -663,6 +759,59 @@ export const landingContent: LandingContent = {
       "The field is a chess-like mirror where two Queens face each other across twelve deployment zones. Where you place a card is as decisive as which card you play.",
     battlefieldSummary:
       "Six Pawn lanes form the front line. Two Rooks hold the corners. Two Knights guard the flanks. Two Bishops command the center. The Queen watches from the heart of your side until seven energy opens the gate.",
+    battlefieldImage: battlefieldImage(
+      "battlefield",
+      "Elemental Queens battlefield interface with card zones and player lanes",
+      1600,
+      687,
+      "(max-width: 1023px) 94vw, min(68vw, 60rem)",
+    ),
+    battlefieldGuide: {
+      title: "Read the primordial field",
+      symbols: [
+        {
+          label: "Player Name",
+          detail: "Your chosen duelist name marks the side of the trial you command.",
+        },
+        {
+          label: "Selected Card Preview",
+          detail: "Hover a card to reveal its preview here before committing it to the battlefield.",
+        },
+        {
+          label: "Turn Phases",
+          detail: "DP, M, BP, SW, M2, and EP guide the ritual order of every turn.",
+        },
+        {
+          label: "Your Hand",
+          detail: "These are the relics still in your hand, waiting for enough energy to answer the Queen's call.",
+        },
+        {
+          label: "Pawn Line",
+          detail: "Six Pawn spaces form the first wall between your Queen and the enemy's verdict.",
+        },
+        {
+          label: "Rook, Knight, Bishop Line",
+          detail: "Six elite spaces hold two Rooks, two Knights, and two Bishops — the named faithful of your formation.",
+        },
+        {
+          label: "Reserve Energy",
+          detail: "Elemental energy still available to pay card costs this turn waits here.",
+        },
+        {
+          label: "Paid Energy",
+          detail: "Energy already spent moves here; it has served the ritual and cannot pay again this turn.",
+        },
+        {
+          label: "Deck Count",
+          detail: "Your remaining deck is your future. Combat wounds remove cards from this fate.",
+        },
+        {
+          label: "Graveyard Check",
+          detail: "Open the cemetery to remember which cards have already fallen in the trial.",
+        },
+      ],
+    },
+    cardImage: gilgameshCardImage(),
     anatomyFields: [
       {
         label: "Power",
