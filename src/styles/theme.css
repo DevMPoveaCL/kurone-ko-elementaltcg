@@ -381,7 +381,8 @@
 
   @media (min-width: 1024px) {
     .battlefield-showcase {
-      grid-template-columns: minmax(0, 1.42fr) minmax(10rem, 0.24fr);
+      grid-template-columns: minmax(0, 1.18fr) minmax(5rem, 0.14fr);
+      align-items: start;
     }
   }
 
@@ -425,7 +426,7 @@
     display: grid;
     place-items: center;
     overflow: visible;
-    min-height: min(48svh, 28rem);
+    min-height: min(28svh, 18rem);
     perspective: 1200px;
   }
 
@@ -440,8 +441,8 @@
 
   .battlefield-card-tilt {
     --card-showing-element: var(--color-metal-aged-gold);
-    width: clamp(10rem, min(13vw, 36svh), 13.5rem);
-    max-width: min(58vw, 13.5rem);
+    width: clamp(7rem, min(10vw, 24svh), 11rem);
+    max-width: min(42vw, 11rem);
     overflow: visible;
     contain: none;
   }
@@ -460,8 +461,8 @@
     top: 50%;
     translate: -50% -50%;
     z-index: 20;
-    width: clamp(10rem, min(13vw, 36svh), 13.5rem);
-    max-width: min(58vw, 13.5rem);
+    width: clamp(7rem, min(10vw, 24svh), 11rem);
+    max-width: min(42vw, 11rem);
     aspect-ratio: 800 / 1422;
   }
 
