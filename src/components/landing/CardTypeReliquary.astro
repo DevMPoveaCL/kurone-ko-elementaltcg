@@ -118,7 +118,7 @@ const trailingTypeTwo = reliquary.cardTypes[2] ?? trailingTypeOne;
         aria-hidden="true"
         data-card-type-slot="trailing-2"
       />
-      <div class="showing-card-tilt card-type-tilt" data-card-type-tilt>
+      <div class="showing-card-tilt card-type-tilt" data-card-magnifier-runtime data-card-type-tilt>
         <img
           src={activeType.image.src}
           srcset={activeType.image.srcSet}
@@ -162,6 +162,8 @@ const trailingTypeTwo = reliquary.cardTypes[2] ?? trailingTypeOne;
           class="showing-card-magnifier"
           aria-hidden="true"
           data-card-type-magnifier
+          data-magnified-width={activeType.image.magnifiedWidth}
+          data-magnified-height={activeType.image.magnifiedHeight}
         />
       </div>
     </div>
@@ -300,6 +302,8 @@ const trailingTypeTwo = reliquary.cardTypes[2] ?? trailingTypeOne;
           magnifier.sizes = cardType.image.magnifiedSizes || cardType.image.sizes || "";
           magnifier.width = cardType.image.magnifiedWidth || cardType.image.width;
           magnifier.height = cardType.image.magnifiedHeight || cardType.image.height;
+          magnifier.dataset.magnifiedWidth = String(cardType.image.magnifiedWidth || cardType.image.width);
+          magnifier.dataset.magnifiedHeight = String(cardType.image.magnifiedHeight || cardType.image.height);
 
           currentBuffer.setAttribute("aria-hidden", "true");
           currentBuffer.dataset.bufferActive = "false";
@@ -372,57 +376,12 @@ const trailingTypeTwo = reliquary.cardTypes[2] ?? trailingTypeOne;
           }
         });
 
-        const canMagnify = window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
-          window.matchMedia("(hover: hover)").matches &&
-          window.matchMedia("(pointer: fine)").matches;
-
-        if (!canMagnify) return;
-
-        let frame = 0;
-        let pointerX = 50;
-        let pointerY = 50;
-        let isPointerInside = false;
-
-        const applyMagnifier = () => {
-          const rotateY = (pointerX - 50) * 0.16;
-          const rotateX = (50 - pointerY) * 0.14;
-          tilt.style.setProperty("--tilt-x", `${rotateX.toFixed(2)}deg`);
-          tilt.style.setProperty("--tilt-y", `${rotateY.toFixed(2)}deg`);
-          tilt.style.setProperty("--glare-x", `${pointerX.toFixed(2)}%`);
-          tilt.style.setProperty("--glare-y", `${pointerY.toFixed(2)}%`);
-          frame = 0;
-        };
-
-        const setMagnifierState = (active) => {
-          tilt.dataset.magnifying = String(active);
-        };
-
-        const resolveStableMagnifierState = () => {
-          if (tilt.dataset.magnifying === "true") return pointerX >= 5 && pointerX <= 95 && pointerY >= 5 && pointerY <= 95;
-          return pointerX >= 9 && pointerX <= 91 && pointerY >= 9 && pointerY <= 91;
-        };
-
-        tilt.addEventListener("pointerenter", () => {
-          isPointerInside = true;
-        }, { passive: true });
-
-        tilt.addEventListener("pointermove", (event) => {
-          const rect = tilt.getBoundingClientRect();
-          pointerX = Math.min(Math.max(((event.clientX - rect.left) / rect.width) * 100, 0), 100);
-          pointerY = Math.min(Math.max(((event.clientY - rect.top) / rect.height) * 100, 0), 100);
-          setMagnifierState(isPointerInside && resolveStableMagnifierState());
-          if (frame === 0) frame = window.requestAnimationFrame(applyMagnifier);
-        }, { passive: true });
-
-        tilt.addEventListener("pointerleave", () => {
-          isPointerInside = false;
-          setMagnifierState(false);
-          tilt.style.setProperty("--tilt-x", "0deg");
-          tilt.style.setProperty("--tilt-y", "0deg");
-          tilt.style.setProperty("--glare-x", "50%");
-          tilt.style.setProperty("--glare-y", "18%");
-        });
       });
     })();
+  </script>
+  <script>
+    import { installCardMagnifierRuntime } from "./magnifierRuntime";
+
+    installCardMagnifierRuntime(document);
   </script>
 </section>

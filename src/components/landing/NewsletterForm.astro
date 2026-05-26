@@ -44,32 +44,61 @@ const helperId = "newsletter-helper";
   <div class="flex flex-wrap items-center gap-3">
     <button
       type="submit"
-      class="inline-flex items-center rounded-md border border-metal-aged-gold bg-metal-aged-gold/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-metal-aged-gold-bright transition hover:bg-metal-aged-gold/20 focus-visible:bg-metal-aged-gold/20"
+      class="inline-flex items-center rounded-md border border-metal-aged-gold bg-metal-aged-gold/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-metal-aged-gold-bright transition hover:bg-metal-aged-gold/20 focus-visible:bg-metal-aged-gold/20 focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian/65"
     >
       {newsletterContent.submitLabel}
     </button>
-    <p class="text-xs text-surface-parchment/80">Static placeholder flow — provider integration is pending.</p>
+    <p class="text-xs text-surface-parchment/80">{newsletterContent.pendingProviderText}</p>
   </div>
 
   <p id={statusId} role="status" aria-live="polite" class="min-h-6 rounded-md border border-metal-bronze/35 bg-surface-obsidian/55 px-3 py-2 text-sm text-surface-parchment/85">
-    Ready to receive your answer.
+    {newsletterContent.readyMessage}
   </p>
 </form>
 
+<script type="application/json" data-newsletter-messages is:inline set:html={JSON.stringify({
+  requiredEmail: newsletterContent.validation.requiredEmail,
+  invalidEmail: newsletterContent.validation.invalidEmail,
+  consentRequired: newsletterContent.consentRequiredMessage,
+  loading: newsletterContent.loadingMessage,
+  success: newsletterContent.successMessage,
+}).replaceAll("<", "\\u003c")}></script>
+
 <script is:inline>
   (() => {
-    const form = document.getElementById("newsletter-form");
+    const script = document.currentScript;
+    const root = script instanceof HTMLElement ? script.closest("#follow-first-edition") : document;
+    const form = root?.querySelector("#newsletter-form");
     if (!(form instanceof HTMLFormElement)) return;
 
     const emailInput = form.querySelector("#newsletter-email");
     const consentInput = form.querySelector("#newsletter-consent");
     const status = form.querySelector("#newsletter-status");
     const submitButton = form.querySelector("button[type='submit']");
+    const messagesScript = root?.querySelector("[data-newsletter-messages]");
 
     if (!(emailInput instanceof HTMLInputElement)) return;
     if (!(consentInput instanceof HTMLInputElement)) return;
     if (!(status instanceof HTMLElement)) return;
     if (!(submitButton instanceof HTMLButtonElement)) return;
+
+    const messages = (() => {
+      if (!(messagesScript instanceof HTMLScriptElement)) return null;
+
+      try {
+        const parsed = JSON.parse(messagesScript.textContent || "{}");
+        if (typeof parsed !== "object" || parsed === null) return null;
+
+        return parsed;
+      } catch {
+        return null;
+      }
+    })();
+
+    const readMessage = (key) => {
+      const value = messages?.[key];
+      return typeof value === "string" ? value : key;
+    };
 
     const setStatus = (message, tone) => {
       status.textContent = message;
@@ -86,28 +115,28 @@ const helperId = "newsletter-helper";
 
       const emailValue = emailInput.value.trim();
       if (!emailValue) {
-        setStatus("Email is required.", "error");
+        setStatus(readMessage("requiredEmail"), "error");
         emailInput.focus();
         return;
       }
 
       if (!emailInput.checkValidity()) {
-        setStatus("Please enter a valid email address.", "error");
+        setStatus(readMessage("invalidEmail"), "error");
         emailInput.focus();
         return;
       }
 
       if (!consentInput.checked) {
-        setStatus("Consent is required to continue.", "error");
+        setStatus(readMessage("consentRequired"), "error");
         consentInput.focus();
         return;
       }
 
       submitButton.disabled = true;
-      setStatus("Submitting request...", "loading");
+      setStatus(readMessage("loading"), "loading");
 
       window.setTimeout(() => {
-        setStatus("The Queens have heard your answer. You are now on the First Edition watchlist.", "success");
+        setStatus(readMessage("success"), "success");
         submitButton.disabled = false;
         form.reset();
       }, 550);

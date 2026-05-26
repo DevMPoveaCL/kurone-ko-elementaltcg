@@ -146,6 +146,9 @@ const cardTypeMagnifierSrcSet = (id: CardTypeId) =>
   CARD_MAGNIFIER_WIDTHS.map((width) => `/assets/landing/card-types/${id}/variants/card-${width}w.webp ${width}w`).join(", ");
 
 const BATTLEFIELD_IMAGE_WIDTHS = [480, 800, 1200, 1600, 2000] as const;
+const BATTLEFIELD_NATIVE_WIDTH = 1914;
+const BATTLEFIELD_NATIVE_HEIGHT = 822;
+const BATTLEFIELD_NATIVE_SRC = "/battlefield.webp";
 const battlefieldSrcSet = (id: "battlefield" | "field-guide") =>
   BATTLEFIELD_IMAGE_WIDTHS.map((width) => `/assets/landing/battlefield/${id}/variants/image-${width}w.webp ${width}w`).join(", ");
 
@@ -281,6 +284,11 @@ export interface LandingResponsiveImage {
   src: string;
   srcSet: string;
   sizes: string;
+  magnifiedSrc: string;
+  magnifiedSrcSet: string;
+  magnifiedSizes: string;
+  magnifiedWidth: number;
+  magnifiedHeight: number;
   width: number;
   height: number;
   alt: string;
@@ -318,7 +326,7 @@ const cardTypeImage = (id: CardTypeId, alt: string): ShowingCardImage => ({
   trailingSizes: "min(42vw, 18rem)",
   magnifiedSrc: magnifiedCardTypeVariant(id),
   magnifiedSrcSet: cardTypeMagnifierSrcSet(id),
-  magnifiedSizes: "min(78vw, 24rem)",
+  magnifiedSizes: `${CARD_MAGNIFIER_WIDTH}px`,
   magnifiedWidth: CARD_MAGNIFIER_WIDTH,
   magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
   width: CARD_ACTIVE_WIDTH,
@@ -331,6 +339,11 @@ const battlefieldImage = (id: "battlefield" | "field-guide", alt: string, width:
   src: `/assets/landing/battlefield/${id}/variants/image-1600w.webp`,
   srcSet: battlefieldSrcSet(id),
   sizes,
+  magnifiedSrc: id === "battlefield" ? BATTLEFIELD_NATIVE_SRC : `/assets/landing/battlefield/${id}/variants/image-1600w.webp`,
+  magnifiedSrcSet: id === "battlefield" ? `${BATTLEFIELD_NATIVE_SRC} ${BATTLEFIELD_NATIVE_WIDTH}w` : `/assets/landing/battlefield/${id}/variants/image-1600w.webp 1600w`,
+  magnifiedSizes: `${id === "battlefield" ? BATTLEFIELD_NATIVE_WIDTH : width}px`,
+  magnifiedWidth: id === "battlefield" ? BATTLEFIELD_NATIVE_WIDTH : width,
+  magnifiedHeight: id === "battlefield" ? BATTLEFIELD_NATIVE_HEIGHT : height,
   width,
   height,
   alt,
@@ -344,7 +357,7 @@ const gilgameshCardImage = (): ShowingCardImage => ({
   trailingSizes: "min(38vw, 16rem)",
   magnifiedSrc: "/assets/landing/battlefield/gilgamesh/variants/card-1600w.webp",
   magnifiedSrcSet: CARD_MAGNIFIER_WIDTHS.map((width) => `/assets/landing/battlefield/gilgamesh/variants/card-${width}w.webp ${width}w`).join(", "),
-  magnifiedSizes: "min(70vw, 20rem)",
+  magnifiedSizes: `${CARD_MAGNIFIER_WIDTH}px`,
   magnifiedWidth: CARD_MAGNIFIER_WIDTH,
   magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
   width: CARD_ACTIVE_WIDTH,
@@ -373,7 +386,7 @@ export const SHOWING_CARDS_BY_ID = {
       trailingSizes: "min(48vw, 18rem)",
       magnifiedSrc: magnifiedCardVariant("nammu"),
       magnifiedSrcSet: cardMagnifierSrcSet("nammu"),
-      magnifiedSizes: "min(78vw, 24rem)",
+      magnifiedSizes: `${CARD_MAGNIFIER_WIDTH}px`,
       magnifiedWidth: CARD_MAGNIFIER_WIDTH,
       magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
       width: CARD_ACTIVE_WIDTH,
@@ -401,7 +414,7 @@ export const SHOWING_CARDS_BY_ID = {
       trailingSizes: "min(48vw, 18rem)",
       magnifiedSrc: magnifiedCardVariant("utu"),
       magnifiedSrcSet: cardMagnifierSrcSet("utu"),
-      magnifiedSizes: "min(78vw, 24rem)",
+      magnifiedSizes: `${CARD_MAGNIFIER_WIDTH}px`,
       magnifiedWidth: CARD_MAGNIFIER_WIDTH,
       magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
       width: CARD_ACTIVE_WIDTH,
@@ -429,7 +442,7 @@ export const SHOWING_CARDS_BY_ID = {
       trailingSizes: "min(48vw, 18rem)",
       magnifiedSrc: magnifiedCardVariant("an"),
       magnifiedSrcSet: cardMagnifierSrcSet("an"),
-      magnifiedSizes: "min(78vw, 24rem)",
+      magnifiedSizes: `${CARD_MAGNIFIER_WIDTH}px`,
       magnifiedWidth: CARD_MAGNIFIER_WIDTH,
       magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
       width: CARD_ACTIVE_WIDTH,
@@ -457,7 +470,7 @@ export const SHOWING_CARDS_BY_ID = {
       trailingSizes: "min(48vw, 18rem)",
       magnifiedSrc: magnifiedCardVariant("ki"),
       magnifiedSrcSet: cardMagnifierSrcSet("ki"),
-      magnifiedSizes: "min(78vw, 24rem)",
+      magnifiedSizes: `${CARD_MAGNIFIER_WIDTH}px`,
       magnifiedWidth: CARD_MAGNIFIER_WIDTH,
       magnifiedHeight: CARD_MAGNIFIER_HEIGHT,
       width: CARD_ACTIVE_WIDTH,
@@ -528,11 +541,15 @@ export interface SacredGridFieldContent {
   label: string;
   position: string;
   detail: string;
+  x: string;
+  y: string;
 }
 
 export interface BattlefieldSymbolContent {
   label: string;
   detail: string;
+  x: string;
+  y: string;
 }
 
 export interface SacredGridAnatomyContent {
@@ -617,8 +634,9 @@ export interface LandingSectionOrder {
     | "card-type-reliquary"
     | "sacred-grid-anatomy"
     | "sealed-roadmap"
-    | "final-cta";
+    | "follow-first-edition";
   title: string;
+  navLabel?: string;
 }
 
 export interface LandingContent {
@@ -764,7 +782,7 @@ export const landingContent: LandingContent = {
       "Elemental Queens battlefield interface with card zones and player lanes",
       1600,
       687,
-      "(max-width: 1023px) 94vw, min(68vw, 60rem)",
+      "(max-width: 1023px) 94vw, min(72vw, 64rem)",
     ),
     battlefieldGuide: {
       title: "Read the primordial field",
@@ -772,42 +790,62 @@ export const landingContent: LandingContent = {
         {
           label: "Player Name",
           detail: "Your chosen duelist name marks the side of the trial you command.",
+          x: "3%",
+          y: "92%",
         },
         {
           label: "Selected Card Preview",
           detail: "Hover a card to reveal its preview here before committing it to the battlefield.",
+          x: "3%",
+          y: "43%",
         },
         {
           label: "Turn Phases",
           detail: "DP, M, BP, SW, M2, and EP guide the ritual order of every turn.",
+          x: "21%",
+          y: "14%",
         },
         {
           label: "Your Hand",
           detail: "These are the relics still in your hand, waiting for enough energy to answer the Queen's call.",
+          x: "32%",
+          y: "92%",
         },
         {
           label: "Pawn Line",
           detail: "Six Pawn spaces form the first wall between your Queen and the enemy's verdict.",
+          x: "49%",
+          y: "62%",
         },
         {
           label: "Rook, Knight, Bishop Line",
           detail: "Six elite spaces hold two Rooks, two Knights, and two Bishops — the named faithful of your formation.",
+          x: "49%",
+          y: "76%",
         },
         {
           label: "Reserve Energy",
           detail: "Elemental energy still available to pay card costs this turn waits here.",
+          x: "40%",
+          y: "48%",
         },
         {
           label: "Paid Energy",
           detail: "Energy already spent moves here; it has served the ritual and cannot pay again this turn.",
+          x: "58%",
+          y: "48%",
         },
         {
           label: "Deck Count",
           detail: "Your remaining deck is your future. Combat wounds remove cards from this fate.",
+          x: "79%",
+          y: "81%",
         },
         {
           label: "Graveyard Check",
           detail: "Open the cemetery to remember which cards have already fallen in the trial.",
+          x: "79%",
+          y: "58%",
         },
       ],
     },
@@ -817,41 +855,57 @@ export const landingContent: LandingContent = {
         label: "Power",
         position: "Top-left medallion",
         detail: "Combat strength. Pawns carry 0–2 power; Bishops and Knights rise from 3–5.",
-      },
-      {
-        label: "Energy Cost",
-        position: "Top-right medallion",
-        detail: "The ritual threshold required to play the card.",
+        x: "4%",
+        y: "0%",
       },
       {
         label: "Name",
         position: "Center-top strip",
         detail: "A Sumerian echo: archetype, hero, god, city, or sacred structure.",
+        x: "48%",
+        y: "0%",
+      },
+      {
+        label: "Energy Cost",
+        position: "Top-right medallion",
+        detail: "The ritual threshold required to play the card.",
+        x: "95%",
+        y: "0%",
       },
       {
         label: "Illustration",
         position: "Central window",
         detail: "The visual soul of the card before rules speak.",
+        x: "4%",
+        y: "42%",
       },
       {
         label: "Lore",
         position: "Lower illustration panel",
         detail: "A memory tied to the Queen who called this card into being.",
+        x: "4%",
+        y: "68%",
       },
       {
         label: "Type",
         position: "Bottom-left medallion",
         detail: "Pawn, Bishop, or Knight — the mark that determines deployment logic.",
+        x: "4%",
+        y: "101%",
       },
       {
         label: "Ability",
         position: "Bottom-center tablet",
         detail: "Keywords such as Rush, Berserk, Guardian, Recover, Drain, Unblockable, and Blessed reshape combat.",
+        x: "50%",
+        y: "101%",
       },
       {
         label: "Attribute",
         position: "Bottom-right medallion",
         detail: "Fire, Water, Air, or Earth — allegiance to the Queen whose gifts may awaken it.",
+        x: "94%",
+        y: "101%",
       },
     ],
   },
@@ -894,12 +948,12 @@ export const landingContent: LandingContent = {
   },
   sections: [
     { id: "hero", title: "Hero Reliquary" },
-    { id: "showing-cards", title: "Showing Cards" },
-    { id: "primordial-verdict", title: "Primordial Verdict" },
-    { id: "card-type-reliquary", title: "Card Type Reliquary" },
-    { id: "sacred-grid-anatomy", title: "Sacred Grid Anatomy" },
-    { id: "sealed-roadmap", title: "Sealed Roadmap" },
-    { id: "final-cta", title: "Final CTA" },
+    { id: "showing-cards", title: "The Four Primordial Queens", navLabel: "Queens" },
+    { id: "primordial-verdict", title: "Primordial Verdict", navLabel: "Trial" },
+    { id: "card-type-reliquary", title: "Card Type Reliquary", navLabel: "Vessels" },
+    { id: "sacred-grid-anatomy", title: "Sacred Grid Anatomy", navLabel: "Battlefield" },
+    { id: "sealed-roadmap", title: "Sealed Roadmap", navLabel: "Roadmap" },
+    { id: "follow-first-edition", title: "First Edition Call", navLabel: "First Edition" },
   ],
 };
 

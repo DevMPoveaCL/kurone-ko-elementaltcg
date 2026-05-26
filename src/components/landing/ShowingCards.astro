@@ -66,7 +66,7 @@ const serializedCards = JSON.stringify(content.cards).replace(/</g, "\\u003c");
           aria-hidden="true"
           data-card-slot="trailing-2"
         />
-        <div class="showing-card-tilt" data-showing-cards-tilt data-card-element={activeCard.element}>
+        <div class="showing-card-tilt" data-card-magnifier-runtime data-showing-cards-tilt data-card-element={activeCard.element}>
           <img
             src={activeCard.image.src}
             srcset={activeCard.image.srcSet}
@@ -110,6 +110,8 @@ const serializedCards = JSON.stringify(content.cards).replace(/</g, "\\u003c");
             class="showing-card-magnifier"
             aria-hidden="true"
             data-showing-card-magnifier
+            data-magnified-width={activeCard.image.magnifiedWidth}
+            data-magnified-height={activeCard.image.magnifiedHeight}
           />
         </div>
 
@@ -341,6 +343,8 @@ const serializedCards = JSON.stringify(content.cards).replace(/</g, "\\u003c");
           magnifier.sizes = card.image.magnifiedSizes || card.image.sizes || "";
           magnifier.width = card.image.magnifiedWidth || card.image.width;
           magnifier.height = card.image.magnifiedHeight || card.image.height;
+          magnifier.dataset.magnifiedWidth = String(card.image.magnifiedWidth || card.image.width);
+          magnifier.dataset.magnifiedHeight = String(card.image.magnifiedHeight || card.image.height);
 
           currentBuffer.setAttribute("aria-hidden", "true");
           currentBuffer.dataset.bufferActive = "false";
@@ -423,60 +427,12 @@ const serializedCards = JSON.stringify(content.cards).replace(/</g, "\\u003c");
           }
         });
 
-        const canTilt = window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
-          window.matchMedia("(hover: hover)").matches &&
-          window.matchMedia("(pointer: fine)").matches;
-
-        if (!canTilt) return;
-
-        let frame = 0;
-        let pointerX = 50;
-        let pointerY = 50;
-        let isPointerInside = false;
-
-        const applyTilt = () => {
-          const rotateY = (pointerX - 50) * 0.16;
-          const rotateX = (50 - pointerY) * 0.14;
-          tilt.style.setProperty("--tilt-x", `${rotateX.toFixed(2)}deg`);
-          tilt.style.setProperty("--tilt-y", `${rotateY.toFixed(2)}deg`);
-          tilt.style.setProperty("--glare-x", `${pointerX.toFixed(2)}%`);
-          tilt.style.setProperty("--glare-y", `${pointerY.toFixed(2)}%`);
-          frame = 0;
-        };
-
-        const setMagnifierState = (active) => {
-          tilt.dataset.magnifying = String(active);
-        };
-
-        const resolveStableMagnifierState = () => {
-          if (tilt.dataset.magnifying === "true") {
-            return pointerX >= 5 && pointerX <= 95 && pointerY >= 5 && pointerY <= 95;
-          }
-
-          return pointerX >= 9 && pointerX <= 91 && pointerY >= 9 && pointerY <= 91;
-        };
-
-        tilt.addEventListener("pointerenter", () => {
-          isPointerInside = true;
-        }, { passive: true });
-
-        tilt.addEventListener("pointermove", (event) => {
-          const rect = tilt.getBoundingClientRect();
-          pointerX = Math.min(Math.max(((event.clientX - rect.left) / rect.width) * 100, 0), 100);
-          pointerY = Math.min(Math.max(((event.clientY - rect.top) / rect.height) * 100, 0), 100);
-          setMagnifierState(isPointerInside && resolveStableMagnifierState());
-          if (frame === 0) frame = window.requestAnimationFrame(applyTilt);
-        }, { passive: true });
-
-        tilt.addEventListener("pointerleave", () => {
-          isPointerInside = false;
-          setMagnifierState(false);
-          tilt.style.setProperty("--tilt-x", "0deg");
-          tilt.style.setProperty("--tilt-y", "0deg");
-          tilt.style.setProperty("--glare-x", "50%");
-          tilt.style.setProperty("--glare-y", "18%");
-        });
       });
     })();
+  </script>
+  <script>
+    import { installCardMagnifierRuntime } from "./magnifierRuntime";
+
+    installCardMagnifierRuntime(document);
   </script>
 </section>

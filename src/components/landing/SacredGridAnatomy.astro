@@ -6,40 +6,18 @@ interface Props {
 }
 
 const { anatomy } = Astro.props as Props;
-const battlefieldHotspotPositions = [
-  { x: "10%", y: "91%" },
-  { x: "10%", y: "48%" },
-  { x: "23%", y: "42%" },
-  { x: "50%", y: "91%" },
-  { x: "58%", y: "63%" },
-  { x: "58%", y: "49%" },
-  { x: "44%", y: "79%" },
-  { x: "62%", y: "79%" },
-  { x: "85%", y: "82%" },
-  { x: "86%", y: "61%" },
-];
-const battlefieldHotspots = anatomy.battlefieldGuide.symbols.map((symbol, index) => {
-  const pos = battlefieldHotspotPositions[index] ?? { x: "50%", y: "50%" };
-  const yPercent = parseInt(pos.y);
+const battlefieldHotspots = anatomy.battlefieldGuide.symbols.map((symbol) => {
+  const yPercent = parseInt(symbol.y);
   return {
     ...symbol,
-    ...pos,
     tooltipDir: yPercent > 60 ? "above" : "below",
   };
 });
-const anatomyHotspotPositions = [
-  { x: "15%", y: "11%" },
-  { x: "85%", y: "11%" },
-  { x: "50%", y: "12%" },
-  { x: "50%", y: "43%" },
-  { x: "50%", y: "72%" },
-  { x: "17%", y: "90%" },
-  { x: "50%", y: "87%" },
-  { x: "84%", y: "90%" },
-];
+const battlefieldSymbolsJson = JSON.stringify(anatomy.battlefieldGuide.symbols).replaceAll("<", "\\u003c");
+const cardAnatomyJson = JSON.stringify(anatomy.anatomyFields).replaceAll("<", "\\u003c");
 ---
 
-<section class="battlefield-content w-full" aria-labelledby="sacred-grid-anatomy-title">
+<section class="battlefield-content w-full" aria-labelledby="sacred-grid-anatomy-title" data-sacred-grid-anatomy-root>
   <div class="grid gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
     <div>
       <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{anatomy.sectionEyebrow}</p>
@@ -52,54 +30,62 @@ const anatomyHotspotPositions = [
 
   <div class="battlefield-showcase mt-6">
     <figure class="battlefield-arena-panel">
-      <div class="showing-card-tilt battlefield-board-tilt" data-battlefield-tilt data-battlefield-board-tilt>
-        <img
-          src={anatomy.battlefieldImage.src}
-          srcset={anatomy.battlefieldImage.srcSet}
-          sizes={anatomy.battlefieldImage.sizes}
-          alt={anatomy.battlefieldImage.alt}
-          width={anatomy.battlefieldImage.width}
-          height={anatomy.battlefieldImage.height}
-          loading="lazy"
-          decoding="async"
-          class="showing-card-image battlefield-arena-image"
-        />
-        <img
-          src="/assets/landing/battlefield/battlefield/variants/image-2000w.webp"
-          srcset={anatomy.battlefieldImage.srcSet}
-          sizes={anatomy.battlefieldImage.sizes}
-          alt=""
-          width={2000}
-          height={859}
-          loading="lazy"
-          decoding="async"
-          fetchpriority="auto"
-          class="showing-card-magnifier battlefield-board-magnifier"
-          aria-hidden="true"
-          data-battlefield-board-magnifier
-        />
-      </div>
-      <div class="battlefield-hotspot-layer" aria-label={anatomy.battlefieldGuide.title}>
-        {
-            battlefieldHotspots.map((hotspot, index) => (
-            <div class="battlefield-hotspot battlefield-hotspot--field" data-tooltip-dir={hotspot.tooltipDir} style={`--hotspot-x:${hotspot.x};--hotspot-y:${hotspot.y};`}>
-              <button type="button" aria-label={`${hotspot.label}: ${hotspot.detail}`} aria-describedby={`battlefield-hotspot-${index}`}>
-                <span>{index + 1}</span>
-              </button>
-              <div id={`battlefield-hotspot-${index}`} class="battlefield-hotspot-card" role="tooltip">
-                <strong>{hotspot.label}</strong>
-                <p>{hotspot.detail}</p>
-              </div>
+      <div class="showing-card-tilt battlefield-board-tilt" data-card-magnifier-runtime data-battlefield-board-tilt>
+          <img
+            src={anatomy.battlefieldImage.src}
+            srcset={anatomy.battlefieldImage.srcSet}
+            sizes={anatomy.battlefieldImage.sizes}
+            alt={anatomy.battlefieldImage.alt}
+            width={anatomy.battlefieldImage.width}
+            height={anatomy.battlefieldImage.height}
+            loading="lazy"
+            decoding="async"
+            class="showing-card-image battlefield-arena-image"
+          />
+          <img
+            src={anatomy.battlefieldImage.magnifiedSrc}
+            srcset={anatomy.battlefieldImage.magnifiedSrcSet}
+            sizes={anatomy.battlefieldImage.magnifiedSizes}
+            alt=""
+            width={anatomy.battlefieldImage.magnifiedWidth}
+            height={anatomy.battlefieldImage.magnifiedHeight}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+            class="showing-card-magnifier battlefield-board-magnifier"
+            aria-hidden="true"
+            data-battlefield-board-magnifier
+            data-magnified-width={anatomy.battlefieldImage.magnifiedWidth}
+            data-magnified-height={anatomy.battlefieldImage.magnifiedHeight}
+          />
+          <div class="battlefield-hotspot-layer" aria-label={anatomy.battlefieldGuide.title}>
+            {
+              battlefieldHotspots.map((hotspot, index) => (
+                <div class="battlefield-hotspot battlefield-hotspot--field" data-tooltip-dir={hotspot.tooltipDir} style={`--hotspot-x:${hotspot.x};--hotspot-y:${hotspot.y};`}>
+                  <button type="button" aria-label={`${hotspot.label}: ${hotspot.detail}`}>
+                    <span>{index + 1}</span>
+                  </button>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+        <div class="battlefield-explanation-panel battlefield-explanation-panel--field" aria-live="polite" aria-label="Battlefield symbol explanation" data-battlefield-explanation-panel hidden>
+          <div class="battlefield-explanation-active" data-explanation-content>
+            <span class="battlefield-explanation-number" data-explanation-number></span>
+            <div class="battlefield-explanation-content">
+              <strong data-explanation-label></strong>
+              <span data-explanation-position hidden></span>
+              <p data-explanation-detail></p>
             </div>
-          ))
-        }
-      </div>
-      <figcaption class="sr-only">{anatomy.battlefieldSummary}</figcaption>
-    </figure>
+          </div>
+        </div>
+        <figcaption class="sr-only">{anatomy.battlefieldSummary}</figcaption>
+      </figure>
 
     <aside class="battlefield-card-anatomy" aria-label="Gilgamesh card anatomy">
       <div class="battlefield-card-stage">
-        <div class="showing-card-tilt battlefield-card-tilt" data-battlefield-tilt data-battlefield-card-tilt>
+        <div class="showing-card-tilt battlefield-card-tilt" data-card-magnifier-runtime data-battlefield-card-tilt>
           <img
             src={anatomy.cardImage.src}
             srcset={anatomy.cardImage.srcSet}
@@ -125,90 +111,139 @@ const anatomyHotspotPositions = [
             class="showing-card-magnifier"
             aria-hidden="true"
             data-battlefield-card-magnifier
+            data-magnified-width={anatomy.cardImage.magnifiedWidth}
+            data-magnified-height={anatomy.cardImage.magnifiedHeight}
           />
         </div>
         <div class="battlefield-hotspot-layer battlefield-hotspot-layer--card" aria-label="Gilgamesh card anatomy markers">
           {
             anatomy.anatomyFields.map((field, index) => {
-              const position = anatomyHotspotPositions[index] ?? { x: "50%", y: "50%" };
-              const yPercent = parseInt(position.y);
-              const tooltipDir = yPercent > 60 ? "above" : "below";
+              const yPercent = parseInt(field.y);
               return (
-                <div class="battlefield-hotspot battlefield-hotspot--card" data-tooltip-dir={tooltipDir} style={`--hotspot-x:${position.x};--hotspot-y:${position.y};`}>
-                  <button type="button" aria-label={`${field.label}: ${field.detail}`} aria-describedby={`card-anatomy-hotspot-${index}`}>
+                <div class="battlefield-hotspot battlefield-hotspot--card" data-tooltip-dir={yPercent > 60 ? "above" : "below"} style={`--hotspot-x:${field.x};--hotspot-y:${field.y};`}>
+                  <button type="button" aria-label={`${field.label}: ${field.detail}`}>
                     <span>{index + 1}</span>
                   </button>
-                  <div id={`card-anatomy-hotspot-${index}`} class="battlefield-hotspot-card" role="tooltip">
-                    <strong>{field.label}</strong>
-                    <span>{field.position}</span>
-                    <p>{field.detail}</p>
-                  </div>
                 </div>
               );
             })
           }
         </div>
+        <div class="battlefield-explanation-panel battlefield-explanation-panel--card" aria-live="polite" aria-label="Gilgamesh card anatomy explanation" data-card-explanation-panel hidden>
+          <div class="battlefield-explanation-active" data-explanation-content>
+            <span class="battlefield-explanation-number" data-explanation-number></span>
+            <div class="battlefield-explanation-content">
+              <strong data-explanation-label></strong>
+              <span data-explanation-position hidden></span>
+              <p data-explanation-detail></p>
+            </div>
+          </div>
+        </div>
       </div>
     </aside>
+
+    <script type="application/json" data-battlefield-symbols is:inline set:html={battlefieldSymbolsJson}></script>
+    <script type="application/json" data-card-anatomy is:inline set:html={cardAnatomyJson}></script>
   </div>
 
   <script is:inline>
     (() => {
-      const tilts = document.querySelectorAll("[data-battlefield-tilt]");
+      const script = document.currentScript;
+      const root = script instanceof HTMLElement ? script.closest("[data-sacred-grid-anatomy-root]") : null;
+      if (!(root instanceof HTMLElement)) return;
 
-      tilts.forEach((tilt) => {
-        if (!(tilt instanceof HTMLElement)) return;
-        const canMagnify = window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
-          window.matchMedia("(hover: hover)").matches &&
-          window.matchMedia("(pointer: fine)").matches;
+      function parseDataScript(selector) {
+        const dataScript = root.querySelector(selector);
+        if (!dataScript) return [];
 
-        if (!canMagnify) return;
+        try {
+          const parsed = JSON.parse(dataScript.textContent || '[]');
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
 
-        let frame = 0;
-        let pointerX = 50;
-        let pointerY = 50;
-        let isPointerInside = false;
+      const battlefieldSymbols = parseDataScript('[data-battlefield-symbols]');
+      const cardAnatomy = parseDataScript('[data-card-anatomy]');
+      const battlefieldExplanationPanel = root.querySelector('[data-battlefield-explanation-panel]');
+      const cardExplanationPanel = root.querySelector('[data-card-explanation-panel]');
 
-        const applyTilt = () => {
-          const rotateY = (pointerX - 50) * 0.16;
-          const rotateX = (50 - pointerY) * 0.14;
-          tilt.style.setProperty("--tilt-x", `${rotateX.toFixed(2)}deg`);
-          tilt.style.setProperty("--tilt-y", `${rotateY.toFixed(2)}deg`);
-          tilt.style.setProperty("--glare-x", `${pointerX.toFixed(2)}%`);
-          tilt.style.setProperty("--glare-y", `${pointerY.toFixed(2)}%`);
-          frame = 0;
-        };
+      function showExplanation(panel, source, index) {
+        const item = source[index];
+        if (!item || !(panel instanceof HTMLElement)) return;
 
-        const setMagnifierState = (active) => {
-          tilt.dataset.magnifying = String(active);
-        };
+        const numEl = panel.querySelector('[data-explanation-number]');
+        const strongEl = panel.querySelector('[data-explanation-label]');
+        const positionEl = panel.querySelector('[data-explanation-position]');
+        const pEl = panel.querySelector('[data-explanation-detail]');
 
-        const resolveStableMagnifierState = () => {
-          if (tilt.dataset.magnifying === "true") return pointerX >= 5 && pointerX <= 95 && pointerY >= 5 && pointerY <= 95;
-          return pointerX >= 9 && pointerX <= 91 && pointerY >= 9 && pointerY <= 91;
-        };
+        if (numEl) numEl.textContent = String(index + 1);
+        if (strongEl) strongEl.textContent = item.label;
+        if (positionEl instanceof HTMLElement) {
+          positionEl.textContent = item.position || '';
+          positionEl.hidden = !item.position;
+        }
+        if (pEl) pEl.textContent = item.detail;
+        panel.hidden = false;
+      }
 
-        tilt.addEventListener("pointerenter", () => {
-          isPointerInside = true;
-        }, { passive: true });
+      function hideExplanation(panel) {
+        if (!(panel instanceof HTMLElement)) return;
+        panel.hidden = true;
+        const numEl = panel.querySelector('[data-explanation-number]');
+        const strongEl = panel.querySelector('[data-explanation-label]');
+        const positionEl = panel.querySelector('[data-explanation-position]');
+        const pEl = panel.querySelector('[data-explanation-detail]');
+        if (numEl) numEl.textContent = '';
+        if (strongEl) strongEl.textContent = '';
+        if (positionEl instanceof HTMLElement) {
+          positionEl.textContent = '';
+          positionEl.hidden = true;
+        }
+        if (pEl) pEl.textContent = '';
+      }
 
-        tilt.addEventListener("pointermove", (event) => {
-          const rect = tilt.getBoundingClientRect();
-          pointerX = Math.min(Math.max(((event.clientX - rect.left) / rect.width) * 100, 0), 100);
-          pointerY = Math.min(Math.max(((event.clientY - rect.top) / rect.height) * 100, 0), 100);
-          setMagnifierState(isPointerInside && resolveStableMagnifierState());
-          if (frame === 0) frame = window.requestAnimationFrame(applyTilt);
-        }, { passive: true });
-
-        tilt.addEventListener("pointerleave", () => {
-          isPointerInside = false;
-          setMagnifierState(false);
-          tilt.style.setProperty("--tilt-x", "0deg");
-          tilt.style.setProperty("--tilt-y", "0deg");
-          tilt.style.setProperty("--glare-x", "50%");
-          tilt.style.setProperty("--glare-y", "18%");
+      root.querySelectorAll('.battlefield-hotspot--field button').forEach((btn, index) => {
+        btn.addEventListener('mouseenter', () => {
+          hideExplanation(cardExplanationPanel);
+          showExplanation(battlefieldExplanationPanel, battlefieldSymbols, index);
         });
+        btn.addEventListener('focus', () => {
+          hideExplanation(cardExplanationPanel);
+          showExplanation(battlefieldExplanationPanel, battlefieldSymbols, index);
+        });
+        btn.addEventListener('mouseleave', () => hideExplanation(battlefieldExplanationPanel));
+        btn.addEventListener('blur', () => hideExplanation(battlefieldExplanationPanel));
+      });
+
+      root.querySelectorAll('.battlefield-hotspot--card button').forEach((btn, index) => {
+        btn.addEventListener('mouseenter', () => {
+          hideExplanation(battlefieldExplanationPanel);
+          showExplanation(cardExplanationPanel, cardAnatomy, index);
+        });
+        btn.addEventListener('focus', () => {
+          hideExplanation(battlefieldExplanationPanel);
+          showExplanation(cardExplanationPanel, cardAnatomy, index);
+        });
+        btn.addEventListener('mouseleave', () => hideExplanation(cardExplanationPanel));
+        btn.addEventListener('blur', () => hideExplanation(cardExplanationPanel));
+      });
+
+      root.querySelector('.battlefield-arena-panel')?.addEventListener('focusout', (event) => {
+        if (event.currentTarget instanceof HTMLElement && event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) return;
+        hideExplanation(battlefieldExplanationPanel);
+      });
+
+      root.querySelector('.battlefield-card-anatomy')?.addEventListener('focusout', (event) => {
+        if (event.currentTarget instanceof HTMLElement && event.relatedTarget instanceof Node && event.currentTarget.contains(event.relatedTarget)) return;
+        hideExplanation(cardExplanationPanel);
       });
     })();
+  </script>
+  <script>
+    import { installCardMagnifierRuntime } from "./magnifierRuntime";
+
+    installCardMagnifierRuntime(document);
   </script>
 </section>

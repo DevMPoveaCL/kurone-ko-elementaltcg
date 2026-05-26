@@ -3,8 +3,8 @@ import { newsletterContent } from "@/content/newsletter";
 import NewsletterForm from "@/components/landing/NewsletterForm.astro";
 ---
 
-<section class="reliquary-panel w-full" aria-labelledby="final-cta-title">
-  <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">Final Invocation</p>
+<div class="reliquary-panel w-full">
+  <p class="text-xs uppercase tracking-[0.24em] text-metal-aged-gold-bright">{newsletterContent.sectionEyebrow}</p>
   <h2 id="final-cta-title" class="mt-3 text-3xl font-semibold">{newsletterContent.formTitle}</h2>
   <p class="mt-3 max-w-3xl text-sm leading-relaxed text-surface-parchment/90 md:text-base">
     {newsletterContent.formDescription}
@@ -13,4 +13,4 @@ import NewsletterForm from "@/components/landing/NewsletterForm.astro";
   <div class="ornate-separator mt-6" aria-hidden="true"></div>
 
   <NewsletterForm />
-</section>
+</div>

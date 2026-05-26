@@ -18,7 +18,7 @@ import FinalCTA from "@/components/landing/FinalCTA.astro";
   robots="index, follow"
 >
   <main class="min-h-screen w-full">
-    <HeroReliquary hero={landingContent.hero} />
+    <HeroReliquary hero={landingContent.hero} sections={landingContent.sections} />
 
     <div class="landing-continuum">
       <div class="showing-cards-section landing-continuum-section">
@@ -51,11 +51,11 @@ import FinalCTA from "@/components/landing/FinalCTA.astro";
         </div>
       </div>
 
-      <div id="follow-first-edition" class="landing-viewport-section landing-viewport-section--continuum">
+      <section id="follow-first-edition" class="landing-viewport-section landing-viewport-section--continuum" aria-labelledby="final-cta-title">
         <div class="scroll-reveal mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-6 py-10 lg:px-10">
           <FinalCTA />
         </div>
-      </div>
+      </section>
     </div>
   </main>
 
