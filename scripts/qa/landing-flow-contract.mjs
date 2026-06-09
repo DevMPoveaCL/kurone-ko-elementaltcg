@@ -534,14 +534,14 @@ add(
   checks,
   "shared magnifier uses native-detail positioning instead of transform zoom",
   Number.isFinite(battlefieldBoardMagnifierScale) &&
-    battlefieldBoardMagnifierScale === 0.55 &&
+    battlefieldBoardMagnifierScale === 0.75 &&
     Number.isFinite(defaultMagnifierLensRadius) &&
     defaultMagnifierLensRadius === 21.6 &&
     Number.isFinite(defaultMagnifierScale) &&
     defaultMagnifierScale === 0.28 &&
     defaultMagnifierLensSize === "clamp(12rem, 18vw, 18rem)" &&
     !battlefieldBoardMagnifierRule?.groups?.body.includes("--magnifier-lens-radius") &&
-    !battlefieldBoardMagnifierRule?.groups?.body.includes("--magnifier-lens-size") &&
+    battlefieldBoardMagnifierLensSize === "clamp(6rem, 9vw, 9rem)" &&
     !battlefieldBoardMagnifierRule?.groups?.body.includes("overflow") &&
     !battlefieldBoardMagnifierRule?.groups?.body.includes("contain") &&
     !battlefieldCardMagnifierRule?.groups?.body.includes("--magnifier-scale") &&

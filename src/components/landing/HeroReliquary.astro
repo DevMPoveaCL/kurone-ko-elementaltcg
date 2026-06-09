@@ -40,10 +40,10 @@ void heroOpt; // Referenced by comment block below; used when <Image /> replaces
   <div class="pointer-events-none absolute inset-x-6 bottom-20 h-px bg-gradient-to-r from-transparent via-metal-bronze/60 to-transparent md:inset-x-16"></div>
 
   <nav class="relative z-30 grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-full border border-metal-bronze/55 bg-surface-obsidian/65 px-4 py-3 backdrop-blur-md" aria-label="Landing navigation">
-    <a href="#hero" class="relative flex items-center overflow-visible h-full w-[140px] sm:w-[160px] md:w-[180px] lg:w-[220px] focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian">
-      <img src="/assets/landing/hero/logotext.webp" alt="Elemental Queens" width="48" height="32" loading="eager" class="absolute top-1/2 left-0 -translate-y-1/2 h-auto w-[140px] sm:w-[160px] md:w-[180px] lg:w-[220px] max-w-none" />
+    <a href="#hero" class="relative flex items-center overflow-visible w-[126px] sm:w-[144px] md:w-[162px] lg:w-[198px] focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian">
+      <img src="/assets/landing/hero/logotext.webp" alt="Elemental Queens" width="48" height="32" loading="eager" class="h-auto w-full max-w-none" />
     </a>
-    <div class="hidden items-center gap-5 text-xs uppercase tracking-[0.16em] text-surface-parchment/80 lg:flex">
+    <div class="hidden items-center justify-center gap-5 text-xs uppercase tracking-[0.16em] text-surface-parchment/80 lg:flex">
       {
         heroNavSections.map((section) => (
           <a class="hover:text-metal-aged-gold-bright focus-visible:text-metal-aged-gold-bright focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian" href={`#${section.id}`}>
@@ -52,7 +52,7 @@ void heroOpt; // Referenced by comment block below; used when <Image /> replaces
         ))
       }
     </div>
-    <div class="flex justify-end">
+    <div class="flex items-center justify-end">
       <a
         href={hero.primaryCtaHref}
         class="inline-flex items-center rounded-full border border-metal-aged-gold bg-metal-aged-gold/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-metal-aged-gold-bright transition hover:bg-metal-aged-gold/20 focus-visible:bg-metal-aged-gold/20 focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface-obsidian"
