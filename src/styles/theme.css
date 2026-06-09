@@ -22,10 +22,7 @@
   body {
     @apply m-0 bg-surface-obsidian text-surface-parchment antialiased;
     font-family: "Spectral", "Palatino Linotype", serif;
-    /* TODO: Custom cursor is pending a compatible PNG/CUR source.
-       WebP cursors are not supported in Chrome/Edge/Brave.
-       The source file (cursor.webp, ~263KB) is too large and in an unsupported format.
-       Convert to 32x32 or 64x64 PNG and re-enable here when ready. */
+    cursor: url('/assets/landing/cursor.png'), auto;
   }
 
   /* ── Custom Scrollbar — golden/dark fantasy palette ─────────────────────── */
