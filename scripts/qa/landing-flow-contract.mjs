@@ -24,14 +24,13 @@ const BATTLEFIELD_ASSETS = [
 ];
 const ANATOMY_FIELDS = ["Power", "Energy Cost", "Name", "Illustration", "Lore", "Type", "Ability", "Attribute"];
 const ROADMAP = ["Sumerian Edition", "Story Mode", "Duelist", "Future Eras"];
-const HERO_NAV_LABELS = ["Queens", "Trial", "Vessels", "Battlefield", "Roadmap", "First Edition"];
+const HERO_NAV_LABELS = ["Cards", "Lore", "Types", "Battlefield", "Roadmap"];
 const HERO_NAV_IDS = [
   "showing-cards",
   "primordial-verdict",
   "card-type-reliquary",
   "sacred-grid-anatomy",
   "sealed-roadmap",
-  "follow-first-edition",
 ];
 const REMOVED_IMPORTS = ["TacticalBattlefield", "EnergyAscension", "CardAnatomy", "LoreFragments", "RoadmapTeaser"];
 const BATTLEFIELD_HOTSPOTS = [
@@ -535,7 +534,7 @@ add(
     defaultMagnifierLensRadius === 24 &&
     Number.isFinite(battlefieldBoardMagnifierLensRadius) &&
     nearlyEqual(battlefieldBoardMagnifierLensRadius, sacredGridLensRadius) &&
-    battlefieldBoardMagnifierLensSize === "clamp(4.25rem, 6vw, 5.75rem)" &&
+    battlefieldBoardMagnifierLensSize === "clamp(6.375rem, 9vw, 8.625rem)" &&
     Number.isFinite(battlefieldCardMagnifierScale) &&
     battlefieldCardMagnifierScale === 0.36 &&
     battlefieldCardMagnifierScale < battlefieldBoardMagnifierScale &&
@@ -604,7 +603,7 @@ add(
 add(
   checks,
   "newsletter CTA uses trial invitation tone",
-  /Answer the Call/.test(newsletter) && /Accept the Trial/.test(newsletter) && /First Edition/.test(newsletter),
+  /Answer the Call/.test(newsletter) && /Wishlist/.test(newsletter) && /First Edition/.test(newsletter),
   "Newsletter copy must invite users into the First Edition trial",
 );
 add(

@@ -37,7 +37,7 @@ export const newsletterContent: NewsletterContent = {
     "No spam. No prophecy. Just the signal when the trial begins.",
   emailLabel: "Your sigil (email)",
   consentLabel: "I accept the invitation and consent to receive First Edition updates.",
-  submitLabel: "Accept the Trial",
+  submitLabel: "Wishlist",
   consentText:
     "By subscribing, you agree to receive product updates related to Elemental Queens: Sumerian Edition.",
   pendingProviderText: "Static placeholder flow — provider integration is pending.",

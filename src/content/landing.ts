@@ -948,12 +948,11 @@ export const landingContent: LandingContent = {
   },
   sections: [
     { id: "hero", title: "Hero Reliquary" },
-    { id: "showing-cards", title: "The Four Primordial Queens", navLabel: "Queens" },
-    { id: "primordial-verdict", title: "Primordial Verdict", navLabel: "Trial" },
-    { id: "card-type-reliquary", title: "Card Type Reliquary", navLabel: "Vessels" },
+    { id: "showing-cards", title: "The Four Primordial Queens", navLabel: "Cards" },
+    { id: "primordial-verdict", title: "Primordial Verdict", navLabel: "Lore" },
+    { id: "card-type-reliquary", title: "Card Type Reliquary", navLabel: "Types" },
     { id: "sacred-grid-anatomy", title: "Sacred Grid Anatomy", navLabel: "Battlefield" },
     { id: "sealed-roadmap", title: "Sealed Roadmap", navLabel: "Roadmap" },
-    { id: "follow-first-edition", title: "First Edition Call", navLabel: "First Edition" },
   ],
 };
 
