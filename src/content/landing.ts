@@ -668,9 +668,9 @@ export const landingContent: LandingContent = {
     cinematic: {
       posterSrc: "/assets/landing/hero/reliquary-poster-placeholder.webp",
       posterAlt: "Ceremonial reliquary backdrop with cuneiform silhouettes",
-      videoSrc: null,
-      videoType: null,
-      allowLoop: false,
+      videoSrc: "/assets/landing/hero/cinematicHero.mp4",
+      videoType: "video/mp4",
+      allowLoop: true,
     },
   },
   showingCards: {
