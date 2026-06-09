@@ -462,13 +462,9 @@
   .battlefield-arena-panel .battlefield-board-tilt {
     --card-showing-element: var(--color-metal-aged-gold);
     --magnifier-scale: 0.55;
-    --magnifier-lens-radius: 21.6%;
-    --magnifier-lens-size: clamp(12rem, 18vw, 18rem);
     width: 100%;
     max-width: none;
     min-width: 0;
-    overflow: visible;
-    contain: none;
     border-radius: inherit;
   }
 
@@ -513,14 +509,9 @@
 
   .battlefield-card-stage .battlefield-card-tilt {
     --card-showing-element: var(--color-metal-aged-gold);
-    --magnifier-scale: 0.28;
-    --magnifier-lens-radius: 21.6%;
-    --magnifier-lens-size: clamp(12rem, 18vw, 18rem);
     width: clamp(11.7rem, min(18.9vw, 43.2svh), 18.9rem);
     max-width: min(52.2vw, 18.9rem);
     min-width: 0;
-    overflow: visible;
-    contain: none;
   }
 
   .battlefield-hotspot-layer {
@@ -1366,8 +1357,8 @@
     --tilt-y: 0deg;
     --glare-x: 50%;
     --glare-y: 18%;
-    --magnifier-scale: 0.6;
-    --magnifier-lens-radius: 24%;
+    --magnifier-scale: 0.28;
+    --magnifier-lens-radius: 21.6%;
     --magnifier-lens-size: clamp(12rem, 18vw, 18rem);
     position: relative;
     z-index: 3;
@@ -1376,8 +1367,8 @@
     transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateZ(0);
     transform-style: preserve-3d;
     border-radius: 1.35rem;
-    overflow: hidden;
-    contain: paint;
+    overflow: visible;
+    contain: none;
     box-shadow:
       0 1.5rem 4rem color-mix(in oklch, var(--color-surface-obsidian) 72%, transparent),
       0 0 2rem color-mix(in oklch, var(--card-showing-element, var(--color-metal-aged-gold)) 24%, transparent);
@@ -1420,6 +1411,7 @@
     position: absolute;
     inset: 0;
     opacity: 0;
+    border-radius: inherit;
     transform-origin: var(--glare-x, 50%) var(--glare-y, 50%);
     transition: opacity 220ms ease-in-out, transform 260ms ease;
     will-change: auto;
@@ -1564,6 +1556,8 @@
 
   .card-type-tilt {
     --card-showing-element: var(--color-metal-aged-gold);
+    --magnifier-scale: 0.28;
+    --magnifier-lens-radius: 21.6%;
     width: clamp(17rem, min(30vw, 52svh), 25rem);
     max-width: min(78vw, 25rem);
   }

@@ -536,19 +536,19 @@ add(
   Number.isFinite(battlefieldBoardMagnifierScale) &&
     battlefieldBoardMagnifierScale === 0.55 &&
     Number.isFinite(defaultMagnifierLensRadius) &&
-    defaultMagnifierLensRadius === 24 &&
+    defaultMagnifierLensRadius === 21.6 &&
     Number.isFinite(defaultMagnifierScale) &&
-    defaultMagnifierScale === 0.6 &&
+    defaultMagnifierScale === 0.28 &&
     defaultMagnifierLensSize === "clamp(12rem, 18vw, 18rem)" &&
-    Number.isFinite(battlefieldBoardMagnifierLensRadius) &&
-    nearlyEqual(battlefieldBoardMagnifierLensRadius, sacredGridLensRadius) &&
-    battlefieldBoardMagnifierLensSize === "clamp(12rem, 18vw, 18rem)" &&
-    Number.isFinite(battlefieldCardMagnifierScale) &&
-    battlefieldCardMagnifierScale === 0.28 &&
-    battlefieldCardMagnifierScale < battlefieldBoardMagnifierScale &&
-    Number.isFinite(battlefieldCardMagnifierLensRadius) &&
-    nearlyEqual(battlefieldCardMagnifierLensRadius, sacredGridLensRadius) &&
-    battlefieldCardMagnifierLensSize === battlefieldBoardMagnifierLensSize &&
+    !battlefieldBoardMagnifierRule?.groups?.body.includes("--magnifier-lens-radius") &&
+    !battlefieldBoardMagnifierRule?.groups?.body.includes("--magnifier-lens-size") &&
+    !battlefieldBoardMagnifierRule?.groups?.body.includes("overflow") &&
+    !battlefieldBoardMagnifierRule?.groups?.body.includes("contain") &&
+    !battlefieldCardMagnifierRule?.groups?.body.includes("--magnifier-scale") &&
+    !battlefieldCardMagnifierRule?.groups?.body.includes("--magnifier-lens-radius") &&
+    !battlefieldCardMagnifierRule?.groups?.body.includes("--magnifier-lens-size") &&
+    !battlefieldCardMagnifierRule?.groups?.body.includes("overflow") &&
+    !battlefieldCardMagnifierRule?.groups?.body.includes("contain") &&
     !showingCardMagnifierUsesTransformScale &&
     /width:\s*var\(--magnifier-source-width,\s*100%\)/.test(theme) &&
     /height:\s*var\(--magnifier-source-height,\s*100%\)/.test(theme) &&
