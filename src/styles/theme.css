@@ -1366,8 +1366,9 @@
     --tilt-y: 0deg;
     --glare-x: 50%;
     --glare-y: 18%;
-    --magnifier-scale: 1;
+    --magnifier-scale: 0.6;
     --magnifier-lens-radius: 24%;
+    --magnifier-lens-size: clamp(12rem, 18vw, 18rem);
     position: relative;
     z-index: 3;
     width: clamp(16rem, min(28vw, 50svh), 24rem);

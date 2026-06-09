@@ -163,6 +163,11 @@ const showingCardTiltMagnifierRule = theme.match(/\.showing-card-tilt\s*\{(?<bod
 const defaultMagnifierLensRadius = Number(
   showingCardTiltMagnifierRule?.groups?.body.match(/--magnifier-lens-radius:\s*(?<radius>[\d.]+)%/)?.groups?.radius ?? NaN,
 );
+const defaultMagnifierScale = Number(
+  showingCardTiltMagnifierRule?.groups?.body.match(/--magnifier-scale:\s*(?<scale>[\d.]+)/)?.groups?.scale ?? NaN,
+);
+const defaultMagnifierLensSize =
+  showingCardTiltMagnifierRule?.groups?.body.match(/--magnifier-lens-size:\s*(?<size>clamp\([^;]+\))/)?.groups?.size ?? "";
 const sacredGridLensRadius = defaultMagnifierLensRadius * 0.9;
 const battlefieldExplanationPanelRule = theme.match(/\.battlefield-explanation-panel\s*\{(?<body>[\s\S]*?)\}/);
 const battlefieldExplanationPanelBody = battlefieldExplanationPanelRule?.groups?.body ?? "";
@@ -532,6 +537,9 @@ add(
     battlefieldBoardMagnifierScale === 0.55 &&
     Number.isFinite(defaultMagnifierLensRadius) &&
     defaultMagnifierLensRadius === 24 &&
+    Number.isFinite(defaultMagnifierScale) &&
+    defaultMagnifierScale === 0.6 &&
+    defaultMagnifierLensSize === "clamp(12rem, 18vw, 18rem)" &&
     Number.isFinite(battlefieldBoardMagnifierLensRadius) &&
     nearlyEqual(battlefieldBoardMagnifierLensRadius, sacredGridLensRadius) &&
     battlefieldBoardMagnifierLensSize === "clamp(12rem, 18vw, 18rem)" &&
