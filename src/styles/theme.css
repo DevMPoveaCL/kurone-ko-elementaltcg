@@ -461,9 +461,9 @@
 
   .battlefield-arena-panel .battlefield-board-tilt {
     --card-showing-element: var(--color-metal-aged-gold);
-    --magnifier-scale: 0.68;
+    --magnifier-scale: 0.55;
     --magnifier-lens-radius: 21.6%;
-    --magnifier-lens-size: clamp(6.375rem, 9vw, 8.625rem);
+    --magnifier-lens-size: clamp(12rem, 18vw, 18rem);
     width: 100%;
     max-width: none;
     min-width: 0;
@@ -513,9 +513,9 @@
 
   .battlefield-card-stage .battlefield-card-tilt {
     --card-showing-element: var(--color-metal-aged-gold);
-    --magnifier-scale: 0.36;
+    --magnifier-scale: 0.28;
     --magnifier-lens-radius: 21.6%;
-    --magnifier-lens-size: clamp(6.375rem, 9vw, 8.625rem);
+    --magnifier-lens-size: clamp(12rem, 18vw, 18rem);
     width: clamp(11.7rem, min(18.9vw, 43.2svh), 18.9rem);
     max-width: min(52.2vw, 18.9rem);
     min-width: 0;
