@@ -4,7 +4,6 @@ Sumerian tactical TCG concept preview: four primordial Queens, elemental devotio
 
 <p>
   <a href="https://kurone-ko-elementaltcg.pages.dev/"><img alt="Live preview" src="https://img.shields.io/badge/LIVE_PREVIEW-Cloudflare_Pages-0f6fff?style=for-the-badge" /></a>
-  <a href="https://github.com/DevMPoveaCL/kurone-ko-elementaltcg"><img alt="Read the repo" src="https://img.shields.io/badge/READ_THE_REPO-GitHub-24292f?style=for-the-badge&logo=github" /></a>
   <a href="LICENSE"><img alt="All rights reserved" src="https://img.shields.io/badge/LICENSE-All_Rights_Reserved-d4af37?style=for-the-badge" /></a>
 </p>
 
