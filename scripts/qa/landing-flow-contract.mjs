@@ -114,12 +114,18 @@ function readGilgameshMarkerTextByNumber(markerNumber) {
   return { label, position };
 }
 
-function add(checks, name, pass, message) {
-  checks.push({ name, pass, message });
+function readShowingCardSourceCopy(cardId) {
+  const block = landing.match(new RegExp(`\\n\\s*${escapeRegExp(cardId)}:\\s*\\{(?<body>[\\s\\S]*?)\\n\\s*image:\\s*\\{`))?.groups?.body ?? "";
+  const readStringField = (field) => block.match(new RegExp(`${field}:\\s*(?:\\n\\s*)?"(?<value>[^"]+)"`))?.groups?.value ?? "";
+
+  return {
+    shortLore: readStringField("shortLore"),
+    tabletLore: readStringField("tabletLore"),
+  };
 }
 
-function nearlyEqual(actual, expected) {
-  return Math.abs(actual - expected) < 0.001;
+function add(checks, name, pass, message) {
+  checks.push({ name, pass, message });
 }
 
 const checks = [];
@@ -140,20 +146,9 @@ const battlefieldBoardMagnifierRule = theme.match(/\.battlefield-arena-panel\s+\
 const battlefieldBoardMagnifierScale = Number(
   battlefieldBoardMagnifierRule?.groups?.body.match(/--magnifier-scale:\s*(?<scale>[\d.]+)/)?.groups?.scale ?? NaN,
 );
-const battlefieldBoardMagnifierLensRadius = Number(
-  battlefieldBoardMagnifierRule?.groups?.body.match(/--magnifier-lens-radius:\s*(?<radius>[\d.]+)%/)?.groups?.radius ?? NaN,
-);
 const battlefieldBoardMagnifierLensSize =
   battlefieldBoardMagnifierRule?.groups?.body.match(/--magnifier-lens-size:\s*(?<size>clamp\([^;]+\))/)?.groups?.size ?? "";
 const battlefieldCardMagnifierRule = theme.match(/\.battlefield-card-stage\s+\.battlefield-card-tilt\s*\{(?<body>[\s\S]*?)\}/);
-const battlefieldCardMagnifierScale = Number(
-  battlefieldCardMagnifierRule?.groups?.body.match(/--magnifier-scale:\s*(?<scale>[\d.]+)/)?.groups?.scale ?? NaN,
-);
-const battlefieldCardMagnifierLensRadius = Number(
-  battlefieldCardMagnifierRule?.groups?.body.match(/--magnifier-lens-radius:\s*(?<radius>[\d.]+)%/)?.groups?.radius ?? NaN,
-);
-const battlefieldCardMagnifierLensSize =
-  battlefieldCardMagnifierRule?.groups?.body.match(/--magnifier-lens-size:\s*(?<size>clamp\([^;]+\))/)?.groups?.size ?? "";
 const battlefieldShowcaseDesktopRule = theme.match(/@media\s*\(min-width:\s*1024px\)\s*\{[\s\S]*?\.battlefield-showcase\s*\{(?<body>[\s\S]*?)\}\s*\}/);
 const battlefieldShowcaseDesktopBody = battlefieldShowcaseDesktopRule?.groups?.body ?? "";
 const battlefieldCardTiltBody = battlefieldCardMagnifierRule?.groups?.body ?? "";
@@ -168,7 +163,6 @@ const defaultMagnifierScale = Number(
 );
 const defaultMagnifierLensSize =
   showingCardTiltMagnifierRule?.groups?.body.match(/--magnifier-lens-size:\s*(?<size>clamp\([^;]+\))/)?.groups?.size ?? "";
-const sacredGridLensRadius = defaultMagnifierLensRadius * 0.9;
 const battlefieldExplanationPanelRule = theme.match(/\.battlefield-explanation-panel\s*\{(?<body>[\s\S]*?)\}/);
 const battlefieldExplanationPanelBody = battlefieldExplanationPanelRule?.groups?.body ?? "";
 const battlefieldContentRule = theme.match(/\.battlefield-content\s*\{(?<body>[\s\S]*?)\}/);
@@ -187,6 +181,8 @@ const showingCardMagnifierRuleBodies = Array.from(
 const showingCardMagnifierUsesTransformScale = showingCardMagnifierRuleBodies.some((body) =>
   /transform\s*:\s*scale\(/.test(body),
 );
+const anShowingCardCopy = readShowingCardSourceCopy("an");
+const kiShowingCardCopy = readShowingCardSourceCopy("ki");
 
 for (const [name, file] of Object.entries(FILES)) {
   add(checks, `${name} file exists`, exists(file), `Missing ${file}`);
@@ -326,8 +322,28 @@ add(
 add(
   checks,
   "ally hierarchy mentions Pawn Bishop Knight",
-  /Pawn · Bishop · Knight/.test(landing) && /Pawn must be discarded/.test(landing),
+  /Pawn · Bishop · Knight/.test(landing) &&
+    /Pawns represent the masses, while Bishops and Knights are legendary Sumerian figures\. Discard a Pawn to summon either\./.test(landing),
   "Allies copy must mention Pawn/Bishop/Knight and the Pawn discard requirement",
+);
+add(
+  checks,
+  "An copy is sourced from the current ShowingCards content",
+  anShowingCardCopy.shortLore.length > 0 &&
+    anShowingCardCopy.tabletLore.length > 0 &&
+    /name:\s*SHOWING_CARD_NAME\.an/.test(landing) &&
+    !/reach beyond the mud\. Yet every time she descended, her gifts twisted/.test(landing),
+  "An ShowingCards source copy must be present and must not restore the old mud/gifts sentence",
+);
+add(
+  checks,
+  "Ki copy is sourced from the current ShowingCards content",
+  kiShowingCardCopy.shortLore.length > 0 &&
+    kiShowingCardCopy.tabletLore.length > 0 &&
+    /name:\s*SHOWING_CARD_NAME\.ki/.test(landing) &&
+    !/every name that cultures placed upon the patient earth/.test(landing) &&
+    !/If the earth still calls you by name/.test(landing),
+  "Ki ShowingCards source copy must be present and must not restore the old patient-earth/by-name wording",
 );
 add(
   checks,

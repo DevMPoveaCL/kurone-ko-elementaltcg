@@ -1,131 +1,105 @@
 # Elemental Queens — Sumerian Edition
 
-Elemental Queens is a Sumerian-inspired tactical TCG concept preview about four primordial Queens, elemental devotion, and a chess-like battlefield where deck destruction is the central pressure.
+Sumerian tactical TCG concept preview: four primordial Queens, elemental devotion, and a chess-like battlefield where every wound burns through the deck.
 
-Production URL: [https://kurone-ko-elementaltcg.pages.dev/](https://kurone-ko-elementaltcg.pages.dev/)
-
-Author: `DevMPoveaCL`
+<p>
+  <a href="https://kurone-ko-elementaltcg.pages.dev/"><img alt="Live preview" src="https://img.shields.io/badge/LIVE_PREVIEW-Cloudflare_Pages-0f6fff?style=for-the-badge" /></a>
+  <a href="https://github.com/DevMPoveaCL/kurone-ko-elementaltcg"><img alt="Read the repo" src="https://img.shields.io/badge/READ_THE_REPO-GitHub-24292f?style=for-the-badge&logo=github" /></a>
+  <a href="LICENSE"><img alt="All rights reserved" src="https://img.shields.io/badge/LICENSE-All_Rights_Reserved-d4af37?style=for-the-badge" /></a>
+</p>
 
 ![Elemental Queens battlefield interface with card zones and player lanes](public/assets/landing/battlefield/battlefield/variants/image-1600w.webp)
 
-## Live Production Preview
+## What this is
 
-Open the current production preview here:
+**Elemental Queens — Sumerian Edition** is a portfolio/concept landing page for a tactical trading-card videogame idea.
 
-[https://kurone-ko-elementaltcg.pages.dev/](https://kurone-ko-elementaltcg.pages.dev/)
+It presents the game mood, board language, card vocabulary, and divine conflict without pretending the product is already released. The live preview is the best way to inspect the cards, battlefield, and mobile interactions at full quality.
 
-The preview presents the project concept, the elemental Queens, the card-type vocabulary, and the tactical board language in one guided landing experience.
+## The pitch
 
-## What This Project Is
+Four elemental Queens judge humanity through a ritual battlefield:
 
-This repository is a portfolio/concept preview for **Elemental Queens — Sumerian Edition**.
+| Queen | Element | Role in the myth |
+|-------|---------|------------------|
+| Nammu | Water | Origin, abyss, memory, and first life. |
+| Utu | Fire | Judgment, revelation, punishment, and clarity. |
+| An | Air | Distance, sky, aspiration, and unreachable order. |
+| Ki | Earth | Ground, grave, harvest, service, and endurance. |
 
-It documents the visual direction, lore premise, card categories, battlefield structure, and production build for a tactical trading-card videogame concept. The README intentionally stays high level: it explains what the visitor is seeing first, then gives local setup and quality commands for reviewers.
+Players bind themselves to a Queen and fight across a structured grid. The pressure is not only board control: when a unit loses a clash, cards are destroyed from the deck. Your strategy is your army, your resource, and your remaining life.
 
-## The Game Idea
+## How the game reads
 
-Four elemental Queens judge humanity through a ritual game: **Nammu** of Water, **Utu** of Fire, **An** of Air, and **Ki** of Earth.
+The landing introduces the core language in layers:
 
-Each player binds their strategy to a Queen and one of the four elements. Two Queens stand on one side of the verdict and two on the other, creating a mythic conflict where elemental allegiance shapes the deck, the board, and the final pressure.
+- **Allies** hold the battlefield: Pawns, Bishops, and Knights define the tactical line.
+- **Rooks** are sacred structures: gates, temples, archives, and ziggurats.
+- **Energy** pays costs and opens the path for divine manifestation.
+- **Talismans** hide ritual answers and rule-bending turns.
+- **Queens** enter at the threshold of seven energy and reshape the field through sacrifice.
 
-The win condition is based on deck destruction. Combat is one against one; when one side loses a clash, the weaker side falls and its controller loses cards from the deck equal to the wound.
+The battlefield uses visible phases — `DP`, `M`, `BP`, `SW`, `M2`, `EP` — so the board feels closer to a ritual chess diagram than a generic card table.
 
-## How the Cards Work
+## Visual direction
 
-**Allies** are the mortal and legendary figures that occupy the battlefield. Pawns form the front line, while Bishops and Knights represent stronger Sumerian figures that can be summoned through sacrifice.
+The interface follows a dark Sumerian reliquary language: black stone, gold ornament, blue elemental glow, cuneiform-inspired framing, and goddess-centered card art.
 
-**Rooks** are sacred structures: towers, temples, gates, archives, and ziggurats where divine law touches the field.
+This README intentionally avoids tiny card thumbnails. Card text is small by design, so explanatory visuals must stay readable. For card-level detail, use the production preview instead of compressed Markdown images.
 
-**Energy** is the ritual fuel. It pays card costs, awakens Queen gifts, and marks the threshold between mortal command and divine manifestation.
+## Tech stack
 
-**Talismans** are hidden strategies and sealed ritual answers. They bend the rules at key moments rather than simply occupying a board space.
+| Layer | Tooling |
+|-------|---------|
+| Framework | Astro |
+| Language | TypeScript strict |
+| Styling | Tailwind CSS + custom theme CSS |
+| Testing | Playwright E2E + custom QA contracts |
+| Deployment | Cloudflare Pages |
 
-**Queens** are the elemental sovereigns. At seven energy, a Queen may enter the field, bless allied cards, and demand sacrifice in return.
-
-## Battlefield and Strategy
-
-The battlefield is a chess-inspired grid where two Queens face each other across twelve deployment zones per side.
-
-Six Pawn lanes form the front line. Two Rooks hold the corners, two Knights guard the flanks, and two Bishops command the center. The Queen watches from the heart of the formation until the energy threshold opens the gate.
-
-Turns are structured around visible phases: `DP`, `M`, `BP`, `SW`, `M2`, and `EP`. Position matters as much as card choice because the board defines where each role can apply pressure.
-
-## Visual Language
-
-The project uses a Sumerian reliquary aesthetic: dark ceremonial surfaces, gold ornament, cuneiform-inspired framing, elemental symbols, and goddess-centered card renders.
-
-The README uses one wide battlefield image because it remains readable in GitHub. Full card renders exist in the project assets, but this document does not use tiny card thumbnails to explain card text; card details are better inspected in the live preview where the layout can provide enough space.
-
-## Tech Stack
-
-- **Astro** for the static site application shell.
-- **TypeScript** for typed content and implementation safety.
-- **Tailwind CSS** for styling.
-- **Playwright** for end-to-end checks.
-- **Cloudflare Pages** as the production preview target.
-
-## Run Locally
-
-Install dependencies:
+## Run locally
 
 ```bash
 npm install
-```
-
-Start the local development server:
-
-```bash
 npm run dev
 ```
 
-Create a production build:
+Production build:
 
 ```bash
 npm run build
 ```
 
-## Quality Checks
-
-Run the type and Astro checks:
+## Quality checks
 
 ```bash
 npm run typecheck
-```
-
-Run the end-to-end test suite:
-
-```bash
+npm run qa:landing-flow
 npm run test:e2e
-```
-
-Run the card-frame QA contract:
-
-```bash
-npm run qa:frame
 ```
 
 ## Deployment
 
-Deployment target: Cloudflare Pages from the `main` branch.
+The production preview is deployed on **Cloudflare Pages**.
 
-Build command:
+| Setting | Value |
+|---------|-------|
+| Build command | `npm run build` |
+| Output directory | `dist` |
+| Production URL | https://kurone-ko-elementaltcg.pages.dev/ |
 
-```bash
-npm run build
-```
+Large hero videos were optimized to stay within Cloudflare Pages limits while preserving the cinematic landing experience.
 
-Build output directory:
+## Project status
 
-```text
-dist
-```
+This repository is a **concept preview and portfolio project**. It documents the Sumerian Edition direction, the current landing experience, and the technical foundation used to present it.
 
-## Project Status
+Roadmap names in the landing are concept directions, not product commitments, release dates, pricing promises, platform availability, or beta/demo announcements.
 
-**Phase I: Sumerian Edition** is the current concept scope. It defines the first reliquary: allies, rooks, energy cards, talismans, and the four elemental Queens.
+## Author and rights
 
-**Phase II: Story Mode**, **Phase III: Duelist**, and **Phase IV+: Future Eras** are planned concept directions documented by the landing content. They are presented as roadmap ideas, not as product commitments.
+**Author:** DevMPoveaCL
 
-## License
+See [LICENSE](LICENSE).
 
 © DevMPoveaCL. All rights reserved. This project is shared as a portfolio/concept preview and is not licensed for reuse, redistribution, or commercial use without permission.
